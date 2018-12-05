@@ -1,4 +1,5 @@
 package environment;
 
-public class Platform {
+public class Platform extends GameObject {
+    private int width;
 }

@@ -1,4 +1,6 @@
 package opponent;
 
-public class ArrowPower {
+public class ArrowPower implements HunterPower {
+    @Override
+    public void use(){}
 }

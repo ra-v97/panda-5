@@ -1,4 +1,7 @@
 package player.powerups;
 
-public class PowerUp {
+import environment.GameObject;
+
+public class PowerUp extends GameObject {
+    private PowerUpEffect effect;
 }

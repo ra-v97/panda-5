@@ -1,4 +1,5 @@
 package collider;
 
-public class CircularCollider {
+public class CircularCollider extends AbstractCollider {
+    private int radius;
 }

@@ -1,4 +1,6 @@
 package player.powerups;
 
-public class PowerUpCoinMagnet {
+public class PowerUpCoinMagnet extends PowerUpDecorator {
+    @Override
+    public void applyEffect(){}
 }

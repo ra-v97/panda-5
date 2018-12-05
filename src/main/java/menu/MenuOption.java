@@ -1,4 +1,5 @@
 package menu;
 
-public class Options {
+public class MenuOption extends Menu {
+    private String name;
 }

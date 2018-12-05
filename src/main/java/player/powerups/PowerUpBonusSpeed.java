@@ -1,4 +1,6 @@
 package player.powerups;
 
-public class PowerUpBonusSpeed {
+public class PowerUpBonusSpeed extends PowerUpDecorator {
+    @Override
+    public void applyEffect(){}
 }

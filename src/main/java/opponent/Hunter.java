@@ -1,4 +1,10 @@
 package opponent;
 
-public class Hunter {
+import environment.GameObject;
+
+
+public class Hunter extends GameObject {
+    private HunterPower power;
+
+    public void usePower(){}
 }

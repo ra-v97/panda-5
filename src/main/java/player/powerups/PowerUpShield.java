@@ -1,6 +1,6 @@
 package player.powerups;
 
-public class PowerUpShield implements PowerUpEffect {
+public class PowerUpShield extends PowerUpDecorator {
     @Override
     public void applyEffect(){}
 }

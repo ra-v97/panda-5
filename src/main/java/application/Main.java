@@ -2,7 +2,7 @@ package application;
 
 /**
  * Main class for PandaGame app
- * Used for starting the programme
+ * Used for starting the program
  *
  */
 public class Main {

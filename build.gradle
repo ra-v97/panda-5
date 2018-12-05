@@ -4,20 +4,37 @@ plugins {
     id 'com.adarshr.test-logger' version '1.6.0'
 }
 
+apply plugin: 'application'
+
+
 group 'pl.edu.agh.to2.czw-1440-panda5'
 version '1.0'
 
 sourceCompatibility = 1.8
 
+ext.jmeVersion = '[3.1,)'
+
 repositories {
+    mavenLocal()
     mavenCentral()
+    jcenter()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    maven { url "https://jitpack.io" }
+    maven { url "http://nifty-gui.sourceforge.net/nifty-maven-repo" }
 }
+
 
 dependencies {
 
     compile 'io.reactivex.rxjava2:rxjava:2.2.0'
-
+    compile "org.jmonkeyengine:jme3-core:$jmeVersion"
+    compile "org.jmonkeyengine:jme3-desktop:$jmeVersion"
+    compile "org.jmonkeyengine:jme3-lwjgl:$jmeVersion"
     testImplementation 'junit:junit:4.12'
 }
 
 mainClassName = 'application.Main'
+
+
+

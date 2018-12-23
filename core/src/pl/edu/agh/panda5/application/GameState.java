@@ -1,7 +1,6 @@
 package pl.edu.agh.panda5.application;
 
 import pl.edu.agh.panda5.environment.EnvironmentalObject;
-import pl.edu.agh.panda5.environment.GameObject;
 
 import java.util.Set;
 

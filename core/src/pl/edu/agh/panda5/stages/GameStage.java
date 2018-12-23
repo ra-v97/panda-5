@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import pl.edu.agh.panda5.environment.Platform;
+import pl.edu.agh.panda5.player.Player;
 import pl.edu.agh.panda5.utils.WorldUtils;
 
 public class GameStage extends Stage {
@@ -14,8 +16,8 @@ public class GameStage extends Stage {
     private static final int VIEWPORT_HEIGHT = 13;
 
     private World world;
-    private Body ground;
-    private Body runner;
+    private Platform ground;
+    private Player runner;
 
     private final float TIME_STEP = 1 / 300f;
     private float accumulator = 0f;
@@ -25,16 +27,26 @@ public class GameStage extends Stage {
 
     public GameStage() {
         world = WorldUtils.createWorld();
-        ground = WorldUtils.createGround(world);
-        runner = WorldUtils.createRunner(world);
-        renderer = new Box2DDebugRenderer(); // Delete in final version
-        setupCamera();
+        setUpGround();
+        setUpPlayer();
+        renderer = new Box2DDebugRenderer(); // TODO: Delete in final version
+        setUpCamera();
     }
 
-    private void setupCamera() {
+    private void setUpCamera() {
         camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
         camera.update();
+    }
+
+    private void setUpGround() {
+        ground = new Platform(WorldUtils.createGround(world));
+        addActor(ground);
+    }
+
+    private void setUpPlayer() {
+        runner = new Player(WorldUtils.createRunner(world));
+        addActor(runner);
     }
 
     @Override
@@ -49,7 +61,7 @@ public class GameStage extends Stage {
             accumulator -= TIME_STEP;
         }
 
-        //TODO: Implement interpolation
+        // TODO: Implement interpolation
 
     }
 

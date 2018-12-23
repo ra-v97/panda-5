@@ -1,7 +1,33 @@
 package pl.edu.agh.panda5.collider;
 
-public class CollisionDetector {
-    public boolean detectCollisionBetween(AbstractCollider c1, AbstractCollider c2){
-        return false;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import pl.edu.agh.panda5.stages.GameStage;
+
+
+public class CollisionDetector implements ContactListener {
+    private GameStage stage;
+
+    public CollisionDetector(GameStage stage){
+        this.stage = stage;
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        Body a = contact.getFixtureA().getBody();
+        Body b = contact.getFixtureB().getBody();
+        stage.beginContact(a, b);
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
     }
 }

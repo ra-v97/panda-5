@@ -1,9 +1,13 @@
 package pl.edu.agh.panda5.stages;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.player.Player;
 import pl.edu.agh.panda5.utils.AbstractFactory;
@@ -30,10 +34,16 @@ public class GameStage extends Stage {
     public GameStage() {
         factory = new GameObjectFactory();
         world = WorldUtils.createWorld();
+        world.setContactListener(new CollisionDetector(this));
         setUpGround();
         setUpPlayer();
-        renderer = new Box2DDebugRenderer(); // TODO: Delete in final version
+        renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
+        setUpKeyboard();
+    }
+
+    private void setUpKeyboard() {
+        Gdx.input.setInputProcessor(this);
     }
 
     private void setUpCamera() {
@@ -74,5 +84,18 @@ public class GameStage extends Stage {
         renderer.render(world, camera.combined);
     }
 
+    @Override
+    public boolean keyDown (int keycode) {
+        if(keycode == Input.Keys.UP)
+            player.jump();
+
+        return super.keyDown(keycode);
+    }
+
+    public void beginContact(Body a , Body b){
+        if((player.getBody() == a && ground.getBody() == b) || (ground.getBody() == a && player.getBody() == b)){
+            player.landed();
+        }
+    }
 }
 

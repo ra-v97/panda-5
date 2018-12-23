@@ -11,10 +11,6 @@ public class Panda5 extends Game {
 		setScreen(new GameScreen());
 	}
 
-	@Override
-	public void render () {
-
-	}
 	
 	@Override
 	public void dispose () {

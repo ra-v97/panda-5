@@ -1,7 +1,6 @@
 package pl.edu.agh.panda5.collider;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import pl.edu.agh.panda5.stages.GameStage;
 
 

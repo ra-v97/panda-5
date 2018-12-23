@@ -9,8 +9,4 @@ public class Platform extends GameObject {
     public Platform(Body body){
         super(body);
     }
-
-    public Body getBody(){
-        return body;
-    }
 }

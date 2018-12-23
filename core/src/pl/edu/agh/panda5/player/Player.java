@@ -28,7 +28,4 @@ public class Player extends GameObject {
         jumping = false;
     }
 
-    public Body getBody(){
-        return body;
-    }
 }

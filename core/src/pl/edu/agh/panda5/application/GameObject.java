@@ -15,4 +15,7 @@ public abstract class GameObject extends Actor {
 
     public void draw(){}
     public void update(){}
+    public Body getBody(){
+        return body;
+    }
 }

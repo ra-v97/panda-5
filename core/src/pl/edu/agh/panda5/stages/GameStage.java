@@ -112,10 +112,10 @@ public class GameStage extends Stage {
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.RIGHT)
-            player.stop();
+            player.stopMovingRight();
 
         if(keycode == Input.Keys.LEFT)
-            player.stop();
+            player.stopMovingLeft();
 
         if (player.isDodging()) {
             player.stopDodge();

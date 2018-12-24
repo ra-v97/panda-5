@@ -26,6 +26,14 @@ public class GameObjectFactory implements AbstractFactory {
         body.setUserData(GameObjectType.PLAYER);
         shape.dispose();
 
+        PolygonShape feetShape = new PolygonShape();
+        feetShape.setAsBox(Constants.RUNNER_FEET_WIDTH / 2f, Constants.RUNNER_FEET_HEIGHT / 2f,
+                new Vector2(Constants.RUNNER_FEET_X / 2f, Constants.RUNNER_FEET_Y / 2f), 0);
+        fDef.shape = feetShape;
+        fDef.isSensor = true;
+        Fixture feet = body.createFixture(fDef);
+        feet.setUserData(GameObjectType.FEET_SENSOR);
+
         return new Player(body, null);
     }
 
@@ -36,7 +44,13 @@ public class GameObjectFactory implements AbstractFactory {
         Body body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
-        body.createFixture(shape, Constants.GROUND_DENSITY);
+
+        FixtureDef fDef = new FixtureDef();
+        fDef.shape = shape;
+        fDef.density = Constants.GROUND_DENSITY;
+
+        Fixture fixture = body.createFixture(fDef);
+        fixture.setUserData(GameObjectType.PLATFORM);
         body.setUserData(GameObjectType.PLATFORM);
         shape.dispose();
 

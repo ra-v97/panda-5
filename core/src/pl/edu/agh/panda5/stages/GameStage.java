@@ -69,7 +69,7 @@ public class GameStage extends Stage {
         // Fixed timestep
         accumulator += delta;
 
-        while (accumulator >= delta) {
+        while (accumulator >= TIME_STEP) {
             world.step(TIME_STEP, 6, 2);
             accumulator -= TIME_STEP;
         }

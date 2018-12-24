@@ -14,15 +14,13 @@ public class Player extends GameObject {
     private List<PowerUpEffect> activePowerUps;
     private boolean dodging;
     private boolean jumping;
-    private Body feet;
     private float currentJumpTimeout;
 
     private boolean isMovingRight;
     private boolean isMovingLeft;
 
-    public Player(Body body, Body feet){
+    public Player(Body body){
         super(body);
-        this.feet = feet;
         currentJumpTimeout = 0f;
         isMovingLeft = false;
         isMovingRight = false;

@@ -34,7 +34,7 @@ public class GameObjectFactory implements AbstractFactory {
         Fixture feet = body.createFixture(fDef);
         feet.setUserData(GameObjectType.FEET_SENSOR);
 
-        return new Player(body, null);
+        return new Player(body);
     }
 
     public Platform createPlatform(World world, Vector2 position, float width, float height){

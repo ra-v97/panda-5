@@ -38,4 +38,6 @@ public class GameObjectFactory implements AbstractFactory {
 
         return new Platform(body);
     }
+
+
 }

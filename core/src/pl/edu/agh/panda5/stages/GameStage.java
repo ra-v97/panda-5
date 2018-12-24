@@ -86,10 +86,23 @@ public class GameStage extends Stage {
 
     @Override
     public boolean keyDown (int keycode) {
-        if(keycode == Input.Keys.UP)
+        if(keycode == Input.Keys.UP){
             player.jump();
+        } else if (keycode == Input.Keys.DOWN){
+            player.dodge();
+        }
 
         return super.keyDown(keycode);
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+
+        if (player.isDodging()) {
+            player.stopDodge();
+        }
+
+        return super.keyUp(keycode);
     }
 
     public void beginContact(Body a , Body b){

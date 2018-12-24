@@ -5,7 +5,7 @@ It is an endless runner game, where you play a role of a cute black and white be
 
 ## Class diagram
 
-![class diagram](classDiagram_v1.png)
+![class diagram](classDiagram_v2.png)
 
 ## Getting Started
 

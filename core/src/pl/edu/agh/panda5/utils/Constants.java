@@ -25,9 +25,5 @@ public class Constants {
     public static final float RUNNER_RUN_RIGHT_SPEED = 10f;
     public static final float RUNNER_RUN_LEFT_SPEED = -10f;
     public static final float RUNNER_JUMP_TIMEOUT = 2f; //TODO: teraz jest ustawione 2s; zamienić na ok 50ms
-    public static final float RUNNER_DODGE_X = 2f;
-    public static final float RUNNER_DODGE_Y= 1.5f;
-    public static final Vector2 RUNNING_POSITION = new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y);
-    public static final Vector2 DODGE_POSITION = new Vector2(Constants.RUNNER_DODGE_X, Constants.RUNNER_DODGE_Y);
 
 }

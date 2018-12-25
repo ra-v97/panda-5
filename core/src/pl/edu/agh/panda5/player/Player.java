@@ -59,14 +59,16 @@ public class Player extends GameObject {
 
     public void dodge() {
         if (!jumping) {
-            body.setTransform(Constants.DODGE_POSITION, (float) (-90f * (Math.PI / 180f)));
+            body.setTransform(body.getPosition().x,(float)(body.getPosition().y-(0.5*(Constants.RUNNER_HEIGHT-Constants.RUNNER_WIDTH))),(float) (-90f * (Math.PI / 180f)));
             dodging = true;
+
+
         }
     }
 
     public void stopDodge() {
         dodging = false;
-        body.setTransform(Constants.RUNNING_POSITION, 0f);
+        body.setTransform(body.getPosition().x,(float)(body.getPosition().y+(0.5*(Constants.RUNNER_HEIGHT-Constants.RUNNER_WIDTH))), 0f);
     }
 
     public boolean isDodging() {

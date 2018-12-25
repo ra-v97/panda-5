@@ -13,8 +13,8 @@ public class CollisionDetector implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        Body a = contact.getFixtureA().getBody();
-        Body b = contact.getFixtureB().getBody();
+        Fixture a = contact.getFixtureA();
+        Fixture b = contact.getFixtureB();
         stage.beginContact(a, b);
     }
 

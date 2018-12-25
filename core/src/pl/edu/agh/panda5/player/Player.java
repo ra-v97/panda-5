@@ -14,13 +14,16 @@ public class Player extends GameObject {
     private List<PowerUpEffect> activePowerUps;
     private boolean dodging;
     private boolean jumping;
-    private Body feet;
     private float currentJumpTimeout;
 
-    public Player(Body body, Body feet){
+    private boolean isMovingRight;
+    private boolean isMovingLeft;
+
+    public Player(Body body){
         super(body);
-        this.feet = feet;
         currentJumpTimeout = 0f;
+        isMovingLeft = false;
+        isMovingRight = false;
     }
 
     public void jump() {
@@ -32,25 +35,24 @@ public class Player extends GameObject {
     }
 
     public void moveRight() {
-        Vector2 velocity = body.getLinearVelocity();
-        velocity.x = Constants.RUNNER_RUN_RIGHT_SPEED;
-        body.setLinearVelocity(velocity);
+        isMovingRight = true;
     }
 
     public void moveLeft() {
-        Vector2 velocity = body.getLinearVelocity();
-        velocity.x = Constants.RUNNER_RUN_LEFT_SPEED;
-        body.setLinearVelocity(velocity);
+        isMovingLeft = true;
     }
 
-    public void stop() {
-        Vector2 velocity = body.getLinearVelocity();
-        velocity.x = 0f;
-        body.setLinearVelocity(velocity);
+    public void stopMovingRight() {
+        isMovingRight = false;
+    }
+
+    public void stopMovingLeft() {
+        isMovingLeft = false;
     }
 
     public void update(float dt) {
         currentJumpTimeout -= dt;
+        setVelocity();
     }
 
     public void landed() {
@@ -73,5 +75,17 @@ public class Player extends GameObject {
 
     public boolean isDodging() {
         return dodging;
+    }
+
+    private void setVelocity() {
+        Vector2 velocity = body.getLinearVelocity();
+        velocity.x = 0f;
+        if(isMovingRight) {
+            velocity.x += Constants.RUNNER_RUN_RIGHT_SPEED;
+        }
+        if(isMovingLeft) {
+            velocity.x += Constants.RUNNER_RUN_LEFT_SPEED;
+        }
+        body.setLinearVelocity(velocity);
     }
 }

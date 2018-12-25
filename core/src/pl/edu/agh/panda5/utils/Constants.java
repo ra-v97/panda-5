@@ -16,7 +16,7 @@ public class Constants {
     public static final float GROUND_DENSITY = 0f;
 
     public static final float RUNNER_X = 2;
-    public static final float RUNNER_Y = GROUND_Y + GROUND_HEIGHT;
+    public static final float RUNNER_Y = GROUND_Y + GROUND_HEIGHT + 0.1f;
     public static final float RUNNER_WIDTH = 1f;
     public static final float RUNNER_HEIGHT = 2f;
     public static final float RUNNER_DENSITY = 0.5f;
@@ -25,5 +25,10 @@ public class Constants {
     public static final float RUNNER_RUN_RIGHT_SPEED = 10f;
     public static final float RUNNER_RUN_LEFT_SPEED = -10f;
     public static final float RUNNER_JUMP_TIMEOUT = 2f; //TODO: teraz jest ustawione 2s; zamienić na ok 50ms
+
+    public static final float RUNNER_FEET_X = 0f;
+    public static final float RUNNER_FEET_Y = -2f;
+    public static final float RUNNER_FEET_WIDTH = 0.5f;
+    public static final float RUNNER_FEET_HEIGHT = 0.1f;
 
 }

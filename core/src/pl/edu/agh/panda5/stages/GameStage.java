@@ -6,12 +6,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.player.Player;
 import pl.edu.agh.panda5.utils.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameStage extends Stage {
 
@@ -22,7 +26,7 @@ public class GameStage extends Stage {
     private AbstractFactory factory;
     private World world;
     private Platform ground;
-    private Platform tmpPlatform;
+    private List<Platform> tmpPlatforms;
     private Player player;
 
     private final float TIME_STEP = 1 / 300f;
@@ -37,7 +41,7 @@ public class GameStage extends Stage {
         world.setContactListener(new CollisionDetector(this));
         setUpGround();
         setUpPlayer();
-        setUpAdditionalPlatform();
+        setUpAdditionalPlatforms();
         renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
         setUpKeyboard();
@@ -59,9 +63,12 @@ public class GameStage extends Stage {
         addActor(ground);
     }
 
-    private void setUpAdditionalPlatform() {
-        tmpPlatform = factory.createPlatform(world, new Vector2(2f, 5.5f), 1, 1);
-        addActor(tmpPlatform);
+    private void setUpAdditionalPlatforms() {
+        tmpPlatforms = new ArrayList<>();
+        tmpPlatforms.add(factory.createPlatform(world, new Vector2(2f, 5.5f), 1f, 1f));
+        addActor(tmpPlatforms.get(0));
+        tmpPlatforms.add(factory.createPlatform(world, new Vector2(10f, 3.3f), 5f, 0.2f));
+        addActor(tmpPlatforms.get(1));
     }
 
     private void setUpPlayer() {
@@ -112,10 +119,10 @@ public class GameStage extends Stage {
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.RIGHT)
-            player.stop();
+            player.stopMovingRight();
 
         if(keycode == Input.Keys.LEFT)
-            player.stop();
+            player.stopMovingLeft();
 
         if (player.isDodging()) {
             player.stopDodge();
@@ -124,9 +131,9 @@ public class GameStage extends Stage {
         return super.keyUp(keycode);
     }
 
-    public void beginContact(Body a , Body b){
-        if((a.getUserData() == GameObjectType.PLAYER && b.getUserData() == GameObjectType.PLATFORM) ||
-                (a.getUserData() == GameObjectType.PLATFORM && b.getUserData() == GameObjectType.PLAYER)){
+    public void beginContact(Fixture a ,Fixture b){
+        if((a.getUserData() == GameObjectType.FEET_SENSOR && b.getUserData() == GameObjectType.PLATFORM) ||
+                (a.getUserData() == GameObjectType.PLATFORM && b.getUserData() == GameObjectType.FEET_SENSOR)){
             player.landed();
         }
     }

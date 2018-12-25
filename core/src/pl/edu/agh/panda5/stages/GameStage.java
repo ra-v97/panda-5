@@ -38,9 +38,9 @@ public class GameStage extends Stage {
     private Box2DDebugRenderer renderer;
 
     public GameStage() {
-        factory = new GameObjectFactory();
         world = WorldUtils.createWorld();
         world.setContactListener(new CollisionDetector(this));
+        factory = new GameObjectFactory(world);
         setUpGround();
         setUpPlayer();
         setUpEnemy();
@@ -61,26 +61,26 @@ public class GameStage extends Stage {
     }
 
     private void setUpGround() {
-        ground = factory.createPlatform(world, new Vector2(Constants.GROUND_X, Constants.GROUND_Y),
+        ground = factory.createPlatform(new Vector2(Constants.GROUND_X, Constants.GROUND_Y),
                 Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT / 2);
         addActor(ground);
     }
 
     private void setUpAdditionalPlatforms() {
         tmpPlatforms = new ArrayList<>();
-        tmpPlatforms.add(factory.createPlatform(world, new Vector2(2f, 5.5f), 1f, 1f));
+        tmpPlatforms.add(factory.createPlatform(new Vector2(2f, 5.5f), 1f, 1f));
         addActor(tmpPlatforms.get(0));
-        tmpPlatforms.add(factory.createPlatform(world, new Vector2(10f, 3.3f), 5f, 0.2f));
+        tmpPlatforms.add(factory.createPlatform(new Vector2(10f, 3.3f), 5f, 0.2f));
         addActor(tmpPlatforms.get(1));
     }
 
     private void setUpPlayer() {
-        player = factory.createPlayer(world);
+        player = factory.createPlayer();
         addActor(player);
     }
 
     private void setUpEnemy(){
-        hunter = factory.createHunter(world,new Vector2(10f,5f));
+        hunter = factory.createHunter(new Vector2(10f,5f));
         addActor(hunter);
     }
 

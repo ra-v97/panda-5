@@ -8,7 +8,13 @@ import pl.edu.agh.panda5.player.Player;
 
 public class GameObjectFactory implements AbstractFactory {
 
-    public Player createPlayer(World world){
+    private World world;
+
+    public GameObjectFactory(World world){
+        this.world = world;
+    }
+
+    public Player createPlayer(){
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -38,7 +44,7 @@ public class GameObjectFactory implements AbstractFactory {
         return new Player(body);
     }
 
-    public Platform createPlatform(World world, Vector2 position, float width, float height){
+    public Platform createPlatform(Vector2 position, float width, float height){
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(position);
@@ -58,7 +64,7 @@ public class GameObjectFactory implements AbstractFactory {
         return new Platform(body);
     }
 
-    public Hunter createHunter(World world,Vector2 position) {
+    public Hunter createHunter(Vector2 position) {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;

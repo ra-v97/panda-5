@@ -7,13 +7,15 @@ import pl.edu.agh.panda5.stages.GameStage;
 
 public class GameScreen implements Screen {
     private GameStage stage;
+    private boolean isPaused = false;
 
     public GameScreen() {
         stage = new GameStage();
     }
 
-    @Override
     public void render(float delta) {
+        if (isPaused)
+            delta = 0;
         //Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -35,11 +37,11 @@ public class GameScreen implements Screen {
     }
 
     public void pause() {
-
+        isPaused = true;
     }
 
     public void resume() {
-
+        isPaused = false;
     }
 
 

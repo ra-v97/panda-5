@@ -38,6 +38,7 @@ public class Constants {
     public static final float FLYING_ENEMY_Y = 3f;
     public static final float HUNTER_WIDTH = 1f;
     public static final float HUNTER_HEIGHT = 1f;
+    public static final Vector2 HUNTER_DEFAULT_POS = new Vector2(25f, Constants.GROUND_Y + Constants.GROUND_HEIGHT);
     public static final Vector2 ENEMY_LINEAR_VELOCITY = new Vector2(-10f, 0);
 
 

@@ -17,7 +17,7 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
 
     private World world;
     private Map<GameObjectType, List<GameObject>> poll = new HashMap<>();
-    private final int cacheSize = 3;
+    private final int cacheSize = 2;
     private boolean running = true;
 
     public GameObjectFactory(World world){

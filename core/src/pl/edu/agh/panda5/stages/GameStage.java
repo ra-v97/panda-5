@@ -28,7 +28,6 @@ public class GameStage extends Stage {
     private AbstractFactory factory;
     private World world;
     private Platform ground;
-    private List<Platform> tmpPlatforms;
     private Player player;
     private Hunter hunter;
 
@@ -42,15 +41,17 @@ public class GameStage extends Stage {
     public GameStage() {
         world = new World(Constants.WORLD_GRAVITY, true);
         world.setContactListener(new CollisionDetector(this));
+
         factory = new GameObjectFactory(world);
         new Thread((GameObjectFactory) factory).start();
+
+        renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
+        setUpCamera();
+
+        setUpKeyboard();
         setUpGround();
         setUpPlayer();
         setUpEnemy();
-        setUpAdditionalPlatforms();
-        renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
-        setUpCamera();
-        setUpKeyboard();
     }
 
     private void setUpKeyboard() {
@@ -69,21 +70,13 @@ public class GameStage extends Stage {
         addActor(ground);
     }
 
-    private void setUpAdditionalPlatforms() {
-        tmpPlatforms = new ArrayList<>();
-        tmpPlatforms.add(factory.createPlatform(new Vector2(2f, 5.5f), 1f, 1f));
-        addActor(tmpPlatforms.get(0));
-        tmpPlatforms.add(factory.createPlatform(new Vector2(10f, 3.3f), 5f, 0.2f));
-        addActor(tmpPlatforms.get(1));
-    }
-
     private void setUpPlayer() {
         player = factory.createPlayer();
         addActor(player);
     }
 
     private void setUpEnemy(){
-        hunter = factory.createHunter(new Vector2(10f,5f));
+        hunter = factory.createHunter(Constants.HUNTER_DEFAULT_POS);
         addActor(hunter);
     }
 

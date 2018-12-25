@@ -19,7 +19,7 @@ public class Player extends GameObject {
     private boolean isMovingRight;
     private boolean isMovingLeft;
 
-    public Player(Body body){
+    public Player(Body body) {
         super(body);
         currentJumpTimeout = 0f;
         isMovingLeft = false;
@@ -61,16 +61,14 @@ public class Player extends GameObject {
 
     public void dodge() {
         if (!jumping) {
-            body.setTransform(body.getPosition().x,(float)(body.getPosition().y-(0.5*(Constants.RUNNER_HEIGHT-Constants.RUNNER_WIDTH))),(float) (-90f * (Math.PI / 180f)));
+            body.setTransform(body.getPosition().x, (float) (body.getPosition().y - (0.5 * (Constants.RUNNER_HEIGHT - Constants.RUNNER_WIDTH))), (float) (90f * (Math.PI / 180f)));
             dodging = true;
-
-
         }
     }
 
     public void stopDodge() {
         dodging = false;
-        body.setTransform(body.getPosition().x,(float)(body.getPosition().y+(0.5*(Constants.RUNNER_HEIGHT-Constants.RUNNER_WIDTH))), 0f);
+        body.setTransform(body.getPosition().x, (float) (body.getPosition().y + (0.5 * (Constants.RUNNER_HEIGHT - Constants.RUNNER_WIDTH))), 0f);
     }
 
     public boolean isDodging() {
@@ -80,10 +78,10 @@ public class Player extends GameObject {
     private void setVelocity() {
         Vector2 velocity = body.getLinearVelocity();
         velocity.x = 0f;
-        if(isMovingRight) {
+        if (isMovingRight) {
             velocity.x += Constants.RUNNER_RUN_RIGHT_SPEED;
         }
-        if(isMovingLeft) {
+        if (isMovingLeft) {
             velocity.x += Constants.RUNNER_RUN_LEFT_SPEED;
         }
         body.setLinearVelocity(velocity);

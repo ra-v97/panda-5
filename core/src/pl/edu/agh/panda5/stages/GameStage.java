@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Platform;
+import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
 import pl.edu.agh.panda5.utils.*;
 
@@ -28,6 +29,7 @@ public class GameStage extends Stage {
     private Platform ground;
     private List<Platform> tmpPlatforms;
     private Player player;
+    private Hunter hunter;
 
     private final float TIME_STEP = 1 / 300f;
     private float accumulator = 0f;
@@ -41,6 +43,7 @@ public class GameStage extends Stage {
         world.setContactListener(new CollisionDetector(this));
         setUpGround();
         setUpPlayer();
+        setUpEnemy();
         setUpAdditionalPlatforms();
         renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
@@ -74,6 +77,11 @@ public class GameStage extends Stage {
     private void setUpPlayer() {
         player = factory.createPlayer(world);
         addActor(player);
+    }
+
+    private void setUpEnemy(){
+        hunter = factory.createHunter(world,new Vector2(10f,5f));
+        addActor(hunter);
     }
 
     @Override

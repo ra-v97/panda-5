@@ -3,6 +3,7 @@ package pl.edu.agh.panda5.utils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import pl.edu.agh.panda5.environment.Platform;
+import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
 
 public class GameObjectFactory implements AbstractFactory {
@@ -57,5 +58,18 @@ public class GameObjectFactory implements AbstractFactory {
         return new Platform(body);
     }
 
+    public Hunter createHunter(World world,Vector2 position) {
 
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.position.set(position);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Constants.HUNTER_WIDTH / 2, Constants.HUNTER_HEIGHT / 2);
+        Body body = world.createBody(bodyDef);
+        body.createFixture(shape, Constants.ENEMY_DENSITY);
+        body.resetMassData();
+        body.setUserData(GameObjectType.HUNTER);
+        shape.dispose();
+        return new Hunter(body);
+    }
 }

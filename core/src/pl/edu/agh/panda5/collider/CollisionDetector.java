@@ -20,6 +20,9 @@ public class CollisionDetector implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+        Fixture a = contact.getFixtureA();
+        Fixture b = contact.getFixtureB();
+        stage.endContact(a, b);
     }
 
     @Override

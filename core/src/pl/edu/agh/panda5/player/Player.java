@@ -34,6 +34,10 @@ public class Player extends GameObject {
         }
     }
 
+    public void fall() {
+        jumping = true;
+    }
+
     public void moveRight() {
         isMovingRight = true;
     }

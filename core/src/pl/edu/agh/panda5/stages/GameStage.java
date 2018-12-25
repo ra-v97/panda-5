@@ -215,11 +215,20 @@ public class GameStage extends Stage {
         return super.keyUp(keycode);
     }
 
-    public void beginContact(Fixture a ,Fixture b){
+    public void beginContact(Fixture a, Fixture b){
         if(a.getUserData() == GameObjectType.FEET_SENSOR || b.getUserData() == GameObjectType.FEET_SENSOR) {
             if((a.getUserData() == GameObjectType.PLATFORM) || (b.getUserData() == GameObjectType.PLATFORM) ||
                     (a.getUserData() == GameObjectType.OBSTACLE) || (b.getUserData() == GameObjectType.OBSTACLE)) {
                 player.landed();
+            }
+        }
+    }
+
+    public void endContact(Fixture a, Fixture b) {
+        if(a.getUserData() == GameObjectType.FEET_SENSOR || b.getUserData() == GameObjectType.FEET_SENSOR) {
+            if((a.getUserData() == GameObjectType.PLATFORM) || (b.getUserData() == GameObjectType.PLATFORM) ||
+                    (a.getUserData() == GameObjectType.OBSTACLE) || (b.getUserData() == GameObjectType.OBSTACLE)) {
+                player.fall();
             }
         }
     }

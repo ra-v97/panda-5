@@ -23,8 +23,7 @@ public abstract class GameObject extends Actor {
     public void act(float delta) {
         super.act(delta);
 
-        if((new Vector2(0,0).sub(this.body.getPosition())).x > 0){
-            System.out.println("Destroy");
+        if(this.body.getPosition().x < 0){
             this.remove();
         }
     }

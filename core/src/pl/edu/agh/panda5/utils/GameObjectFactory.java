@@ -28,7 +28,6 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
     public void run(){
         while(running) {
             if (poll.get(GameObjectType.OBSTACLE).size() < cacheSize) {
-                System.out.println("Creating");
                 poll.get(GameObjectType.OBSTACLE).add(createObstaclePrototype());
             }
         }

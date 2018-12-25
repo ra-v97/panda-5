@@ -40,7 +40,7 @@ public class GameStage extends Stage {
     private Box2DDebugRenderer renderer;
 
     public GameStage() {
-        world = WorldUtils.createWorld();
+        world = new World(Constants.WORLD_GRAVITY, true);
         world.setContactListener(new CollisionDetector(this));
         factory = new GameObjectFactory(world);
         new Thread((GameObjectFactory) factory).start();
@@ -123,6 +123,7 @@ public class GameStage extends Stage {
     @Override
     public void dispose(){
         ((GameObjectFactory) factory).terminate();
+        super.dispose();
     }
 
     @Override

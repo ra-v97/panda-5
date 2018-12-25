@@ -15,6 +15,7 @@ import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
+import pl.edu.agh.panda5.screens.GameOverScreen;
 import pl.edu.agh.panda5.utils.*;
 
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class GameStage extends Stage {
         while (accumulator >= TIME_STEP) {
             world.step(TIME_STEP, 6, 2);
             player.update(delta);
+            isPlayerInBounds();
             accumulator -= TIME_STEP;
         }
 
@@ -110,6 +112,13 @@ public class GameStage extends Stage {
     private void spawnObstacle(){
         Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
         addActor(obstacle);
+    }
+
+    private void isPlayerInBounds(){
+        if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0){
+            game.pause();
+            game.setScreen(new GameOverScreen(game));
+        }
     }
 
     @Override
@@ -139,10 +148,12 @@ public class GameStage extends Stage {
             player.moveLeft();
 
         if(keycode == Input.Keys.P)
-            game.pause();
+            game.pauseOrResume();
 
-        if(keycode == Input.Keys.R)
-            game.resume();
+        if(keycode == Input.Keys.R) {
+           game.dispose();
+           game.create();
+        }
 
         return super.keyDown(keycode);
     }

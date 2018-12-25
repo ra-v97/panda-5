@@ -44,6 +44,7 @@ public class GameStage extends Stage {
     private Box2DDebugRenderer renderer;
 
     private Random rand;
+    static boolean onlyLowerPlatformLastTime = true;
 
     public GameStage(Panda5 game) {
         this.game = game;
@@ -107,16 +108,49 @@ public class GameStage extends Stage {
             accumulator -= TIME_STEP;
         }
 
-        if(accumulator2 > Constants.OBSTACLE_TIME_STEP) {
-            spawnObstacle();
-            accumulator2 -= Constants.OBSTACLE_TIME_STEP;
+        if(accumulator2 > Constants.PLATFORM_TIME_STEP) {
+            spawnPlatforms();
+            accumulator2 -= Constants.PLATFORM_TIME_STEP;
         }
         // TODO: Implement interpolation
     }
 
-    private void spawnObstacle(){
-        Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
-        addActor(obstacle);
+    private void spawnPlatforms(){
+
+        //40% chance to generate each platform
+        boolean[] generatePlatform = {
+                rand.nextInt() % 100 <= Constants.PLATFORM_GENERATION_CHANCE,
+                rand.nextInt() % 100 <= Constants.PLATFORM_GENERATION_CHANCE,
+                rand.nextInt() % 100 <= Constants.PLATFORM_GENERATION_CHANCE
+        };
+
+        //if there is no platform generated choose one at random
+        boolean oneGenerated = false;
+        for(int i = 0; i < 3; ++i) {
+            if(generatePlatform[i])
+                oneGenerated = true;
+        }
+
+        if(!oneGenerated)
+            generatePlatform[rand.nextInt() % 3] = true;
+
+        for(int i = 0; i < 3; ++i) {
+
+            //generate platform
+            if(generatePlatform[i]) {
+                Platform platform = factory.createPlatform(new Vector2(Constants.PLATFORM_DEFAULT_X, Constants.PLATFORM_Y[i]),
+                        Constants.PLATFORM_WIDTH, Constants.PLATFORM_HEIGHT);
+                addActor(platform);
+            }
+
+            //generate obstacles
+            if(rand.nextInt() % 100 <= Constants.OBSTACLE_GENERATION_CHANCE) {
+                //TODO: coś się tu zjebało
+                //Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
+                //addActor(obstacle);
+            }
+        }
+
     }
 
     private void isPlayerInBounds(){

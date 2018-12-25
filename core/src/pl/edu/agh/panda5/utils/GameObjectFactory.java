@@ -70,8 +70,10 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
     public Platform createPlatform(Vector2 position, float width, float height){
 
         BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(position);
         Body body = world.createBody(bodyDef);
+        //body.setGravityScale(0f);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
 

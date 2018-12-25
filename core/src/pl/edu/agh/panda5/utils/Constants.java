@@ -11,7 +11,7 @@ public class Constants {
 
     public static final float GROUND_X = 0;
     public static final float GROUND_Y = 0;
-    public static final float GROUND_WIDTH = 25f;
+    public static final float GROUND_WIDTH = 35f;
     public static final float GROUND_HEIGHT = 2f;
     public static final float GROUND_DENSITY = 0f;
 
@@ -20,8 +20,8 @@ public class Constants {
     public static final float RUNNER_WIDTH = 1f;
     public static final float RUNNER_HEIGHT = 2f;
     public static final float RUNNER_DENSITY = 0.5f;
-    public static final float RUNNER_GRAVITY_SCALE = 3f;
-    public static final Vector2 RUNNER_JUMPING_LINEAR_IMPULSE = new Vector2(0, 13f);
+    public static final float RUNNER_GRAVITY_SCALE = 7f;
+    public static final Vector2 RUNNER_JUMPING_LINEAR_IMPULSE = new Vector2(0, 30f);
     public static final float RUNNER_RUN_RIGHT_SPEED = 10f;
     public static final float RUNNER_RUN_LEFT_SPEED = -10f;
     public static final float RUNNER_JUMP_TIMEOUT = 0.05f;
@@ -39,12 +39,20 @@ public class Constants {
     public static final float HUNTER_WIDTH = 1f;
     public static final float HUNTER_HEIGHT = 1f;
     public static final Vector2 HUNTER_DEFAULT_POS = new Vector2(25f, Constants.GROUND_Y + Constants.GROUND_HEIGHT);
-    public static final Vector2 ENEMY_LINEAR_VELOCITY = new Vector2(-10f, 0);
+    public static final Vector2 GAME_LINEAR_VELOCITY = new Vector2(-10f, 0);
 
 
-    public static final float OBSTACLE_WIDTH = 3f;
-    public static final float OBSTACLE_HEIGHT = 0.2f;
+    public static final float OBSTACLE_WIDTH = 0.7f;
+    public static final float OBSTACLE_HEIGHT = 1f;
     public static final Vector2 OBSTACLE_DEFAULT_POS = new Vector2(25f,Constants.GROUND_Y + Constants.GROUND_HEIGHT);
-    public static final float OBSTACLE_TIME_STEP = 3f;
+    public static final int OBSTACLE_GENERATION_CHANCE = 20;
+
+    public static final float PLATFORM_WIDTH = 3f;
+    public static final float PLATFORM_HEIGHT = 0.2f;
+    public static final float PLATFORM_DEFAULT_X = 25f;
+    public static final float PLATFORM_TIME_STEP = 1.5f;
+    public static final float[] PLATFORM_Y = {0f, 5f, 10f};
+    public static final int PLATFORM_GENERATION_CHANCE = 40;
+
 
 }

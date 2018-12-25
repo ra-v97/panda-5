@@ -14,6 +14,6 @@ public class Obstacle extends GameObject {
     @Override
     public void act(float delta) {
         super.act(delta);
-        body.setLinearVelocity(Constants.ENEMY_LINEAR_VELOCITY);
+        body.setLinearVelocity(Constants.GAME_LINEAR_VELOCITY);
     }
 }

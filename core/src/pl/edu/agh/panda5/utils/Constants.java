@@ -40,4 +40,9 @@ public class Constants {
     public static final float HUNTER_HEIGHT = 1f;
     public static final Vector2 ENEMY_LINEAR_VELOCITY = new Vector2(-10f, 0);
 
+
+    public static final float OBSTACLE_WIDTH = 0.7f;
+    public static final float OBSTACLE_HEIGHT = 1f;
+    public static final Vector2 OBSTACLE_DEFAULT_POS = new Vector2(25f,Constants.GROUND_Y + Constants.GROUND_HEIGHT);
+
 }

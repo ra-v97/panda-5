@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import pl.edu.agh.panda5.collider.CollisionDetector;
+import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
@@ -33,6 +34,7 @@ public class GameStage extends Stage {
 
     private final float TIME_STEP = 1 / 300f;
     private float accumulator = 0f;
+    private float accumulator2 = 0f;
 
     private OrthographicCamera camera;
     private Box2DDebugRenderer renderer;
@@ -41,6 +43,7 @@ public class GameStage extends Stage {
         world = WorldUtils.createWorld();
         world.setContactListener(new CollisionDetector(this));
         factory = new GameObjectFactory(world);
+        new Thread((GameObjectFactory) factory).start();
         setUpGround();
         setUpPlayer();
         setUpEnemy();
@@ -90,6 +93,8 @@ public class GameStage extends Stage {
 
         // Fixed timestep
         accumulator += delta;
+        accumulator2 += delta;
+
 
         while (accumulator >= TIME_STEP) {
             world.step(TIME_STEP, 6, 2);
@@ -97,14 +102,27 @@ public class GameStage extends Stage {
             accumulator -= TIME_STEP;
         }
 
+        if(accumulator2 > 3) {
+            spawnObstacle();
+            accumulator2 = 0;
+        }
         // TODO: Implement interpolation
+    }
 
+    private void spawnObstacle(){
+        Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
+        addActor(obstacle);
     }
 
     @Override
     public void draw() {
         super.draw();
         renderer.render(world, camera.combined);
+    }
+
+    @Override
+    public void dispose(){
+        ((GameObjectFactory) factory).terminate();
     }
 
     @Override

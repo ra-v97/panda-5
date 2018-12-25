@@ -5,4 +5,5 @@ public enum GameObjectType {
     PLAYER,
     FEET_SENSOR,
     HUNTER,
+    OBSTACLE
 }

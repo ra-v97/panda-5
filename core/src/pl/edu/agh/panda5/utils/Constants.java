@@ -24,7 +24,7 @@ public class Constants {
     public static final Vector2 RUNNER_JUMPING_LINEAR_IMPULSE = new Vector2(0, 13f);
     public static final float RUNNER_RUN_RIGHT_SPEED = 10f;
     public static final float RUNNER_RUN_LEFT_SPEED = -10f;
-    public static final float RUNNER_JUMP_TIMEOUT = 2f; //TODO: teraz jest ustawione 2s; zamienić na ok 50ms
+    public static final float RUNNER_JUMP_TIMEOUT = 0.05f;
 
     public static final float RUNNER_FEET_X = 0f;
     public static final float RUNNER_FEET_Y = -2f;
@@ -42,8 +42,9 @@ public class Constants {
     public static final Vector2 ENEMY_LINEAR_VELOCITY = new Vector2(-10f, 0);
 
 
-    public static final float OBSTACLE_WIDTH = 0.7f;
-    public static final float OBSTACLE_HEIGHT = 1f;
+    public static final float OBSTACLE_WIDTH = 3f;
+    public static final float OBSTACLE_HEIGHT = 0.2f;
     public static final Vector2 OBSTACLE_DEFAULT_POS = new Vector2(25f,Constants.GROUND_Y + Constants.GROUND_HEIGHT);
+    public static final float OBSTACLE_TIME_STEP = 3f;
 
 }

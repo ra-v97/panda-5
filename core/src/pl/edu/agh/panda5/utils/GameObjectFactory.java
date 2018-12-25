@@ -122,8 +122,8 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
         fDef.shape = shape;
         fDef.density = Constants.GROUND_DENSITY;
 
-        body.createFixture(fDef);
-        body.setUserData(GameObjectType.OBSTACLE);
+        Fixture fix = body.createFixture(fDef);
+        fix.setUserData(GameObjectType.OBSTACLE);
         shape.dispose();
 
         return new Obstacle(body);

@@ -20,6 +20,7 @@ import pl.edu.agh.panda5.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameStage extends Stage {
 
@@ -42,6 +43,8 @@ public class GameStage extends Stage {
     private OrthographicCamera camera;
     private Box2DDebugRenderer renderer;
 
+    private Random rand;
+
     public GameStage(Panda5 game) {
         this.game = game;
 
@@ -53,6 +56,8 @@ public class GameStage extends Stage {
 
         renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
+
+        rand = new Random();
 
         setUpKeyboard();
         setUpGround();
@@ -102,9 +107,9 @@ public class GameStage extends Stage {
             accumulator -= TIME_STEP;
         }
 
-        if(accumulator2 > 3) {
+        if(accumulator2 > Constants.OBSTACLE_TIME_STEP) {
             spawnObstacle();
-            accumulator2 = 0;
+            accumulator2 -= Constants.OBSTACLE_TIME_STEP;
         }
         // TODO: Implement interpolation
     }
@@ -177,9 +182,11 @@ public class GameStage extends Stage {
     }
 
     public void beginContact(Fixture a ,Fixture b){
-        if((a.getUserData() == GameObjectType.FEET_SENSOR && b.getUserData() == GameObjectType.PLATFORM) ||
-                (a.getUserData() == GameObjectType.PLATFORM && b.getUserData() == GameObjectType.FEET_SENSOR)){
-            player.landed();
+        if(a.getUserData() == GameObjectType.FEET_SENSOR || b.getUserData() == GameObjectType.FEET_SENSOR) {
+            if((a.getUserData() == GameObjectType.PLATFORM) || (b.getUserData() == GameObjectType.PLATFORM) ||
+                    (a.getUserData() == GameObjectType.OBSTACLE) || (b.getUserData() == GameObjectType.OBSTACLE)) {
+                player.landed();
+            }
         }
     }
 }

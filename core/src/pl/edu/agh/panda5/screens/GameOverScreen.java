@@ -31,7 +31,7 @@ public class GameOverScreen implements Screen{
         layout.setText(font, fontText);
 
         batch.begin();
-        font.draw(batch, layout, Constants.APP_WIDTH / 2f - layout.width/2, Constants.APP_HEIGHT / 2f);
+        font.draw(batch, layout, Constants.APP_WIDTH / 2f - layout.width/2, Constants.APP_HEIGHT / 2f); // TODO: Fix, screen size is not constant
         batch.end();
     }
 

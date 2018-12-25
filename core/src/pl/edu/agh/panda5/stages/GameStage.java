@@ -115,10 +115,13 @@ public class GameStage extends Stage {
     }
 
     private void isPlayerInBounds(){
-        if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0){
-            game.pause();
-            game.setScreen(new GameOverScreen(game));
-        }
+        if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0)
+            gameOver();
+    }
+
+    private void gameOver(){
+        game.pause();
+        game.setScreen(new GameOverScreen(game));
     }
 
     @Override

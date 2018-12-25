@@ -19,6 +19,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         if (isPaused)
             delta = 0;
+
         //Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

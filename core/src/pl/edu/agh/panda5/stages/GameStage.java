@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import pl.edu.agh.panda5.Panda5;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
@@ -25,6 +26,8 @@ public class GameStage extends Stage {
     private static final int VIEWPORT_WIDTH = 20;
     private static final int VIEWPORT_HEIGHT = 13;
 
+    private Panda5 game;
+
     private AbstractFactory factory;
     private World world;
     private Platform ground;
@@ -38,7 +41,9 @@ public class GameStage extends Stage {
     private OrthographicCamera camera;
     private Box2DDebugRenderer renderer;
 
-    public GameStage() {
+    public GameStage(Panda5 game) {
+        this.game = game;
+
         world = new World(Constants.WORLD_GRAVITY, true);
         world.setContactListener(new CollisionDetector(this));
 
@@ -132,6 +137,12 @@ public class GameStage extends Stage {
 
         if(keycode == Input.Keys.LEFT)
             player.moveLeft();
+
+        if(keycode == Input.Keys.P)
+            game.pause();
+
+        if(keycode == Input.Keys.R)
+            game.resume();
 
         return super.keyDown(keycode);
     }

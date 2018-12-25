@@ -10,10 +10,19 @@ public class Panda5 extends Game {
 
 	@Override
 	public void create() {
-		gameScreen = new GameScreen();
+		gameScreen = new GameScreen(this);
 		setScreen(gameScreen);
 	}
 
+	public void pause(){
+		if(this.getScreen() == gameScreen)
+			gameScreen.pause();
+	}
+
+	public void resume(){
+		if(this.getScreen() == gameScreen)
+			gameScreen.resume();
+	}
 	
 	@Override
 	public void dispose () {

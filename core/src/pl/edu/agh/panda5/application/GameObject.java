@@ -18,12 +18,4 @@ public abstract class GameObject extends Actor {
         return body;
     }
 
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-
-        if(this.body.getPosition().x < 0){
-            this.remove();
-        }
-    }
 }

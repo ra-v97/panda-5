@@ -4,11 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.LongMap;
 import pl.edu.agh.panda5.Panda5;
+import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
@@ -173,9 +178,10 @@ public class GameStage extends Stage {
     }
 
     private void isPlayerInBounds(){
-        if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0)
+        if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0) // TODO: Fix this someday
             gameOver();
     }
+
 
     private void gameOver(){
         game.pause();

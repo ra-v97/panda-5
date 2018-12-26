@@ -34,11 +34,10 @@ public class Constants {
     public static final float ENEMY_DENSITY = RUNNER_DENSITY;
     public static final float HUNTER_WIDTH = 1f;
     public static final float HUNTER_HEIGHT = 1f;
-    public static final Vector2 HUNTER_DEFAULT_POS = new Vector2(25f, Constants.GROUND_Y + Constants.GROUND_HEIGHT);
+
     public static final Vector2 GAME_LINEAR_VELOCITY = new Vector2(-10f, 0);
 
     public static final Vector2 HUNTER_DEFAULT_POS = new Vector2(19f, (float)(Constants.GROUND_Y + Constants.GROUND_HEIGHT + 0.2*RUNNER_HEIGHT));
-    public static final Vector2 ENEMY_LINEAR_VELOCITY = new Vector2(-10f, 0);
     public static final float ARROW_SPEED = 2f;
 
     public static final float OBSTACLE_WIDTH = 0.7f;

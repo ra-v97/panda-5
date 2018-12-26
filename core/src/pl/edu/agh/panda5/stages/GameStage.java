@@ -9,22 +9,27 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import pl.edu.agh.panda5.Panda5;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
+import pl.edu.agh.panda5.screens.GameOverScreen;
 import pl.edu.agh.panda5.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameStage extends Stage {
 
     // This will be our viewport measurements while working with the debug renderer
     private static final int VIEWPORT_WIDTH = 20;
     private static final int VIEWPORT_HEIGHT = 13;
+
+    private Panda5 game;
 
     private AbstractFactory factory;
     private World world;
@@ -40,7 +45,12 @@ public class GameStage extends Stage {
     private OrthographicCamera camera;
     private Box2DDebugRenderer renderer;
 
-    public GameStage() {
+    private Random rand;
+    static boolean onlyLowerPlatformLastTime = true;
+
+    public GameStage(Panda5 game) {
+        this.game = game;
+
         world = new World(Constants.WORLD_GRAVITY, true);
         world.setContactListener(new CollisionDetector(this));
 
@@ -49,6 +59,8 @@ public class GameStage extends Stage {
 
         renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
+
+        rand = new Random();
 
         setUpKeyboard();
         setUpGround();
@@ -90,12 +102,13 @@ public class GameStage extends Stage {
         while (accumulator >= TIME_STEP) {
             world.step(TIME_STEP, 6, 2);
             player.update(delta);
+            isPlayerInBounds();
             accumulator -= TIME_STEP;
         }
 
-        if(accumulator2 > 3) {
-            //spawnObstacle();
-            accumulator2 = 0;
+        if(accumulator2 > Constants.PLATFORM_TIME_STEP) {
+            spawnPlatforms();
+            accumulator2 -= Constants.PLATFORM_TIME_STEP;
         }
 
         if(accumulator3 > 2) {
@@ -104,9 +117,52 @@ public class GameStage extends Stage {
         // TODO: Implement interpolation
     }
 
-    private void spawnObstacle(){
-        Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
-        addActor(obstacle);
+    private void spawnPlatforms(){
+
+        //40% chance to generate each platform
+        boolean[] generatePlatform = {
+                rand.nextInt() % 100 <= Constants.PLATFORM_GENERATION_CHANCE,
+                rand.nextInt() % 100 <= Constants.PLATFORM_GENERATION_CHANCE,
+                rand.nextInt() % 100 <= Constants.PLATFORM_GENERATION_CHANCE
+        };
+
+        //if there is no platform generated choose one at random
+        boolean oneGenerated = false;
+        for(int i = 0; i < 3; ++i) {
+            if(generatePlatform[i])
+                oneGenerated = true;
+        }
+
+        if(!oneGenerated)
+            generatePlatform[rand.nextInt() % 3] = true;
+
+        for(int i = 0; i < 3; ++i) {
+
+            //generate platform
+            if(generatePlatform[i]) {
+                Platform platform = factory.createPlatform(new Vector2(Constants.PLATFORM_DEFAULT_X, Constants.PLATFORM_Y[i]),
+                        Constants.PLATFORM_WIDTH, Constants.PLATFORM_HEIGHT);
+                addActor(platform);
+            }
+
+            //generate obstacles
+            if(rand.nextInt() % 100 <= Constants.OBSTACLE_GENERATION_CHANCE) {
+                //TODO: coś się tu zjebało
+                //Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
+                //addActor(obstacle);
+            }
+        }
+
+    }
+
+    private void isPlayerInBounds(){
+        if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0)
+            gameOver();
+    }
+
+    private void gameOver(){
+        game.pause();
+        game.setScreen(new GameOverScreen(game));
     }
 
     private void setUpHunter(){
@@ -140,6 +196,14 @@ public class GameStage extends Stage {
         if(keycode == Input.Keys.LEFT)
             player.moveLeft();
 
+        if(keycode == Input.Keys.P)
+            game.pauseOrResume();
+
+        if(keycode == Input.Keys.R) {
+           game.dispose();
+           game.create();
+        }
+
         return super.keyDown(keycode);
     }
 
@@ -158,10 +222,21 @@ public class GameStage extends Stage {
         return super.keyUp(keycode);
     }
 
-    public void beginContact(Fixture a ,Fixture b){
-        if((a.getUserData() == GameObjectType.FEET_SENSOR && b.getUserData() == GameObjectType.PLATFORM) ||
-                (a.getUserData() == GameObjectType.PLATFORM && b.getUserData() == GameObjectType.FEET_SENSOR)){
-            player.landed();
+    public void beginContact(Fixture a, Fixture b){
+        if(a.getUserData() == GameObjectType.FEET_SENSOR || b.getUserData() == GameObjectType.FEET_SENSOR) {
+            if((a.getUserData() == GameObjectType.PLATFORM) || (b.getUserData() == GameObjectType.PLATFORM) ||
+                    (a.getUserData() == GameObjectType.OBSTACLE) || (b.getUserData() == GameObjectType.OBSTACLE)) {
+                player.landed();
+            }
+        }
+    }
+
+    public void endContact(Fixture a, Fixture b) {
+        if(a.getUserData() == GameObjectType.FEET_SENSOR || b.getUserData() == GameObjectType.FEET_SENSOR) {
+            if((a.getUserData() == GameObjectType.PLATFORM) || (b.getUserData() == GameObjectType.PLATFORM) ||
+                    (a.getUserData() == GameObjectType.OBSTACLE) || (b.getUserData() == GameObjectType.OBSTACLE)) {
+                player.fall();
+            }
         }
     }
 }

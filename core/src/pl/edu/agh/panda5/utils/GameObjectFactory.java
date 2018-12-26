@@ -71,8 +71,10 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
     public Platform createPlatform(Vector2 position, float width, float height){
 
         BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(position);
         Body body = world.createBody(bodyDef);
+        //body.setGravityScale(0f);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
 
@@ -126,8 +128,8 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
         fDef.shape = shape;
         fDef.density = Constants.GROUND_DENSITY;
 
-        body.createFixture(fDef);
-        body.setUserData(GameObjectType.OBSTACLE);
+        Fixture fix = body.createFixture(fDef);
+        fix.setUserData(GameObjectType.OBSTACLE);
         shape.dispose();
 
         return new Obstacle(body);

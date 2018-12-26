@@ -42,7 +42,7 @@ public class GameStage extends Stage {
     private Box2DDebugRenderer renderer;
 
     private Random rand;
-    static boolean onlyLowerPlatformLastTime = true;
+    private boolean onlyLowerPlatformLastTime = true;
 
     public GameStage(Panda5 game) {
         this.game = game;
@@ -51,7 +51,6 @@ public class GameStage extends Stage {
         world.setContactListener(new CollisionDetector(this));
 
         factory = new GameObjectFactory(world);
-        //new Thread((GameObjectFactory) factory).start();
 
         renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
@@ -155,7 +154,7 @@ public class GameStage extends Stage {
             //generate platform
             if(generatePlatform[i]) {
                 Platform platform = factory.createPlatform(new Vector2(Constants.PLATFORM_DEFAULT_X,
-                        Constants.PLATFORM_Y[i]));
+                        Constants.PLATFORM_DEFAULT_Y[i]));
                 addActor(platform);
 
                 //generate obstacles

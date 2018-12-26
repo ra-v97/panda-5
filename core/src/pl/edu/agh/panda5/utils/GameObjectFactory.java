@@ -5,7 +5,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
-import pl.edu.agh.panda5.opponent.Bullet;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
 
@@ -31,7 +30,7 @@ public class GameObjectFactory implements AbstractFactory {
 
         while(poll.get(GameObjectType.PLATFORM).size() < platformCacheSize) {
             poll.get(GameObjectType.PLATFORM).add(createPlatformPrototype(new Vector2(Constants.PLATFORM_DEFAULT_X,
-                    Constants.PLATFORM_Y[0]), Constants.PLATFORM_WIDTH, Constants.PLATFORM_HEIGHT));
+                    Constants.PLATFORM_DEFAULT_Y[0]), Constants.PLATFORM_WIDTH, Constants.PLATFORM_HEIGHT));
         }
     }
 

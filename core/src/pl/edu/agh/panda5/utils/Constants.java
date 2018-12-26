@@ -44,16 +44,16 @@ public class Constants {
     public static final float PLATFORM_HEIGHT = 0.2f;
     public static final float PLATFORM_DEFAULT_X = 25f;
     public static final float PLATFORM_TIME_STEP = 1.5f;
-    public static final float[] PLATFORM_Y = {0f, 5f, 10f};
+    public static final float[] PLATFORM_DEFAULT_Y = {0f, 5f, 10f};
     public static final int PLATFORM_GENERATION_CHANCE = 40;
 
     public static final float OBSTACLE_WIDTH = 0.7f;
     public static final float OBSTACLE_HEIGHT = 0.55f;
     public static final float OBSTACLE_DEFAULT_X = 25f;
     public static final float[] OBSTACLE_DEFAULT_Y = {
-            PLATFORM_Y[0] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT,
-            PLATFORM_Y[1] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT,
-            PLATFORM_Y[2] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT
+            PLATFORM_DEFAULT_Y[0] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT,
+            PLATFORM_DEFAULT_Y[1] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT,
+            PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT
     };
     public static final int OBSTACLE_GENERATION_CHANCE = 20;
 }

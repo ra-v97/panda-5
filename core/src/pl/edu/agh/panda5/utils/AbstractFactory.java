@@ -8,7 +8,8 @@ import pl.edu.agh.panda5.player.Player;
 
 public interface AbstractFactory {
     Player createPlayer();
-    Platform createPlatform(Vector2 position, float width, float height);
+    Platform createGround();
+    Platform createPlatform(Vector2 position);
     Hunter createHunter(Vector2 position);
     Obstacle createObstacle(Vector2 position);
 }

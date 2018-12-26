@@ -28,7 +28,7 @@ public class Constants {
 
     public static final float RUNNER_FEET_X = 0f;
     public static final float RUNNER_FEET_Y = -2f;
-    public static final float RUNNER_FEET_WIDTH = 0.5f;
+    public static final float RUNNER_FEET_WIDTH = RUNNER_WIDTH * 0.9f;
     public static final float RUNNER_FEET_HEIGHT = 0.1f;
 
     public static final float ENEMY_DENSITY = RUNNER_DENSITY;

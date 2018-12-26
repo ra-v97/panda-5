@@ -9,33 +9,30 @@ import pl.edu.agh.panda5.opponent.Bullet;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class GameObjectFactory implements AbstractFactory, Runnable {
+public class GameObjectFactory implements AbstractFactory {
 
     private World world;
     private Map<GameObjectType, List<GameObject>> poll = new HashMap<>();
-    private final int cacheSize = 2;
-    private boolean running = true;
+    private final int obstacleCacheSize = 4;
+    private final int platformCacheSize = 6;
+    private int currentObstacle = 0;
+    private int currentPlatform = 0;
 
     public GameObjectFactory(World world){
         this.world = world;
-        poll.put(GameObjectType.OBSTACLE, new LinkedList<>());
-    }
+        poll.put(GameObjectType.OBSTACLE, new ArrayList<>());
+        poll.put(GameObjectType.PLATFORM, new ArrayList<>());
 
-    public void run(){
-        while(running) {
-            if (poll.get(GameObjectType.OBSTACLE).size() < cacheSize) {
-                poll.get(GameObjectType.OBSTACLE).add(createObstaclePrototype());
-            }
+        while(poll.get(GameObjectType.OBSTACLE).size() < obstacleCacheSize) {
+            poll.get(GameObjectType.OBSTACLE).add(createObstaclePrototype());
         }
-    }
 
-    public void terminate(){
-        this.running = false;
+        while(poll.get(GameObjectType.PLATFORM).size() < platformCacheSize) {
+            poll.get(GameObjectType.PLATFORM).add(createPlatformPrototype(new Vector2(Constants.PLATFORM_DEFAULT_X,
+                    Constants.PLATFORM_Y[0]), Constants.PLATFORM_WIDTH, Constants.PLATFORM_HEIGHT));
+        }
     }
 
     public Player createPlayer(){
@@ -68,13 +65,24 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
         return new Player(body);
     }
 
-    public Platform createPlatform(Vector2 position, float width, float height){
+    public Platform createGround() {
+        return createPlatformPrototype(new Vector2(Constants.GROUND_X, Constants.GROUND_Y), Constants.GROUND_WIDTH,
+                Constants.GROUND_HEIGHT);
+    }
+
+    public Platform createPlatform(Vector2 position) {
+        Platform platform = (Platform) poll.get(GameObjectType.PLATFORM).get(currentPlatform);
+        platform.getBody().setTransform(position.x, position.y, 0f);
+        currentPlatform = (currentPlatform + 1) % platformCacheSize;
+        return platform;
+    }
+
+    private Platform createPlatformPrototype(Vector2 position, float width, float height) {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(position);
         Body body = world.createBody(bodyDef);
-        //body.setGravityScale(0f);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
 
@@ -110,8 +118,9 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
     }
 
     public Obstacle createObstacle(Vector2 position) {
-        Obstacle obstacle = (Obstacle) poll.get(GameObjectType.OBSTACLE).remove(0);
+        Obstacle obstacle = (Obstacle) poll.get(GameObjectType.OBSTACLE).get(currentObstacle);
         obstacle.getBody().setTransform(position.x, position.y, 0f);
+        currentObstacle = (currentObstacle + 1) % obstacleCacheSize;
         return obstacle;
     }
 

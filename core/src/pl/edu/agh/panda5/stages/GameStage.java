@@ -55,7 +55,7 @@ public class GameStage extends Stage {
         world.setContactListener(new CollisionDetector(this));
 
         factory = new GameObjectFactory(world);
-        new Thread((GameObjectFactory) factory).start();
+        //new Thread((GameObjectFactory) factory).start();
 
         renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
@@ -79,8 +79,7 @@ public class GameStage extends Stage {
     }
 
     private void setUpGround() {
-        ground = factory.createPlatform(new Vector2(Constants.GROUND_X, Constants.GROUND_Y),
-                Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT / 2);
+        ground = factory.createGround();
         addActor(ground);
     }
 
@@ -134,22 +133,22 @@ public class GameStage extends Stage {
         }
 
         if(!oneGenerated)
-            generatePlatform[rand.nextInt() % 3] = true;
+            //Zero out sign bit so that nextInt returns only positive ints
+            generatePlatform[(rand.nextInt() & Integer.MAX_VALUE) % 3] = true;
 
         for(int i = 0; i < 3; ++i) {
 
             //generate platform
             if(generatePlatform[i]) {
-                Platform platform = factory.createPlatform(new Vector2(Constants.PLATFORM_DEFAULT_X, Constants.PLATFORM_Y[i]),
-                        Constants.PLATFORM_WIDTH, Constants.PLATFORM_HEIGHT);
+                Platform platform = factory.createPlatform(new Vector2(Constants.PLATFORM_DEFAULT_X,
+                        Constants.PLATFORM_Y[i]));
                 addActor(platform);
             }
 
             //generate obstacles
             if(rand.nextInt() % 100 <= Constants.OBSTACLE_GENERATION_CHANCE) {
-                //TODO: coś się tu zjebało
-                //Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
-                //addActor(obstacle);
+                Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
+                addActor(obstacle);
             }
         }
 
@@ -178,7 +177,6 @@ public class GameStage extends Stage {
 
     @Override
     public void dispose(){
-        ((GameObjectFactory) factory).terminate();
         super.dispose();
     }
 

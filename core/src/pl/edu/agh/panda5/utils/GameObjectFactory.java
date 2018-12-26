@@ -15,7 +15,7 @@ public class GameObjectFactory implements AbstractFactory {
 
     private World world;
     private Map<GameObjectType, List<GameObject>> poll = new HashMap<>();
-    private final int obstacleCacheSize = 4;
+    private final int obstacleCacheSize = 6;
     private final int platformCacheSize = 6;
     private int currentObstacle = 0;
     private int currentPlatform = 0;
@@ -128,7 +128,7 @@ public class GameObjectFactory implements AbstractFactory {
     private Obstacle createObstaclePrototype(){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
-        bodyDef.position.set(Constants.OBSTACLE_DEFAULT_POS);
+        bodyDef.position.set(Constants.OBSTACLE_DEFAULT_X, Constants.OBSTACLE_DEFAULT_Y[0]);
         Body body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT);

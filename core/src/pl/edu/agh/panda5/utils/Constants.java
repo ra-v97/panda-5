@@ -40,11 +40,6 @@ public class Constants {
     public static final Vector2 HUNTER_DEFAULT_POS = new Vector2(19f, (float)(Constants.GROUND_Y + Constants.GROUND_HEIGHT + 0.2*RUNNER_HEIGHT));
     public static final float ARROW_SPEED = 2f;
 
-    public static final float OBSTACLE_WIDTH = 0.7f;
-    public static final float OBSTACLE_HEIGHT = 1f;
-    public static final Vector2 OBSTACLE_DEFAULT_POS = new Vector2(25f,Constants.GROUND_Y + Constants.GROUND_HEIGHT);
-    public static final int OBSTACLE_GENERATION_CHANCE = 20;
-
     public static final float PLATFORM_WIDTH = 3f;
     public static final float PLATFORM_HEIGHT = 0.2f;
     public static final float PLATFORM_DEFAULT_X = 25f;
@@ -52,5 +47,13 @@ public class Constants {
     public static final float[] PLATFORM_Y = {0f, 5f, 10f};
     public static final int PLATFORM_GENERATION_CHANCE = 40;
 
-
+    public static final float OBSTACLE_WIDTH = 0.7f;
+    public static final float OBSTACLE_HEIGHT = 0.55f;
+    public static final float OBSTACLE_DEFAULT_X = 25f;
+    public static final float[] OBSTACLE_DEFAULT_Y = {
+            PLATFORM_Y[0] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT,
+            PLATFORM_Y[1] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT,
+            PLATFORM_Y[2] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT
+    };
+    public static final int OBSTACLE_GENERATION_CHANCE = 20;
 }

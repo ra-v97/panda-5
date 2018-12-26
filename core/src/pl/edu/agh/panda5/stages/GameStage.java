@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
@@ -34,6 +35,7 @@ public class GameStage extends Stage {
     private final float TIME_STEP = 1 / 300f;
     private float accumulator = 0f;
     private float accumulator2 = 0f;
+    private float accumulator3 = 0f;
 
     private OrthographicCamera camera;
     private Box2DDebugRenderer renderer;
@@ -51,7 +53,7 @@ public class GameStage extends Stage {
         setUpKeyboard();
         setUpGround();
         setUpPlayer();
-        setUpEnemy();
+        setUpHunter();
     }
 
     private void setUpKeyboard() {
@@ -75,11 +77,6 @@ public class GameStage extends Stage {
         addActor(player);
     }
 
-    private void setUpEnemy(){
-        hunter = factory.createHunter(Constants.HUNTER_DEFAULT_POS);
-        addActor(hunter);
-    }
-
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -87,6 +84,7 @@ public class GameStage extends Stage {
         // Fixed timestep
         accumulator += delta;
         accumulator2 += delta;
+        accumulator3 += delta;
 
 
         while (accumulator >= TIME_STEP) {
@@ -96,8 +94,12 @@ public class GameStage extends Stage {
         }
 
         if(accumulator2 > 3) {
-            spawnObstacle();
+            //spawnObstacle();
             accumulator2 = 0;
+        }
+
+        if(accumulator3 > 2) {
+            accumulator3 = 0;
         }
         // TODO: Implement interpolation
     }
@@ -105,6 +107,11 @@ public class GameStage extends Stage {
     private void spawnObstacle(){
         Obstacle obstacle = factory.createObstacle(Constants.OBSTACLE_DEFAULT_POS);
         addActor(obstacle);
+    }
+
+    private void setUpHunter(){
+        hunter = factory.createHunter(Constants.HUNTER_DEFAULT_POS);
+        addActor(hunter);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
+import pl.edu.agh.panda5.opponent.Bullet;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
 
@@ -94,14 +95,17 @@ public class GameObjectFactory implements AbstractFactory, Runnable {
         bodyDef.position.set(position);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Constants.HUNTER_WIDTH / 2, Constants.HUNTER_HEIGHT / 2);
+
+        FixtureDef fDef = new FixtureDef();
+        fDef.shape = shape;
+        fDef.density = Constants.ENEMY_DENSITY;
         Body body = world.createBody(bodyDef);
-        body.createFixture(shape, Constants.ENEMY_DENSITY);
-        body.resetMassData();
-        body.setUserData(GameObjectType.HUNTER);
+        Fixture fixture = body.createFixture(fDef);
+        fixture.setUserData(GameObjectType.HUNTER);
         shape.dispose();
+
         return new Hunter(body);
     }
-
 
     public Obstacle createObstacle(Vector2 position) {
         Obstacle obstacle = (Obstacle) poll.get(GameObjectType.OBSTACLE).remove(0);

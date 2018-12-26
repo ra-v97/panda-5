@@ -21,4 +21,5 @@ public class Hunter extends GameObject {
         Random random = new Random();
         random.nextFloat();
     }
+
 }

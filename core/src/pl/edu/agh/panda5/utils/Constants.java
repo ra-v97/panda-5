@@ -56,4 +56,12 @@ public class Constants {
             PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT
     };
     public static final int OBSTACLE_GENERATION_CHANCE = 20;
+
+    public static final float COIN_WIDTH = 0.1f;
+    public static final float COIN_HEIGHT = 0.1f;
+    public static final float COIN_DEFAULT_X = 25f;
+    public static final float COIN_DEFAULT_Y = 3f;
+    public static final float COIN_DENSITY = GROUND_DENSITY;
+
+    public static final int[] COIN_VALUE = {1, 3, 5};
 }

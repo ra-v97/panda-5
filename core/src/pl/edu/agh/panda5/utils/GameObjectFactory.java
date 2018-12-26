@@ -3,6 +3,7 @@ package pl.edu.agh.panda5.utils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import pl.edu.agh.panda5.application.GameObject;
+import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
@@ -16,13 +17,18 @@ public class GameObjectFactory implements AbstractFactory {
     private Map<GameObjectType, List<GameObject>> poll = new HashMap<>();
     private final int obstacleCacheSize = 6;
     private final int platformCacheSize = 6;
+    private final int[] coinCacheSize = {5, 2, 2};
     private int currentObstacle = 0;
     private int currentPlatform = 0;
+    private int[] currentCoin = {0, 0, 0};
 
     public GameObjectFactory(World world){
         this.world = world;
         poll.put(GameObjectType.OBSTACLE, new ArrayList<>());
         poll.put(GameObjectType.PLATFORM, new ArrayList<>());
+        poll.put(GameObjectType.COIN0, new ArrayList<>());
+        poll.put(GameObjectType.COIN1, new ArrayList<>());
+        poll.put(GameObjectType.COIN2, new ArrayList<>());
 
         while(poll.get(GameObjectType.OBSTACLE).size() < obstacleCacheSize) {
             poll.get(GameObjectType.OBSTACLE).add(createObstaclePrototype());
@@ -31,6 +37,18 @@ public class GameObjectFactory implements AbstractFactory {
         while(poll.get(GameObjectType.PLATFORM).size() < platformCacheSize) {
             poll.get(GameObjectType.PLATFORM).add(createPlatformPrototype(new Vector2(Constants.PLATFORM_DEFAULT_X,
                     Constants.PLATFORM_DEFAULT_Y[0]), Constants.PLATFORM_WIDTH, Constants.PLATFORM_HEIGHT));
+        }
+
+        while(poll.get(GameObjectType.COIN0).size() < coinCacheSize[0]) {
+            poll.get(GameObjectType.COIN0).add(createCoinPrototype(0));
+        }
+
+        while(poll.get(GameObjectType.COIN1).size() < coinCacheSize[1]) {
+            poll.get(GameObjectType.COIN1).add(createCoinPrototype(1));
+        }
+
+        while(poll.get(GameObjectType.COIN2).size() < coinCacheSize[2]) {
+            poll.get(GameObjectType.COIN2).add(createCoinPrototype(2));
         }
     }
 
@@ -78,22 +96,8 @@ public class GameObjectFactory implements AbstractFactory {
 
     private Platform createPlatformPrototype(Vector2 position, float width, float height) {
 
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody;
-        bodyDef.position.set(position);
-        Body body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width, height);
-
-        FixtureDef fDef = new FixtureDef();
-        fDef.shape = shape;
-        fDef.density = Constants.GROUND_DENSITY;
-
-        Fixture fixture = body.createFixture(fDef);
-        fixture.setUserData(GameObjectType.PLATFORM);
-        body.setUserData(GameObjectType.PLATFORM);
-        shape.dispose();
-
+        Body body = createKinematicBodyPrototype(position.x, position.y, width, height,
+                Constants.GROUND_DENSITY, GameObjectType.PLATFORM);
         return new Platform(body);
     }
 
@@ -123,23 +127,69 @@ public class GameObjectFactory implements AbstractFactory {
         return obstacle;
     }
 
-
     private Obstacle createObstaclePrototype(){
+
+        Body body = createKinematicBodyPrototype(Constants.OBSTACLE_DEFAULT_X, Constants.OBSTACLE_DEFAULT_Y[0],
+                Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT, Constants.GROUND_DENSITY, GameObjectType.OBSTACLE);
+        return new Obstacle(body);
+    }
+
+    public Coin createCoin(Vector2 position, int type) {
+        Coin coin;
+        switch(type) {
+            case 0:
+                coin = (Coin) poll.get(GameObjectType.COIN0).get(currentCoin[type]);
+                break;
+            case 1:
+                coin = (Coin) poll.get(GameObjectType.COIN1).get(currentCoin[type]);
+                break;
+            case 2:
+                coin = (Coin) poll.get(GameObjectType.COIN2).get(currentCoin[type]);
+                break;
+            default:
+                throw new RuntimeException("coin type can only be one of {0, 1, 2}");
+        }
+        currentCoin[type] = (currentCoin[type] + 1) % coinCacheSize[type];
+        coin.getBody().setTransform(position.x, position.y, 0);
+        return coin;
+    }
+
+    private Coin createCoinPrototype(int type) {
+        GameObjectType objectType;
+        int value = Constants.COIN_VALUE[type];
+        switch(type) {
+            case 0: objectType = GameObjectType.COIN0; break;
+            case 1: objectType = GameObjectType.COIN1; break;
+            case 2: objectType = GameObjectType.COIN2; break;
+            default:
+                throw new RuntimeException("coin type can only be one of {0, 1, 2}");
+        }
+        Body body = createKinematicBodyPrototype(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y,
+                Constants.COIN_WIDTH, Constants.COIN_HEIGHT, Constants.COIN_DENSITY, objectType);
+
+        return new Coin(body, value);
+    }
+
+    private Body createKinematicBodyPrototype(float x, float y, float width, float height,
+                                              float density, GameObjectType type) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
-        bodyDef.position.set(Constants.OBSTACLE_DEFAULT_X, Constants.OBSTACLE_DEFAULT_Y[0]);
+        bodyDef.position.set(x, y);
         Body body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT);
+        shape.setAsBox(width, height);
+
 
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;
-        fDef.density = Constants.GROUND_DENSITY;
+        fDef.density = density;
 
         Fixture fix = body.createFixture(fDef);
-        fix.setUserData(GameObjectType.OBSTACLE);
+        fix.setUserData(type);
         shape.dispose();
 
-        return new Obstacle(body);
+        return body;
     }
+
+
 }

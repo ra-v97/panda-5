@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import pl.edu.agh.panda5.Panda5;
 import pl.edu.agh.panda5.collider.CollisionDetector;
+import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
@@ -167,7 +168,8 @@ public class GameStage extends Stage {
 
 
         }
-
+        Coin coin = factory.createCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), 0);
+        addActor(coin);
     }
 
     private void isPlayerInBounds(){

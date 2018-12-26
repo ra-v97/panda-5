@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class Player extends GameObject {
-    private int points;
+    private int points = 0;
     private List<PowerUpEffect> activePowerUps;
     private boolean dodging;
     private boolean jumping;

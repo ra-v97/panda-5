@@ -8,12 +8,28 @@ import java.util.Random;
 
 public class Hunter extends GameObject {
     private HunterPower power;
+    private int level;
 
-    public Hunter(Body body){
+    public Hunter(Body body,int level,HunterPower power){
         super(body);
+        this.level =level;
+        this.power = power;
     }
 
-    public void usePower(){}
+    public void usePower(){
+        power.use(level);
+    }
+
+    public int getLevel(){
+        return level;
+    }
+    public void setLevel(int level){
+        if(level < 1 || level >3){
+            throw new RuntimeException("Invalid level of hunter");
+        }
+        this.level = level;
+
+    }
 
     @Override
     public void act(float delta) {

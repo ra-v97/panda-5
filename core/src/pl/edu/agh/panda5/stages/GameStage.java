@@ -9,8 +9,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import pl.edu.agh.panda5.Panda5;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
@@ -36,7 +34,8 @@ public class GameStage extends Stage {
     private World world;
     private Platform ground;
     private Player player;
-    private Hunter hunter;
+    private Hunter arrowHunter;
+    private Hunter bombHunter;
 
     private final float TIME_STEP = 1 / 300f;
     private float accumulator = 0f;
@@ -66,7 +65,8 @@ public class GameStage extends Stage {
         setUpKeyboard();
         setUpGround();
         setUpPlayer();
-        setUpHunter();
+        //setUpHunters();
+
     }
 
     private void setUpKeyboard() {
@@ -87,6 +87,13 @@ public class GameStage extends Stage {
     private void setUpPlayer() {
         player = factory.createPlayer();
         addActor(player);
+    }
+
+    private void setUpHunters(){
+        arrowHunter = factory.createHunter(1,GameObjectType.ARROW_POWER);
+        addActor(arrowHunter);
+        bombHunter = factory.createHunter(1,GameObjectType.BOMB_POWER);
+        addActor(bombHunter);
     }
 
     @Override
@@ -113,7 +120,6 @@ public class GameStage extends Stage {
 
         if(accumulator3 > 2) {
             accumulator3 = 0;
-            addActor(factory.createBomb(new Vector2(17f,12f)));
         }
 
         removeUnusedCoins();
@@ -192,6 +198,20 @@ public class GameStage extends Stage {
         }
     }
 
+    private void spawnArrowHunter(){
+        arrowHunter
+                .getBody()
+                .getPosition()
+                .set(Constants.HUNTER_DEFAULT_POS_X,Constants.HUNTER_DEFAULT_POS_Y[arrowHunter.getLevel()]);
+    }
+
+    private void spawnBombHunter(){
+        bombHunter
+                .getBody()
+                .getPosition()
+                .set(Constants.HUNTER_DEFAULT_POS_X,Constants.HUNTER_DEFAULT_POS_Y[bombHunter.getLevel()]);
+    }
+
     private void isPlayerInBounds(){
         if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0) // TODO: Fix this someday
             gameOver();
@@ -201,11 +221,6 @@ public class GameStage extends Stage {
     private void gameOver(){
         game.pause();
         game.setScreen(new GameOverScreen(game));
-    }
-
-    private void setUpHunter(){
-        hunter = factory.createHunter(Constants.HUNTER_DEFAULT_POS);
-        addActor(hunter);
     }
 
     @Override
@@ -286,7 +301,7 @@ public class GameStage extends Stage {
                 gameOver();
             }
         }
-        if (aType == GameObjectType.BOMB || bType == GameObjectType.BOMB) {
+        if (aType == GameObjectType.BULLET || bType == GameObjectType.BULLET) {
             if(aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
                 gameOver();
             }else if(aType == GameObjectType.PLATFORM || bType == GameObjectType.PLATFORM ||

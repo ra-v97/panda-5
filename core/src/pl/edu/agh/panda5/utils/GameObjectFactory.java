@@ -6,16 +6,12 @@ import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
-import pl.edu.agh.panda5.opponent.Bomb;
-import pl.edu.agh.panda5.opponent.Bullet;
-import pl.edu.agh.panda5.opponent.Hunter;
+import pl.edu.agh.panda5.opponent.*;
 import pl.edu.agh.panda5.player.Player;
 
 import static pl.edu.agh.panda5.utils.GameObjectType.*;
 
 import java.util.*;
-
-import static pl.edu.agh.panda5.utils.GameObjectType.BULLET;
 
 public class GameObjectFactory implements AbstractFactory {
 
@@ -107,64 +103,63 @@ public class GameObjectFactory implements AbstractFactory {
         return new Platform(body);
     }
 
-    public Hunter createHunter(Vector2 position) {
-
+    public Hunter createHunter(int level, GameObjectType power)
+    {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
-        bodyDef.position.set(position);
+        bodyDef.position.set(Constants.DUMPSTER_POS);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Constants.HUNTER_WIDTH / 2, Constants.HUNTER_HEIGHT / 2);
 
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;
-        fDef.density = Constants.ENEMY_DENSITY;
+        fDef.density = Constants.HUNTER_DENSITY;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
         fixture.setUserData(new GameObjectData(GameObjectType.HUNTER));
         shape.dispose();
 
-        return new Hunter(body);
-    }
+        BodyDef bulletBodyDef = new BodyDef();
+        PolygonShape bulletShape = new PolygonShape();
+        FixtureDef bulletFixDef = new FixtureDef();
+        Body bulletBody;
+        Fixture bulletFixture;
+        HunterPower hunterPower;
 
-    public Bullet createBullet(Vector2 velocity, int level){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody;
-        bodyDef.position.set(Constants.HUNTER_DEFAULT_POS.x,(float)(Constants.GROUND_Y + Constants.GROUND_HEIGHT + 0.2*Constants.RUNNER_HEIGHT+Constants.HUNTER_HEIGHT*0.5));
-        bodyDef.linearVelocity.set(-velocity.x,velocity.y);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.ARROW_LENGTH,Constants.ARROW_HEIGHT);
+        switch(power){
+            case ARROW_POWER:
+                bulletBodyDef.type = BodyDef.BodyType.KinematicBody;
+                bulletBodyDef.position.set(Constants.DUMPSTER_POS);
+                bulletBodyDef.linearVelocity.set(Constants.BULLET_SPEED,0f);
+                bulletShape.setAsBox(Constants.BULLET_LENGTH,Constants.BULLET_HEIGHT);
 
-        FixtureDef fDef = new FixtureDef();
-        fDef.shape= shape;
-        fDef.density = Constants.ARROW_DENSITY;
-        Body body = world.createBody(bodyDef);
-        Fixture fixture = body.createFixture(fDef);
-        fixture.setUserData(new GameObjectData(GameObjectType.BULLET));
-        shape.dispose();
+                bulletFixDef.shape= bulletShape;
+                bulletFixDef.density = Constants.BULLET_DENSITY;
+                bulletBody = world.createBody(bulletBodyDef);
+                bulletFixture = body.createFixture(bulletFixDef);
+                bulletFixture.setUserData(new GameObjectData(GameObjectType.BULLET));
+                shape.dispose();
+                hunterPower = new ArrowPower(bulletBody);
+                break;
 
-        return new Bullet(body);
-
-    }
-
-    public Bomb createBomb(Vector2 position){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(position);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.BOMB_SIZE,Constants.BOMB_SIZE);
-
-        FixtureDef fDef = new FixtureDef();
-        fDef.shape= shape;
-        fDef.density = Constants.BOMB_DENSITY;
-        Body body = world.createBody(bodyDef);
-        body.setGravityScale(Constants.BOMB_GRAVITY_SCALE);
-        body.resetMassData();
-        Fixture fixture = body.createFixture(fDef);
-        fixture.setUserData(new GameObjectData(GameObjectType.BOMB));
-        shape.dispose();
-
-        return new Bomb(body);
-
+            case BOMB_POWER:
+                bulletBodyDef.type = BodyDef.BodyType.DynamicBody;
+                bulletBodyDef.position.set(Constants.DUMPSTER_POS);
+                shape.setAsBox(Constants.BOMB_SIZE,Constants.BOMB_SIZE);
+                bulletFixDef.shape= bulletShape;
+                bulletFixDef.density = Constants.BOMB_DENSITY;
+                bulletBody = world.createBody(bulletBodyDef);
+                bulletBody.setGravityScale(Constants.BOMB_GRAVITY_SCALE);
+                bulletBody.resetMassData();
+                bulletFixture = bulletBody.createFixture(bulletFixDef);
+                bulletFixture.setUserData(new GameObjectData(GameObjectType.BULLET));
+                shape.dispose();
+                hunterPower = new BombPower(bulletBody);
+                break;
+             default:
+                 throw new RuntimeException("Invalid power type");
+        }
+        return new Hunter(body,level,hunterPower);
     }
 
     public Obstacle createObstacle(Vector2 position) {
@@ -225,7 +220,6 @@ public class GameObjectFactory implements AbstractFactory {
         Body body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
-
 
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;

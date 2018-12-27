@@ -34,20 +34,8 @@ public class Constants {
     public static final float RUNNER_FEET_WIDTH = RUNNER_WIDTH * 0.9f;
     public static final float RUNNER_FEET_HEIGHT = 0.2f;
 
-    public static final float ENEMY_DENSITY = RUNNER_DENSITY;
-    public static final float HUNTER_WIDTH = 1f;
-    public static final float HUNTER_HEIGHT = 1f;
-
     public static final Vector2 GAME_LINEAR_VELOCITY = new Vector2(-10f, 0);
 
-    public static final Vector2 HUNTER_DEFAULT_POS = new Vector2(19f, (float)(Constants.GROUND_Y + Constants.GROUND_HEIGHT + 0.2*RUNNER_HEIGHT));
-    public static final float ARROW_SPEED = 2f;
-    public static final float ARROW_DENSITY = 1f;
-    public static final float ARROW_HEIGHT = 0.01f;
-    public static final float ARROW_LENGTH = 0.2f;
-    public static final float BOMB_SIZE = 0.1f;
-    public static final float BOMB_DENSITY = 2f;
-    public static final float BOMB_GRAVITY_SCALE = 15f;
     public static final float PLATFORM_WIDTH = 3f;
     public static final float PLATFORM_HEIGHT = 0.2f;
     public static final float PLATFORM_DEFAULT_X = 25f;
@@ -64,6 +52,34 @@ public class Constants {
             PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + OBSTACLE_HEIGHT
     };
     public static final int OBSTACLE_GENERATION_CHANCE = 20;
+
+    public static final float HUNTER_DENSITY = RUNNER_DENSITY;
+    public static final float HUNTER_WIDTH = 1f;
+    public static final float HUNTER_HEIGHT = 1f;
+    public static final float HUNTER_DEFAULT_POS_X = 19f;
+    public static final float HUNTER_POS_Y_OFFSET = 0.5f;
+    public static final float HUNTER_DEFAULT_POS_Y[] = {
+            PLATFORM_DEFAULT_Y[0] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET,
+            PLATFORM_DEFAULT_Y[1] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET,
+            PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET
+    };
+
+    public static final float BULLET_SPEED = -2f;
+    public static final float BULLET_DENSITY = 1f;
+    public static final float BULLET_HEIGHT = 0.01f;
+    public static final float BULLET_LENGTH = 0.2f;
+    public static final float BULLET_DEFAULT_POS_X = HUNTER_DEFAULT_POS_X+0.05f;
+    public static final float BULLET_POS_Y_OFFSET = (float)0.5* HUNTER_HEIGHT;
+    public static final float BULLET_DEFAULT_POS_Y[] = {
+            HUNTER_DEFAULT_POS_Y[0] + BULLET_POS_Y_OFFSET,
+            HUNTER_DEFAULT_POS_Y[1] + BULLET_POS_Y_OFFSET,
+            HUNTER_DEFAULT_POS_Y[2] + BULLET_POS_Y_OFFSET
+    };
+
+    public static final float BOMB_SIZE = 0.1f;
+    public static final float BOMB_DENSITY = 2f;
+    public static final float BOMB_POS_Y= 15f;
+    public static final float BOMB_GRAVITY_SCALE = 15f;
 
     public static final float COIN_WIDTH = 0.1f;
     public static final float COIN_HEIGHT = 0.1f;

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import pl.edu.agh.panda5.Panda5;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
@@ -66,7 +67,7 @@ public class GameStage extends Stage {
         setUpGround();
         setUpPlayer();
         setUpHunter();
-        addActor(factory.createBullet(new Vector2(2f,0f),1));
+        addActor(factory.createBullet(new Vector2(2f,0f),0));
     }
 
     private void setUpKeyboard() {
@@ -226,6 +227,13 @@ public class GameStage extends Stage {
             if((a.getUserData() == GameObjectType.PLATFORM) || (b.getUserData() == GameObjectType.PLATFORM) ||
                     (a.getUserData() == GameObjectType.OBSTACLE) || (b.getUserData() == GameObjectType.OBSTACLE)) {
                 player.landed();
+            }
+        }
+
+        if(a.getUserData() == GameObjectType.PLAYER || b.getUserData() == GameObjectType.PLAYER){
+            System.out.println("jo");
+            if(a.getUserData() == GameObjectType.BULLET || b.getUserData() == GameObjectType.BULLET){
+                System.out.printf("Siema");
             }
         }
     }

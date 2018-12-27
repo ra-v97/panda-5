@@ -121,18 +121,18 @@ public class GameObjectFactory implements AbstractFactory {
 
     public Bullet createBullet(Vector2 velocity,int level){
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(Constants.HUNTER_DEFAULT_POS.x,Constants.PLATFORM_Y[level]);
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.position.set(Constants.HUNTER_DEFAULT_POS.x,(float)(Constants.GROUND_Y + Constants.GROUND_HEIGHT + 0.2*Constants.RUNNER_HEIGHT+Constants.HUNTER_HEIGHT*0.5));
         bodyDef.linearVelocity.set(-velocity.x,velocity.y);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.ARROW_LENGHT,Constants.ARROW_HEIGHT);
+        shape.setAsBox(Constants.ARROW_LENGTH,Constants.ARROW_HEIGHT);
 
         FixtureDef fDef = new FixtureDef();
         fDef.shape= shape;
         fDef.density = Constants.ARROW_DENSITY;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
-        fixture.setUserData(BULLET);
+        fixture.setUserData(GameObjectType.BULLET);
         shape.dispose();
 
         return new Bullet(body);

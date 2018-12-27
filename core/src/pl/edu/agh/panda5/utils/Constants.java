@@ -41,7 +41,7 @@ public class Constants {
     public static final float ARROW_SPEED = 2f;
     public static final float ARROW_DENSITY = 1f;
     public static final float ARROW_HEIGHT = 0.01f;
-    public static final float ARROW_LENGHT = 0.5f;
+    public static final float ARROW_LENGTH = 0.5f;
 
     public static final float OBSTACLE_WIDTH = 0.7f;
     public static final float OBSTACLE_HEIGHT = 1f;

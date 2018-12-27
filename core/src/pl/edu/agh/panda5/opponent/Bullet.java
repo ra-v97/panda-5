@@ -4,13 +4,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool;
 import pl.edu.agh.panda5.application.GameObject;
+import pl.edu.agh.panda5.player.Player;
 import pl.edu.agh.panda5.utils.Constants;
 
 public class Bullet extends GameObject implements Pool.Poolable {
 
-    public Vector2 position;
     public boolean alive;
-
 
     public Bullet(Body body) {
         super(body);
@@ -18,32 +17,30 @@ public class Bullet extends GameObject implements Pool.Poolable {
     }
 
     public void init(float posX, float posY) {
-        position.set(posX,  posY);
+        body.setTransform(posX,posY,0f);
+
         alive = true;
     }
 
     @Override
     public void reset() {
-        position.set(0,0);
+        body.setTransform(0f,0f,0f);
         alive = false;
     }
 
     public void update (float delta) {
 
         // update bullet position
-        position.add(Constants.ARROW_SPEED *delta*60, 0);
-
-        this.getBody().setTransform(position,0f);
+        getBody().setTransform(getBody().getPosition().x+Constants.ARROW_SPEED *delta*60,getBody().getPosition().y, 0);
 
         if (isOutOfScreen()) alive = false;
     }
-
     @Override
     public void act(float delta) {
         super.act(delta);
+        body.setLinearVelocity(Constants.GAME_LINEAR_VELOCITY);
     }
-
     private boolean isOutOfScreen() {
-        return this.getBody().getPosition().x < 0f;
+        return getBody().getPosition().x < 0f;
     }
 }

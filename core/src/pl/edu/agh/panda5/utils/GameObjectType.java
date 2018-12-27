@@ -7,6 +7,7 @@ public enum GameObjectType {
     HUNTER,
     OBSTACLE,
     BULLET,
+    BOMB,
     COIN0,
     COIN1,
     COIN2;

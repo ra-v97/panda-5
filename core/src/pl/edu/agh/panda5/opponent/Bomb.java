@@ -1,17 +1,16 @@
 package pl.edu.agh.panda5.opponent;
 
-
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool;
 import pl.edu.agh.panda5.application.GameObject;
 
 import pl.edu.agh.panda5.utils.Constants;
 
-public class Bullet extends GameObject implements Pool.Poolable {
+public class Bomb extends GameObject implements Pool.Poolable {
 
     public boolean alive;
 
-    public Bullet(Body body) {
+    public Bomb(Body body) {
         super(body);
         this.alive = false;
     }

@@ -44,8 +44,10 @@ public class Constants {
     public static final float ARROW_SPEED = 2f;
     public static final float ARROW_DENSITY = 1f;
     public static final float ARROW_HEIGHT = 0.01f;
-    public static final float ARROW_LENGTH = 0.5f;
-
+    public static final float ARROW_LENGTH = 0.2f;
+    public static final float BOMB_SIZE = 0.1f;
+    public static final float BOMB_DENSITY = 2f;
+    public static final float BOMB_GRAVITY_SCALE = 15f;
     public static final float PLATFORM_WIDTH = 3f;
     public static final float PLATFORM_HEIGHT = 0.2f;
     public static final float PLATFORM_DEFAULT_X = 25f;

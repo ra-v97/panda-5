@@ -6,6 +6,8 @@ import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
+import pl.edu.agh.panda5.opponent.Bomb;
+import pl.edu.agh.panda5.opponent.Bullet;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
 
@@ -118,13 +120,13 @@ public class GameObjectFactory implements AbstractFactory {
         fDef.density = Constants.ENEMY_DENSITY;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
-        fixture.setUserData(new GameObjectData(HUNTER));
+        fixture.setUserData(new GameObjectData(GameObjectType.HUNTER));
         shape.dispose();
 
         return new Hunter(body);
     }
 
-    public Bullet createBullet(Vector2 velocity,int level){
+    public Bullet createBullet(Vector2 velocity, int level){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(Constants.HUNTER_DEFAULT_POS.x,(float)(Constants.GROUND_Y + Constants.GROUND_HEIGHT + 0.2*Constants.RUNNER_HEIGHT+Constants.HUNTER_HEIGHT*0.5));
@@ -137,10 +139,31 @@ public class GameObjectFactory implements AbstractFactory {
         fDef.density = Constants.ARROW_DENSITY;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
-        fixture.setUserData(GameObjectType.BULLET);
+        fixture.setUserData(new GameObjectData(GameObjectType.BULLET));
         shape.dispose();
 
         return new Bullet(body);
+
+    }
+
+    public Bomb createBomb(Vector2 position){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(position);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Constants.BOMB_SIZE,Constants.BOMB_SIZE);
+
+        FixtureDef fDef = new FixtureDef();
+        fDef.shape= shape;
+        fDef.density = Constants.BOMB_DENSITY;
+        Body body = world.createBody(bodyDef);
+        body.setGravityScale(Constants.BOMB_GRAVITY_SCALE);
+        body.resetMassData();
+        Fixture fixture = body.createFixture(fDef);
+        fixture.setUserData(new GameObjectData(GameObjectType.BOMB));
+        shape.dispose();
+
+        return new Bomb(body);
 
     }
 

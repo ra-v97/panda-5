@@ -67,7 +67,6 @@ public class GameStage extends Stage {
         setUpGround();
         setUpPlayer();
         setUpHunter();
-        addActor(factory.createBullet(new Vector2(2f,0f),0));
     }
 
     private void setUpKeyboard() {
@@ -114,6 +113,7 @@ public class GameStage extends Stage {
 
         if(accumulator3 > 2) {
             accumulator3 = 0;
+            addActor(factory.createBomb(new Vector2(17f,12f)));
         }
 
         removeUnusedCoins();
@@ -278,6 +278,20 @@ public class GameStage extends Stage {
         } else if(bType == GameObjectType.FEET_SENSOR || bType == GameObjectType.PLAYER) {
             if (((GameObjectData)a.getUserData()).isCoin()) {
                 handlePlayerCoinContact(a);
+            }
+        }
+
+        if(aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
+            if(aType == GameObjectType.BULLET || bType == GameObjectType.BULLET ) {
+                gameOver();
+            }
+        }
+        if (aType == GameObjectType.BOMB || bType == GameObjectType.BOMB) {
+            if(aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
+                gameOver();
+            }else if(aType == GameObjectType.PLATFORM || bType == GameObjectType.PLATFORM ||
+                    aType == GameObjectType.OBSTACLE || bType == GameObjectType.OBSTACLE){
+                //remove bomb
             }
         }
     }

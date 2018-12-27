@@ -11,6 +11,8 @@ import pl.edu.agh.panda5.player.Player;
 
 import java.util.*;
 
+import static pl.edu.agh.panda5.utils.GameObjectType.BULLET;
+
 public class GameObjectFactory implements AbstractFactory {
 
     private World world;
@@ -115,6 +117,26 @@ public class GameObjectFactory implements AbstractFactory {
         shape.dispose();
 
         return new Hunter(body);
+    }
+
+    public Bullet createBullet(Vector2 velocity,int level){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(Constants.HUNTER_DEFAULT_POS.x,Constants.PLATFORM_Y[level]);
+        bodyDef.linearVelocity.set(-velocity.x,velocity.y);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Constants.ARROW_LENGHT,Constants.ARROW_HEIGHT);
+
+        FixtureDef fDef = new FixtureDef();
+        fDef.shape= shape;
+        fDef.density = Constants.ARROW_DENSITY;
+        Body body = world.createBody(bodyDef);
+        Fixture fixture = body.createFixture(fDef);
+        fixture.setUserData(BULLET);
+        shape.dispose();
+
+        return new Bullet(body);
+
     }
 
     public Obstacle createObstacle(Vector2 position) {

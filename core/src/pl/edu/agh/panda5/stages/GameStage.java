@@ -66,6 +66,7 @@ public class GameStage extends Stage {
         setUpGround();
         setUpPlayer();
         setUpHunter();
+        addActor(factory.createBullet(new Vector2(2f,0f),1));
     }
 
     private void setUpKeyboard() {

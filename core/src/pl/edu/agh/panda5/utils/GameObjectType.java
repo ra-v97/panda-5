@@ -8,5 +8,5 @@ public enum GameObjectType {
     OBSTACLE,
     COIN0,
     COIN1,
-    COIN2
+    COIN2;
 }

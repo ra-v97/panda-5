@@ -4,16 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.LongMap;
 import pl.edu.agh.panda5.Panda5;
-import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
@@ -23,7 +18,9 @@ import pl.edu.agh.panda5.player.Player;
 import pl.edu.agh.panda5.screens.GameOverScreen;
 import pl.edu.agh.panda5.utils.*;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class GameStage extends Stage {
 
@@ -49,6 +46,7 @@ public class GameStage extends Stage {
 
     private Random rand;
     private boolean onlyLowerPlatformLastTime = true;
+    private Set<Coin> coins = new HashSet<>();
 
     public GameStage(Panda5 game) {
         this.game = game;
@@ -114,6 +112,8 @@ public class GameStage extends Stage {
         if(accumulator3 > 2) {
             accumulator3 = 0;
         }
+
+        removeUnusedCoins();
         // TODO: Implement interpolation
     }
 
@@ -175,6 +175,18 @@ public class GameStage extends Stage {
         }
         Coin coin = factory.createCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), 0);
         addActor(coin);
+        coins.add(coin);
+    }
+
+    private void removeUnusedCoins() {
+        coins.forEach(this::removeCoin);
+    }
+
+    private void removeCoin(Coin coin) {
+        if (((GameObjectData) coin.getBody().getFixtureList().get(0).getUserData()).isFlaggedForDelete()) {
+            coin.getBody().setTransform(Constants.DUMPSTER_POS, 0f);
+            ((GameObjectData) coin.getBody().getFixtureList().get(0).getUserData()).setFlaggedForDelete(false);
+        }
     }
 
     private void isPlayerInBounds(){
@@ -245,18 +257,45 @@ public class GameStage extends Stage {
     }
 
     public void beginContact(Fixture a, Fixture b){
-        if(a.getUserData() == GameObjectType.FEET_SENSOR || b.getUserData() == GameObjectType.FEET_SENSOR) {
-            if((a.getUserData() == GameObjectType.PLATFORM) || (b.getUserData() == GameObjectType.PLATFORM) ||
-                    (a.getUserData() == GameObjectType.OBSTACLE) || (b.getUserData() == GameObjectType.OBSTACLE)) {
+
+        GameObjectType aType = ((GameObjectData)a.getUserData()).getType();
+        GameObjectType bType = ((GameObjectData)b.getUserData()).getType();
+
+        if(aType == GameObjectType.FEET_SENSOR || bType == GameObjectType.FEET_SENSOR) {
+            if(aType == GameObjectType.PLATFORM || bType == GameObjectType.PLATFORM ||
+                    aType == GameObjectType.OBSTACLE || bType == GameObjectType.OBSTACLE) {
                 player.landed();
+                return;
+            }
+        }
+
+        if(aType == GameObjectType.FEET_SENSOR || aType == GameObjectType.PLAYER) {
+            if(((GameObjectData)b.getUserData()).isCoin()) {
+                handlePlayerCoinContact(b);
+            }
+        } else if(bType == GameObjectType.FEET_SENSOR || bType == GameObjectType.PLAYER) {
+            if (((GameObjectData)a.getUserData()).isCoin()) {
+                handlePlayerCoinContact(a);
             }
         }
     }
 
+    private void handlePlayerCoinContact(Fixture coin) {
+        if (coin.getUserData() == GameObjectType.COIN0) {
+            player.addPoints(Constants.COIN_VALUE[0]);
+        } else if (coin.getUserData() == GameObjectType.COIN1) {
+            player.addPoints(Constants.COIN_VALUE[1]);
+        }  else if (coin.getUserData() == GameObjectType.COIN2) {
+            player.addPoints(Constants.COIN_VALUE[2]);
+        }
+
+        ((GameObjectData)coin.getUserData()).setFlaggedForDelete(true);
+    }
+
     public void endContact(Fixture a, Fixture b) {
-        if(a.getUserData() == GameObjectType.FEET_SENSOR || b.getUserData() == GameObjectType.FEET_SENSOR) {
-            if((a.getUserData() == GameObjectType.PLATFORM) || (b.getUserData() == GameObjectType.PLATFORM) ||
-                    (a.getUserData() == GameObjectType.OBSTACLE) || (b.getUserData() == GameObjectType.OBSTACLE)) {
+        if(((GameObjectData)a.getUserData()).getType() == GameObjectType.FEET_SENSOR || ((GameObjectData)b.getUserData()).getType() == GameObjectType.FEET_SENSOR) {
+            if((((GameObjectData)a.getUserData()).getType() == GameObjectType.PLATFORM) || (((GameObjectData)b.getUserData()).getType() == GameObjectType.PLATFORM) ||
+                    (((GameObjectData)a.getUserData()).getType() == GameObjectType.OBSTACLE) || (((GameObjectData)b.getUserData()).getType() == GameObjectType.OBSTACLE)) {
                 player.fall();
             }
         }

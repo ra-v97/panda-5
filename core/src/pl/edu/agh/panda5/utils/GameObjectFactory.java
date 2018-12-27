@@ -9,6 +9,8 @@ import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
 
+import static pl.edu.agh.panda5.utils.GameObjectType.*;
+
 import java.util.*;
 
 public class GameObjectFactory implements AbstractFactory {
@@ -64,11 +66,11 @@ public class GameObjectFactory implements AbstractFactory {
         fDef.friction = 0.0f;
         fDef.shape = shape;
         fDef.density = Constants.RUNNER_DENSITY;
-        body.createFixture(fDef);
+        Fixture fix = body.createFixture(fDef);
+        fix.setUserData(new GameObjectData(GameObjectType.PLAYER));
         body.setGravityScale(Constants.RUNNER_GRAVITY_SCALE);
         body.resetMassData();
         body.setFixedRotation(true);
-        body.setUserData(GameObjectType.PLAYER);
         shape.dispose();
 
         PolygonShape feetShape = new PolygonShape();
@@ -77,7 +79,7 @@ public class GameObjectFactory implements AbstractFactory {
         fDef.shape = feetShape;
         fDef.isSensor = true;
         Fixture feet = body.createFixture(fDef);
-        feet.setUserData(GameObjectType.FEET_SENSOR);
+        feet.setUserData(new GameObjectData(GameObjectType.FEET_SENSOR));
 
         return new Player(body);
     }
@@ -97,7 +99,7 @@ public class GameObjectFactory implements AbstractFactory {
     private Platform createPlatformPrototype(Vector2 position, float width, float height) {
 
         Body body = createKinematicBodyPrototype(position.x, position.y, width, height,
-                Constants.GROUND_DENSITY, GameObjectType.PLATFORM);
+                Constants.GROUND_DENSITY, new GameObjectData(PLATFORM));
         return new Platform(body);
     }
 
@@ -114,14 +116,14 @@ public class GameObjectFactory implements AbstractFactory {
         fDef.density = Constants.ENEMY_DENSITY;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
-        fixture.setUserData(GameObjectType.HUNTER);
+        fixture.setUserData(new GameObjectData(HUNTER));
         shape.dispose();
 
         return new Hunter(body);
     }
 
     public Obstacle createObstacle(Vector2 position) {
-        Obstacle obstacle = (Obstacle) poll.get(GameObjectType.OBSTACLE).get(currentObstacle);
+        Obstacle obstacle = (Obstacle) poll.get(OBSTACLE).get(currentObstacle);
         obstacle.getBody().setTransform(position.x, position.y, 0f);
         currentObstacle = (currentObstacle + 1) % obstacleCacheSize;
         return obstacle;
@@ -130,7 +132,7 @@ public class GameObjectFactory implements AbstractFactory {
     private Obstacle createObstaclePrototype(){
 
         Body body = createKinematicBodyPrototype(Constants.OBSTACLE_DEFAULT_X, Constants.OBSTACLE_DEFAULT_Y[0],
-                Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT, Constants.GROUND_DENSITY, GameObjectType.OBSTACLE);
+                Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT, Constants.GROUND_DENSITY, new GameObjectData(OBSTACLE));
         return new Obstacle(body);
     }
 
@@ -155,12 +157,12 @@ public class GameObjectFactory implements AbstractFactory {
     }
 
     private Coin createCoinPrototype(int type) {
-        GameObjectType objectType;
+        GameObjectData objectType;
         int value = Constants.COIN_VALUE[type];
         switch(type) {
-            case 0: objectType = GameObjectType.COIN0; break;
-            case 1: objectType = GameObjectType.COIN1; break;
-            case 2: objectType = GameObjectType.COIN2; break;
+            case 0: objectType = new GameObjectData(GameObjectType.COIN0); break;
+            case 1: objectType = new GameObjectData(GameObjectType.COIN1); break;
+            case 2: objectType = new GameObjectData(GameObjectType.COIN2); break;
             default:
                 throw new RuntimeException("coin type can only be one of {0, 1, 2}");
         }
@@ -171,7 +173,7 @@ public class GameObjectFactory implements AbstractFactory {
     }
 
     private Body createKinematicBodyPrototype(float x, float y, float width, float height,
-                                              float density, GameObjectType type) {
+                                              float density, GameObjectData type) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(x, y);

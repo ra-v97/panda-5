@@ -79,6 +79,8 @@ public class Player extends GameObject {
         return dodging;
     }
 
+    public void addPoints(int points) {this.points += points;}
+
     private void setVelocity() {
         Vector2 velocity = body.getLinearVelocity();
         velocity.x = 0f;

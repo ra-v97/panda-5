@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class Player extends GameObject {
-    private int points;
+    private int points = 0;
     private List<PowerUpEffect> activePowerUps;
     private boolean dodging;
     private boolean jumping;
@@ -78,6 +78,8 @@ public class Player extends GameObject {
     public boolean isDodging() {
         return dodging;
     }
+
+    public void addPoints(int points) {this.points += points;}
 
     private void setVelocity() {
         Vector2 velocity = body.getLinearVelocity();

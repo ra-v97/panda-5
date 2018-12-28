@@ -7,6 +7,10 @@ It is an endless runner game, where you play a role of a cute black and white be
 
 ![class diagram](classDiagram_v2.png)
 
+## Pattern description
+
+For more info see [patterns description](project_patterns_description.pdf) file in main folder.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment section for more information.

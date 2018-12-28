@@ -15,7 +15,7 @@ import java.util.*;
 
 public class GameObjectFactory implements AbstractFactory {
 
-    private World world;
+    private static World world;
     private Map<GameObjectType, List<GameObject>> poll = new HashMap<>();
     private final int obstacleCacheSize = 6;
     private final int platformCacheSize = 6;
@@ -123,11 +123,11 @@ public class GameObjectFactory implements AbstractFactory {
 
         switch(power){
             case ARROW_POWER:
-                hunterPower = new ArrowPower(createArrowBody());
+                hunterPower = new ArrowPower();
                 break;
 
             case BOMB_POWER:
-                hunterPower = new BombPower(createBombBody());
+                hunterPower = new BombPower();
                 break;
              default:
                  throw new RuntimeException("Invalid power type");
@@ -135,7 +135,7 @@ public class GameObjectFactory implements AbstractFactory {
         return new Hunter(body,level,hunterPower);
     }
 
-    private Body createArrowBody(){
+    public static Body createArrowBody(){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(Constants.DUMPSTER_POS);
@@ -155,7 +155,7 @@ public class GameObjectFactory implements AbstractFactory {
         return body;
     }
 
-    private Body createBombBody(){
+    public static Body createBombBody(){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(Constants.DUMPSTER_POS);

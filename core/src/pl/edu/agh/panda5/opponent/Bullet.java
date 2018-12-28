@@ -1,19 +1,18 @@
 package pl.edu.agh.panda5.opponent;
 
-
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import pl.edu.agh.panda5.application.GameObject;
 
 import pl.edu.agh.panda5.utils.Constants;
+import pl.edu.agh.panda5.utils.GameObjectFactory;
 
 public class Bullet extends GameObject implements Pool.Poolable {
 
     private boolean alive;
 
-    public Bullet(Body body) {
-        super(body);
+    public Bullet() {
+        super(GameObjectFactory.createArrowBody());
         this.alive = false;
     }
 
@@ -50,4 +49,5 @@ public class Bullet extends GameObject implements Pool.Poolable {
             }
         }
     }
+
 }

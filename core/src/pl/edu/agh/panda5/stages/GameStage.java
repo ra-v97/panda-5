@@ -65,10 +65,10 @@ public class GameStage extends Stage {
         setUpKeyboard();
         setUpGround();
         setUpPlayer();
-        //setUpHunters();
-        //spawnArrowHunter();
-        //spawnBombHunter();
-        //removeBombHunter();
+        setUpHunters();
+        spawnArrowHunter();
+        spawnBombHunter();
+        removeBombHunter();
     }
 
     private void setUpKeyboard() {
@@ -118,8 +118,8 @@ public class GameStage extends Stage {
         if(accumulator2 > Constants.PLATFORM_TIME_STEP) {
             spawnPlatforms();
             accumulator2 -= Constants.PLATFORM_TIME_STEP;
-            //bombHunter.usePower();
-            //arrowHunter.usePower();
+            bombHunter.usePower();
+            arrowHunter.usePower();
         }
 
         if(accumulator3 > 2) {

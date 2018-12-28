@@ -43,6 +43,10 @@ public class Hunter extends GameObject {
 
     }
 
+    public void verifyPowers(){
+        power.tideUp();
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);

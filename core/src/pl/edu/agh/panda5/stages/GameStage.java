@@ -323,7 +323,8 @@ public class GameStage extends Stage {
                 gameOver();
             }else if(aType == GameObjectType.PLATFORM || bType == GameObjectType.PLATFORM ||
                     aType == GameObjectType.OBSTACLE || bType == GameObjectType.OBSTACLE){
-                //remove bomb
+                arrowHunter.verifyPowers();
+                bombHunter.verifyPowers();
             }
         }
     }

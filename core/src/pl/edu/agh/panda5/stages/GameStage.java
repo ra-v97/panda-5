@@ -65,8 +65,10 @@ public class GameStage extends Stage {
         setUpKeyboard();
         setUpGround();
         setUpPlayer();
-        //setUpHunters();
-
+        setUpHunters();
+        spawnArrowHunter();
+        spawnBombHunter();
+        removeBombHunter();
     }
 
     private void setUpKeyboard() {
@@ -92,7 +94,7 @@ public class GameStage extends Stage {
     private void setUpHunters(){
         arrowHunter = factory.createHunter(1,GameObjectType.ARROW_POWER);
         addActor(arrowHunter);
-        bombHunter = factory.createHunter(1,GameObjectType.BOMB_POWER);
+        bombHunter = factory.createHunter(0,GameObjectType.BOMB_POWER);
         addActor(bombHunter);
     }
 
@@ -116,6 +118,8 @@ public class GameStage extends Stage {
         if(accumulator2 > Constants.PLATFORM_TIME_STEP) {
             spawnPlatforms();
             accumulator2 -= Constants.PLATFORM_TIME_STEP;
+            bombHunter.usePower();
+            arrowHunter.usePower();
         }
 
         if(accumulator3 > 2) {
@@ -199,17 +203,30 @@ public class GameStage extends Stage {
     }
 
     private void spawnArrowHunter(){
+        arrowHunter.setSpawned();
         arrowHunter
                 .getBody()
-                .getPosition()
-                .set(Constants.HUNTER_DEFAULT_POS_X,Constants.HUNTER_DEFAULT_POS_Y[arrowHunter.getLevel()]);
+                .setTransform(Constants.HUNTER_DEFAULT_POS_X,Constants.HUNTER_DEFAULT_POS_Y[arrowHunter.getLevel()],0);
     }
 
     private void spawnBombHunter(){
+        bombHunter.setSpawned();
         bombHunter
                 .getBody()
-                .getPosition()
-                .set(Constants.HUNTER_DEFAULT_POS_X,Constants.HUNTER_DEFAULT_POS_Y[bombHunter.getLevel()]);
+                .setTransform(Constants.HUNTER_DEFAULT_POS_X,Constants.HUNTER_DEFAULT_POS_Y[bombHunter.getLevel()],0);
+    }
+
+    private void removeArrowHunter(){
+        arrowHunter.deleteSpawn();
+        arrowHunter
+                .getBody()
+                .setTransform(Constants.DUMPSTER_POS,0);
+    }
+    private void removeBombHunter(){
+        bombHunter.deleteSpawn();
+        bombHunter
+                .getBody()
+                .setTransform(Constants.DUMPSTER_POS,0);
     }
 
     private void isPlayerInBounds(){

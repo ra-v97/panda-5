@@ -18,18 +18,18 @@ public class Bullet extends GameObject implements Pool.Poolable {
     }
 
     void initVertical(int level) {
-        body.getPosition().set(Constants.BULLET_DEFAULT_POS_X,Constants.BULLET_DEFAULT_POS_Y[level]);
+        body.setTransform(Constants.BULLET_DEFAULT_POS_X,Constants.BULLET_DEFAULT_POS_Y[level],0f);
         alive = true;
     }
 
     void initHorizontal(float posX) {
-        body.getPosition().set(posX,Constants.BOMB_POS_Y);
+        body.setTransform(posX,Constants.BOMB_POS_Y,0f);
         alive = true;
     }
 
     @Override
     public void reset() {
-        body.getPosition().set(Constants.DUMPSTER_POS);
+        body.setTransform(Constants.DUMPSTER_POS,0f);
         alive = false;
     }
 

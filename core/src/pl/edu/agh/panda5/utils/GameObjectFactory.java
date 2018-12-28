@@ -119,47 +119,58 @@ public class GameObjectFactory implements AbstractFactory {
         fixture.setUserData(new GameObjectData(GameObjectType.HUNTER));
         shape.dispose();
 
-        BodyDef bulletBodyDef = new BodyDef();
-        PolygonShape bulletShape = new PolygonShape();
-        FixtureDef bulletFixDef = new FixtureDef();
-        Body bulletBody;
-        Fixture bulletFixture;
         HunterPower hunterPower;
 
         switch(power){
             case ARROW_POWER:
-                bulletBodyDef.type = BodyDef.BodyType.KinematicBody;
-                bulletBodyDef.position.set(Constants.DUMPSTER_POS);
-                bulletBodyDef.linearVelocity.set(Constants.BULLET_SPEED,0f);
-                bulletShape.setAsBox(Constants.BULLET_LENGTH,Constants.BULLET_HEIGHT);
-
-                bulletFixDef.shape= bulletShape;
-                bulletFixDef.density = Constants.BULLET_DENSITY;
-                bulletBody = world.createBody(bulletBodyDef);
-                bulletFixture = body.createFixture(bulletFixDef);
-                bulletFixture.setUserData(new GameObjectData(GameObjectType.BULLET));
-                shape.dispose();
-                hunterPower = new ArrowPower(bulletBody);
+                hunterPower = new ArrowPower(createArrowBody());
                 break;
 
             case BOMB_POWER:
-                bulletBodyDef.type = BodyDef.BodyType.DynamicBody;
-                bulletBodyDef.position.set(Constants.DUMPSTER_POS);
-                shape.setAsBox(Constants.BOMB_SIZE,Constants.BOMB_SIZE);
-                bulletFixDef.shape= bulletShape;
-                bulletFixDef.density = Constants.BOMB_DENSITY;
-                bulletBody = world.createBody(bulletBodyDef);
-                bulletBody.setGravityScale(Constants.BOMB_GRAVITY_SCALE);
-                bulletBody.resetMassData();
-                bulletFixture = bulletBody.createFixture(bulletFixDef);
-                bulletFixture.setUserData(new GameObjectData(GameObjectType.BULLET));
-                shape.dispose();
-                hunterPower = new BombPower(bulletBody);
+                hunterPower = new BombPower(createBombBody());
                 break;
              default:
                  throw new RuntimeException("Invalid power type");
         }
         return new Hunter(body,level,hunterPower);
+    }
+
+    private Body createArrowBody(){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.position.set(Constants.DUMPSTER_POS);
+        bodyDef.linearVelocity.set(Constants.BULLET_SPEED,0f);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Constants.BULLET_LENGTH,Constants.BULLET_HEIGHT);
+
+        FixtureDef fDef = new FixtureDef();
+        fDef.shape= shape;
+        fDef.density = Constants.BULLET_DENSITY;
+        Body body = world.createBody(bodyDef);
+        Fixture fixture = body.createFixture(fDef);
+        fixture.setUserData(GameObjectType.BULLET);
+        fixture.setUserData(new GameObjectData(GameObjectType.BULLET));
+        shape.dispose();
+
+        return body;
+    }
+
+    private Body createBombBody(){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(Constants.DUMPSTER_POS);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Constants.BOMB_SIZE,Constants.BOMB_SIZE);
+
+        FixtureDef fDef = new FixtureDef();
+        fDef.shape= shape;
+        fDef.density = Constants.BOMB_DENSITY;
+        Body body = world.createBody(bodyDef);
+        Fixture fixture = body.createFixture(fDef);
+        fixture.setUserData(new GameObjectData(BULLET));
+        shape.dispose();
+
+        return body;
     }
 
     public Obstacle createObstacle(Vector2 position) {
@@ -220,6 +231,7 @@ public class GameObjectFactory implements AbstractFactory {
         Body body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
+
 
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;

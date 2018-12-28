@@ -57,14 +57,14 @@ public class Constants {
     public static final float HUNTER_WIDTH = 1f;
     public static final float HUNTER_HEIGHT = 1f;
     public static final float HUNTER_DEFAULT_POS_X = 19f;
-    public static final float HUNTER_POS_Y_OFFSET = 0.5f;
+    public static final float HUNTER_POS_Y_OFFSET = 1f;
     public static final float HUNTER_DEFAULT_POS_Y[] = {
             PLATFORM_DEFAULT_Y[0] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET,
             PLATFORM_DEFAULT_Y[1] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET,
             PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET
     };
 
-    public static final float BULLET_SPEED = -2f;
+    public static final float BULLET_SPEED = -4f;
     public static final float BULLET_DENSITY = 1f;
     public static final float BULLET_HEIGHT = 0.01f;
     public static final float BULLET_LENGTH = 0.2f;
@@ -77,10 +77,9 @@ public class Constants {
     };
 
     public static final float BOMB_SIZE = 0.1f;
-    public static final float BOMB_DENSITY = 2f;
+    public static final float BOMB_DENSITY = GROUND_DENSITY;
     public static final float BOMB_POS_Y= 15f;
-    public static final float BOMB_GRAVITY_SCALE = 15f;
-
+    public static final int BULLET_CASH_SIZE = 30;
     public static final float COIN_WIDTH = 0.1f;
     public static final float COIN_HEIGHT = 0.1f;
     public static final float COIN_DEFAULT_X = 25f;

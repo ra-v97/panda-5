@@ -34,6 +34,15 @@ public class Player extends GameObject {
         }
     }
 
+
+    public boolean isJumping() {
+        return jumping;
+    }
+
+    public void landed() {
+        jumping = false;
+    }
+
     public void fall() {
         jumping = true;
     }
@@ -59,10 +68,6 @@ public class Player extends GameObject {
         setVelocity();
     }
 
-    public void landed() {
-        jumping = false;
-    }
-
     public void dodge() {
         if (!jumping) {
             body.setTransform(body.getPosition().x, (float) (body.getPosition().y - (0.5 * (Constants.RUNNER_HEIGHT - Constants.RUNNER_WIDTH))), (float) (90f * (Math.PI / 180f)));
@@ -80,6 +85,8 @@ public class Player extends GameObject {
     }
 
     public void addPoints(int points) {this.points += points;}
+
+    public int getPoints() {return points;}
 
     private void setVelocity() {
         Vector2 velocity = body.getLinearVelocity();

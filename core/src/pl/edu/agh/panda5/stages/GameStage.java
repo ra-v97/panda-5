@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import pl.edu.agh.panda5.Panda5;
+import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
@@ -66,9 +67,6 @@ public class GameStage extends Stage {
         setUpGround();
         setUpPlayer();
         setUpHunters();
-        spawnArrowHunter();
-        spawnBombHunter();
-        removeBombHunter();
     }
 
     private void setUpKeyboard() {
@@ -92,10 +90,12 @@ public class GameStage extends Stage {
     }
 
     private void setUpHunters(){
-        arrowHunter = factory.createHunter(1,GameObjectType.ARROW_POWER);
+        arrowHunter = factory.createHunter(0,GameObjectType.ARROW_POWER);
         addActor(arrowHunter);
         bombHunter = factory.createHunter(0,GameObjectType.BOMB_POWER);
         addActor(bombHunter);
+        removeArrowHunter();
+        removeBombHunter();
     }
 
     @Override
@@ -105,25 +105,18 @@ public class GameStage extends Stage {
         // Fixed timestep
         accumulator += delta;
         accumulator2 += delta;
-        accumulator3 += delta;
-
 
         while (accumulator >= TIME_STEP) {
             world.step(TIME_STEP, 6, 2);
             player.update(delta);
             isPlayerInBounds();
+            removeUnusedBullets();
             accumulator -= TIME_STEP;
         }
 
         if(accumulator2 > Constants.PLATFORM_TIME_STEP) {
             spawnPlatforms();
             accumulator2 -= Constants.PLATFORM_TIME_STEP;
-            bombHunter.usePower();
-            arrowHunter.usePower();
-        }
-
-        if(accumulator3 > 2) {
-            accumulator3 = 0;
         }
 
         removeUnusedCoins();
@@ -229,6 +222,10 @@ public class GameStage extends Stage {
                 .setTransform(Constants.DUMPSTER_POS,0);
     }
 
+    private void removeUnusedBullets(){
+        arrowHunter.verifyPowers();
+        bombHunter.verifyPowers();
+    }
     private void isPlayerInBounds(){
         if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0) // TODO: Fix this someday
             gameOver();
@@ -318,15 +315,19 @@ public class GameStage extends Stage {
                 gameOver();
             }
         }
+
         if (aType == GameObjectType.BULLET || bType == GameObjectType.BULLET) {
             if(aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
                 gameOver();
-            }else if(aType == GameObjectType.PLATFORM || bType == GameObjectType.PLATFORM ||
-                    aType == GameObjectType.OBSTACLE || bType == GameObjectType.OBSTACLE){
-                arrowHunter.verifyPowers();
-                bombHunter.verifyPowers();
             }
         }
+
+        if(aType == GameObjectType.BULLET && (bType == GameObjectType.PLATFORM ||bType == GameObjectType.OBSTACLE)){
+            ((GameObjectData) a.getUserData()).setFlaggedForDelete(true);
+        }else if(bType == GameObjectType.BULLET && (aType == GameObjectType.PLATFORM ||aType == GameObjectType.OBSTACLE)){
+            ((GameObjectData) b.getUserData()).setFlaggedForDelete(true);
+        }
+
     }
 
     private void handlePlayerCoinContact(Fixture coin) {

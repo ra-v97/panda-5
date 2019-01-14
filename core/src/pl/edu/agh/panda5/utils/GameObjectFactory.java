@@ -139,7 +139,7 @@ public class GameObjectFactory implements AbstractFactory {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(Constants.DUMPSTER_POS);
-        bodyDef.linearVelocity.set(Constants.BULLET_SPEED,0f);
+        bodyDef.linearVelocity.set(Constants.BULLET_SPEED);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Constants.BULLET_LENGTH,Constants.BULLET_HEIGHT);
 

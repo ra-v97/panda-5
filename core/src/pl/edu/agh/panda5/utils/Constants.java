@@ -64,7 +64,7 @@ public class Constants {
             PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET
     };
 
-    public static final float BULLET_SPEED = -4f;
+    public static final Vector2 BULLET_SPEED = new Vector2(-17f,0);
     public static final float BULLET_DENSITY = 1f;
     public static final float BULLET_HEIGHT = 0.01f;
     public static final float BULLET_LENGTH = 0.2f;
@@ -80,6 +80,7 @@ public class Constants {
     public static final float BOMB_DENSITY = GROUND_DENSITY;
     public static final float BOMB_POS_Y= 15f;
     public static final int BULLET_CASH_SIZE = 30;
+
     public static final float COIN_WIDTH = 0.1f;
     public static final float COIN_HEIGHT = 0.1f;
     public static final float COIN_DEFAULT_X = 25f;

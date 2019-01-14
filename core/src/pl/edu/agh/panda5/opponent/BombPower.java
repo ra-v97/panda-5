@@ -2,6 +2,7 @@ package pl.edu.agh.panda5.opponent;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import pl.edu.agh.panda5.utils.GameObjectFactory;
 
 import java.util.Random;
 
@@ -14,7 +15,7 @@ public class BombPower implements HunterPower {
     private final Pool<Bullet> bombsPool = new Pool<Bullet>() {
         @Override
         protected Bullet newObject() {
-            return new Bullet();
+            return new Bullet(GameObjectFactory.createBombBody());
         }
     };
 

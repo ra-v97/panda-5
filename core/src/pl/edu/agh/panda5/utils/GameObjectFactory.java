@@ -24,8 +24,8 @@ public class GameObjectFactory implements AbstractFactory {
     private int currentPlatform = 0;
     private int[] currentCoin = {0, 0, 0};
 
-    public GameObjectFactory(World world){
-        this.world = world;
+    public GameObjectFactory(World worldRef){
+        world = worldRef;
         poll.put(GameObjectType.OBSTACLE, new ArrayList<>());
         poll.put(GameObjectType.PLATFORM, new ArrayList<>());
         poll.put(GameObjectType.COIN0, new ArrayList<>());
@@ -99,25 +99,20 @@ public class GameObjectFactory implements AbstractFactory {
     private Platform createPlatformPrototype(Vector2 position, float width, float height) {
 
         Body body = createKinematicBodyPrototype(position.x, position.y, width, height,
-                Constants.GROUND_DENSITY, new GameObjectData(PLATFORM));
+                Constants.GROUND_DENSITY, false, new GameObjectData(PLATFORM));
         return new Platform(body);
     }
 
     public Hunter createHunter(int level, GameObjectType power)
     {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody;
-        bodyDef.position.set(Constants.DUMPSTER_POS);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.HUNTER_WIDTH / 2, Constants.HUNTER_HEIGHT / 2);
-
-        FixtureDef fDef = new FixtureDef();
-        fDef.shape = shape;
-        fDef.density = Constants.HUNTER_DENSITY;
-        Body body = world.createBody(bodyDef);
-        Fixture fixture = body.createFixture(fDef);
-        fixture.setUserData(new GameObjectData(GameObjectType.HUNTER));
-        shape.dispose();
+        Body body = createKinematicBodyPrototype(
+                Constants.DUMPSTER_POS.x,
+                Constants.DUMPSTER_POS.y,
+                Constants.HUNTER_WIDTH / 2,
+                Constants.HUNTER_HEIGHT / 2,
+                Constants.HUNTER_DENSITY,
+                false,
+                new GameObjectData(GameObjectType.HUNTER));
 
         HunterPower hunterPower;
 
@@ -183,7 +178,7 @@ public class GameObjectFactory implements AbstractFactory {
     private Obstacle createObstaclePrototype(){
 
         Body body = createKinematicBodyPrototype(Constants.OBSTACLE_DEFAULT_X, Constants.OBSTACLE_DEFAULT_Y[0],
-                Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT, Constants.GROUND_DENSITY, new GameObjectData(OBSTACLE));
+                Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT, Constants.GROUND_DENSITY, false, new GameObjectData(OBSTACLE));
         return new Obstacle(body);
     }
 
@@ -218,13 +213,13 @@ public class GameObjectFactory implements AbstractFactory {
                 throw new RuntimeException("coin type can only be one of {0, 1, 2}");
         }
         Body body = createKinematicBodyPrototype(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y,
-                Constants.COIN_WIDTH, Constants.COIN_HEIGHT, Constants.COIN_DENSITY, objectType);
+                Constants.COIN_WIDTH, Constants.COIN_HEIGHT, Constants.COIN_DENSITY, true, objectType);
 
         return new Coin(body, value);
     }
 
     private Body createKinematicBodyPrototype(float x, float y, float width, float height,
-                                              float density, GameObjectData type) {
+                                              float density, boolean isSensor, GameObjectData type) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(x, y);
@@ -232,10 +227,10 @@ public class GameObjectFactory implements AbstractFactory {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
 
-
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;
         fDef.density = density;
+        fDef.isSensor = isSensor;
 
         Fixture fix = body.createFixture(fDef);
         fix.setUserData(type);

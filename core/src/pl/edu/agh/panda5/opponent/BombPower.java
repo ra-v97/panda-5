@@ -21,10 +21,12 @@ public class BombPower implements HunterPower {
 
     @Override
     public void use(int level){
-        Bullet item = bombsPool.obtain();
-        float pos_X = new Random().nextFloat()*20+level;
-        item.initHorizontal(pos_X);
-        activeBombs.add(item);
+        for(int i = 0 ; i < 4 ; i++){
+            Bullet item = bombsPool.obtain();
+            float pos_X = new Random().nextFloat()*20+level;
+            item.initHorizontal(pos_X);
+            activeBombs.add(item);
+        }
     }
 
     @Override

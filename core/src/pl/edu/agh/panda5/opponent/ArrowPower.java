@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import pl.edu.agh.panda5.utils.GameObjectFactory;
 
+import java.util.concurrent.CompletableFuture;
+
 public class ArrowPower implements HunterPower {
 
     // array containing the active bullets.
@@ -20,7 +22,14 @@ public class ArrowPower implements HunterPower {
 
     @Override
     public void use(int level){
-        spawnNewBullet(level);
+        CompletableFuture.runAsync(() -> {
+            for (int i = 0; i<3;i++){
+                spawnNewBullet(level);
+                try{
+                    Thread.sleep(200);
+                }catch (Exception e){e.printStackTrace();}
+            }
+        });
     }
 
     private void spawnNewBullet(int level){

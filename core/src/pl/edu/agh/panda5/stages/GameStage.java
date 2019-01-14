@@ -67,6 +67,8 @@ public class GameStage extends Stage {
         setUpGround();
         setUpPlayer();
         setUpHunters();
+        //spawnArrowHunter();
+        //spawnBombHunter();
     }
 
     private void setUpKeyboard() {
@@ -105,6 +107,7 @@ public class GameStage extends Stage {
         // Fixed timestep
         accumulator += delta;
         accumulator2 += delta;
+        accumulator3 += delta;
 
         while (accumulator >= TIME_STEP) {
             world.step(TIME_STEP, 6, 2);
@@ -117,6 +120,12 @@ public class GameStage extends Stage {
         if(accumulator2 > Constants.PLATFORM_TIME_STEP) {
             spawnPlatforms();
             accumulator2 -= Constants.PLATFORM_TIME_STEP;
+        }
+
+        if(accumulator3 >= 5){
+            //arrowHunter.usePower();
+            bombHunter.usePower();
+            accumulator3 =0;
         }
 
         removeUnusedCoins();

@@ -90,8 +90,9 @@ public class Player extends GameObject {
 
     private void setVelocity() {
         Vector2 velocity = body.getLinearVelocity();
+        Vector2 position = body.getPosition();
         velocity.x = 0f;
-        if (isMovingRight) {
+        if (isMovingRight && position.x < Constants.RIGHT_BORDER) {
             velocity.x += Constants.RUNNER_RUN_RIGHT_SPEED;
         }
         if (isMovingLeft) {

@@ -7,12 +7,16 @@ import pl.edu.agh.panda5.utils.Constants;
 public class PowerUp extends GameObject {
     private PowerUpEffect effect;
 
-    public PowerUp(Body body){
+    public PowerUp(Body body) {
         super(body);
     }
 
-    public void setEffect(PowerUpEffect powerUpEffect){
+    public void setEffect(PowerUpEffect powerUpEffect) {
         this.effect = powerUpEffect;
+    }
+
+    public PowerUpEffect getEffect() {
+        return this.effect;
     }
 
     @Override

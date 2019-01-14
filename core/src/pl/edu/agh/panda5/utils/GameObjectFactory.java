@@ -233,18 +233,15 @@ public class GameObjectFactory implements AbstractFactory {
 
     public PowerUp createPowerUp(Vector2 position) {
         PowerUpEffect effect;
-        switch((new Random().nextInt() & Integer.MAX_VALUE) % 3 +1){
+        switch((new Random().nextInt() & Integer.MAX_VALUE) % 2 +1){
             case 1:
                 effect = new PowerUpShield();
                 break;
             case 2:
                 effect = new PowerUpCoinMagnet();
                 break;
-            case 3:
-                effect = new PowerUpBonusJump();
-                break;
             default:
-                effect = new BasicPowerUpEffect();
+                effect = new PowerUpBonusJump();
         }
         PowerUp powerUp = (PowerUp) poll.get(GameObjectType.POWER_UP).get(currentPowerUp);
         powerUp.setEffect(effect);

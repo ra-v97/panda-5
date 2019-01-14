@@ -87,11 +87,16 @@ public class Player extends GameObject {
         return dodging;
     }
 
-    public void addPoints(int points) {this.points += points;}
+    public void addPoints(int points) {
+        this.points += points;
+    }
 
-    public int getPoints() {return points;}
+    public int getPoints() {
+        return points;
+    }
 
-    public void addEffect(PowerUpEffect effect){
+    public void addEffect(PowerUpEffect effect) {
+        powerUp.decorate((PowerUpDecorator) effect);
     }
 
     private void setVelocity() {

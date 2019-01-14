@@ -242,7 +242,7 @@ public class GameStage extends Stage {
     }
 
     private void spawnPowerUp(int level) {
-        PowerUp powerUp = factory.createPowerUp(new Vector2(Constants.POWER_UP_DEFAULT_X,Constants.POWER_UP_DEFAULT_Y[level]));
+        PowerUp powerUp = factory.createPowerUp(new Vector2(Constants.POWER_UP_DEFAULT_X, Constants.POWER_UP_DEFAULT_Y[level]));
         addActor(powerUp);
         powerUps.add(powerUp);
     }
@@ -382,8 +382,11 @@ public class GameStage extends Stage {
     }
 
     private void handlePlayerPowerUpContact(Fixture powerUp) {
-        //player.addEffect(powerUp);
-        System.out.println("Power upp collected");
+        PowerUp pu = powerUps
+                .stream()
+                .filter((p) -> p.getBody().getFixtureList().contains(powerUp, true))
+                .findFirst().orElseThrow(() -> new RuntimeException("Power upp error"));
+        player.addEffect(pu.getEffect());
         ((GameObjectData) powerUp.getUserData()).setFlaggedForDelete(true);
     }
 

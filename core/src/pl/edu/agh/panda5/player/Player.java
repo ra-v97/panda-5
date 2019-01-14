@@ -3,6 +3,8 @@ package pl.edu.agh.panda5.player;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import pl.edu.agh.panda5.application.GameObject;
+import pl.edu.agh.panda5.player.powerups.BasicPowerUpEffect;
+import pl.edu.agh.panda5.player.powerups.PowerUpDecorator;
 import pl.edu.agh.panda5.player.powerups.PowerUpEffect;
 import pl.edu.agh.panda5.utils.Constants;
 
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class Player extends GameObject {
     private int points = 0;
-    private List<PowerUpEffect> activePowerUps;
+    private PowerUpEffect powerUp = new BasicPowerUpEffect();
     private boolean dodging;
     private boolean jumping;
     private float currentJumpTimeout;
@@ -65,6 +67,7 @@ public class Player extends GameObject {
 
     public void update(float dt) {
         currentJumpTimeout -= dt;
+        powerUp.applyEffect();
         setVelocity();
     }
 
@@ -87,6 +90,9 @@ public class Player extends GameObject {
     public void addPoints(int points) {this.points += points;}
 
     public int getPoints() {return points;}
+
+    public void addEffect(PowerUpEffect effect){
+    }
 
     private void setVelocity() {
         Vector2 velocity = body.getLinearVelocity();

@@ -79,7 +79,6 @@ public class Constants {
     public static final float BOMB_SIZE = 0.1f;
     public static final float BOMB_DENSITY = GROUND_DENSITY;
     public static final float BOMB_POS_Y= 15f;
-    public static final int BULLET_CASH_SIZE = 30;
 
     public static final float COIN_WIDTH = 0.1f;
     public static final float COIN_HEIGHT = 0.1f;
@@ -88,4 +87,15 @@ public class Constants {
     public static final float COIN_DENSITY = GROUND_DENSITY;
 
     public static final int[] COIN_VALUE = {1, 3, 5};
+
+    public static final float POWER_UP_WIDTH = 0.15f;
+    public static final float POWER_UP_HEIGHT = 0.15f;
+    public static final float POWER_UP_DENSITY = GROUND_DENSITY;
+    public static final float POWER_UP_Y_OFFSET = 1f;
+    public static final float POWER_UP_DEFAULT_X = 22f;
+    public static final float[] POWER_UP_DEFAULT_Y = {
+            PLATFORM_DEFAULT_Y[0] + PLATFORM_HEIGHT + POWER_UP_Y_OFFSET ,
+            PLATFORM_DEFAULT_Y[1] + PLATFORM_HEIGHT + POWER_UP_Y_OFFSET ,
+            PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + POWER_UP_Y_OFFSET
+    };
 }

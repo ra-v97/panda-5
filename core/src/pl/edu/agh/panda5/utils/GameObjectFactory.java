@@ -8,6 +8,7 @@ import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.*;
 import pl.edu.agh.panda5.player.Player;
+import pl.edu.agh.panda5.player.powerups.*;
 
 import static pl.edu.agh.panda5.utils.GameObjectType.*;
 
@@ -20,41 +21,48 @@ public class GameObjectFactory implements AbstractFactory {
     private final int obstacleCacheSize = 6;
     private final int platformCacheSize = 6;
     private final int[] coinCacheSize = {5, 2, 2};
+    private final int powerUpsCacheSize = 6;
     private int currentObstacle = 0;
     private int currentPlatform = 0;
     private int[] currentCoin = {0, 0, 0};
+    private int currentPowerUp = 0;
 
-    public GameObjectFactory(World worldRef){
+    public GameObjectFactory(World worldRef) {
         world = worldRef;
         poll.put(GameObjectType.OBSTACLE, new ArrayList<>());
         poll.put(GameObjectType.PLATFORM, new ArrayList<>());
         poll.put(GameObjectType.COIN0, new ArrayList<>());
         poll.put(GameObjectType.COIN1, new ArrayList<>());
         poll.put(GameObjectType.COIN2, new ArrayList<>());
+        poll.put(GameObjectType.POWER_UP,new ArrayList<>());
 
-        while(poll.get(GameObjectType.OBSTACLE).size() < obstacleCacheSize) {
+        while (poll.get(GameObjectType.OBSTACLE).size() < obstacleCacheSize) {
             poll.get(GameObjectType.OBSTACLE).add(createObstaclePrototype());
         }
 
-        while(poll.get(GameObjectType.PLATFORM).size() < platformCacheSize) {
+        while (poll.get(GameObjectType.PLATFORM).size() < platformCacheSize) {
             poll.get(GameObjectType.PLATFORM).add(createPlatformPrototype(new Vector2(Constants.PLATFORM_DEFAULT_X,
                     Constants.PLATFORM_DEFAULT_Y[0]), Constants.PLATFORM_WIDTH, Constants.PLATFORM_HEIGHT));
         }
 
-        while(poll.get(GameObjectType.COIN0).size() < coinCacheSize[0]) {
+        while (poll.get(GameObjectType.COIN0).size() < coinCacheSize[0]) {
             poll.get(GameObjectType.COIN0).add(createCoinPrototype(0));
         }
 
-        while(poll.get(GameObjectType.COIN1).size() < coinCacheSize[1]) {
+        while (poll.get(GameObjectType.COIN1).size() < coinCacheSize[1]) {
             poll.get(GameObjectType.COIN1).add(createCoinPrototype(1));
         }
 
-        while(poll.get(GameObjectType.COIN2).size() < coinCacheSize[2]) {
+        while (poll.get(GameObjectType.COIN2).size() < coinCacheSize[2]) {
             poll.get(GameObjectType.COIN2).add(createCoinPrototype(2));
+        }
+
+        while (poll.get(GameObjectType.POWER_UP).size() < powerUpsCacheSize) {
+            poll.get(GameObjectType.POWER_UP).add(createPowerUpPrototype());
         }
     }
 
-    public Player createPlayer(){
+    public Player createPlayer() {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -103,8 +111,7 @@ public class GameObjectFactory implements AbstractFactory {
         return new Platform(body);
     }
 
-    public Hunter createHunter(int level, GameObjectType power)
-    {
+    public Hunter createHunter(int level, GameObjectType power) {
         Body body = createKinematicBodyPrototype(
                 Constants.DUMPSTER_POS.x,
                 Constants.DUMPSTER_POS.y,
@@ -116,7 +123,7 @@ public class GameObjectFactory implements AbstractFactory {
 
         HunterPower hunterPower;
 
-        switch(power){
+        switch (power) {
             case ARROW_POWER:
                 hunterPower = new ArrowPower();
                 break;
@@ -124,22 +131,22 @@ public class GameObjectFactory implements AbstractFactory {
             case BOMB_POWER:
                 hunterPower = new BombPower();
                 break;
-             default:
-                 throw new RuntimeException("Invalid power type");
+            default:
+                throw new RuntimeException("Invalid power type");
         }
-        return new Hunter(body,level,hunterPower);
+        return new Hunter(body, level, hunterPower);
     }
 
-    public static Body createArrowBody(){
+    public static Body createArrowBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(Constants.DUMPSTER_POS);
         bodyDef.linearVelocity.set(Constants.BULLET_SPEED);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.BULLET_LENGTH,Constants.BULLET_HEIGHT);
+        shape.setAsBox(Constants.BULLET_LENGTH, Constants.BULLET_HEIGHT);
 
         FixtureDef fDef = new FixtureDef();
-        fDef.shape= shape;
+        fDef.shape = shape;
         fDef.density = Constants.BULLET_DENSITY;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
@@ -150,15 +157,15 @@ public class GameObjectFactory implements AbstractFactory {
         return body;
     }
 
-    public static Body createBombBody(){
+    public static Body createBombBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(Constants.DUMPSTER_POS);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.BOMB_SIZE,Constants.BOMB_SIZE);
+        shape.setAsBox(Constants.BOMB_SIZE, Constants.BOMB_SIZE);
 
         FixtureDef fDef = new FixtureDef();
-        fDef.shape= shape;
+        fDef.shape = shape;
         fDef.density = Constants.BOMB_DENSITY;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
@@ -175,7 +182,7 @@ public class GameObjectFactory implements AbstractFactory {
         return obstacle;
     }
 
-    private Obstacle createObstaclePrototype(){
+    private Obstacle createObstaclePrototype() {
 
         Body body = createKinematicBodyPrototype(Constants.OBSTACLE_DEFAULT_X, Constants.OBSTACLE_DEFAULT_Y[0],
                 Constants.OBSTACLE_WIDTH, Constants.OBSTACLE_HEIGHT, Constants.GROUND_DENSITY, false, new GameObjectData(OBSTACLE));
@@ -184,7 +191,7 @@ public class GameObjectFactory implements AbstractFactory {
 
     public Coin createCoin(Vector2 position, int type) {
         Coin coin;
-        switch(type) {
+        switch (type) {
             case 0:
                 coin = (Coin) poll.get(GameObjectType.COIN0).get(currentCoin[type]);
                 break;
@@ -205,10 +212,16 @@ public class GameObjectFactory implements AbstractFactory {
     private Coin createCoinPrototype(int type) {
         GameObjectData objectType;
         int value = Constants.COIN_VALUE[type];
-        switch(type) {
-            case 0: objectType = new GameObjectData(GameObjectType.COIN0); break;
-            case 1: objectType = new GameObjectData(GameObjectType.COIN1); break;
-            case 2: objectType = new GameObjectData(GameObjectType.COIN2); break;
+        switch (type) {
+            case 0:
+                objectType = new GameObjectData(GameObjectType.COIN0);
+                break;
+            case 1:
+                objectType = new GameObjectData(GameObjectType.COIN1);
+                break;
+            case 2:
+                objectType = new GameObjectData(GameObjectType.COIN2);
+                break;
             default:
                 throw new RuntimeException("coin type can only be one of {0, 1, 2}");
         }
@@ -216,6 +229,42 @@ public class GameObjectFactory implements AbstractFactory {
                 Constants.COIN_WIDTH, Constants.COIN_HEIGHT, Constants.COIN_DENSITY, true, objectType);
 
         return new Coin(body, value);
+    }
+
+    public PowerUp createPowerUp(Vector2 position) {
+        PowerUpEffect effect;
+        switch((new Random().nextInt() & Integer.MAX_VALUE) % 3 +1){
+            case 1:
+                effect = new PowerUpShield();
+                break;
+            case 2:
+                effect = new PowerUpCoinMagnet();
+                break;
+            case 3:
+                effect = new PowerUpBonusJump();
+                break;
+            default:
+                effect = new BasicPowerUpEffect();
+        }
+        PowerUp powerUp = (PowerUp) poll.get(GameObjectType.POWER_UP).get(currentPowerUp);
+        powerUp.setEffect(effect);
+        powerUp.getBody().setTransform(position, 0f);
+        currentPowerUp = (currentPowerUp + 1) % powerUpsCacheSize;
+
+        return powerUp;
+    }
+
+    private PowerUp createPowerUpPrototype() {
+        Body body = createKinematicBodyPrototype(
+                Constants.DUMPSTER_POS.x,
+                Constants.DUMPSTER_POS.y,
+                Constants.POWER_UP_WIDTH,
+                Constants.POWER_UP_HEIGHT,
+                Constants.POWER_UP_DENSITY,
+                true,
+                new GameObjectData(GameObjectType.POWER_UP));
+
+        return new PowerUp(body);
     }
 
     private Body createKinematicBodyPrototype(float x, float y, float width, float height,
@@ -238,6 +287,4 @@ public class GameObjectFactory implements AbstractFactory {
 
         return body;
     }
-
-
 }

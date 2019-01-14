@@ -6,6 +6,7 @@ import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
+import pl.edu.agh.panda5.player.powerups.PowerUp;
 
 public interface AbstractFactory {
     Player createPlayer();
@@ -14,4 +15,5 @@ public interface AbstractFactory {
     Hunter createHunter(int level, GameObjectType power);
     Obstacle createObstacle(Vector2 position);
     Coin createCoin(Vector2 position, int type);
+    PowerUp createPowerUp(Vector2 position);
 }

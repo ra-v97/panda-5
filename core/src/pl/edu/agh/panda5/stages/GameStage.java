@@ -15,6 +15,7 @@ import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
+import pl.edu.agh.panda5.player.powerups.*;
 import pl.edu.agh.panda5.screens.GameOverScreen;
 import pl.edu.agh.panda5.utils.*;
 
@@ -48,6 +49,7 @@ public class GameStage extends Stage {
     private Random rand;
     private boolean onlyLowerPlatformLastTime = true;
     private Set<Coin> coins = new HashSet<>();
+    private Set<PowerUp> powerUps = new HashSet<>();
 
     public GameStage(Panda5 game) {
         this.game = game;
@@ -90,10 +92,10 @@ public class GameStage extends Stage {
         addActor(player);
     }
 
-    private void setUpHunters(){
-        arrowHunter = factory.createHunter(0,GameObjectType.ARROW_POWER);
+    private void setUpHunters() {
+        arrowHunter = factory.createHunter(0, GameObjectType.ARROW_POWER);
         addActor(arrowHunter);
-        bombHunter = factory.createHunter(0,GameObjectType.BOMB_POWER);
+        bombHunter = factory.createHunter(0, GameObjectType.BOMB_POWER);
         addActor(bombHunter);
         removeArrowHunter();
         removeBombHunter();
@@ -116,25 +118,27 @@ public class GameStage extends Stage {
             accumulator -= TIME_STEP;
         }
 
-        if(accumulator2 > Constants.PLATFORM_TIME_STEP) {
+        if (accumulator2 > Constants.PLATFORM_TIME_STEP) {
             spawnPlatforms();
             accumulator2 -= Constants.PLATFORM_TIME_STEP;
         }
 
-        if(accumulator3 >= 5){
+        if (accumulator3 >= 5) {
             //arrowHunter.usePower();
             bombHunter.usePower();
-            accumulator3 =0;
+            accumulator3 = 0;
         }
 
         removeUnusedCoins();
+        removeUnusedPowerUps();
+
         // TODO: Implement interpolation
     }
 
-    private void spawnPlatforms(){
+    private void spawnPlatforms() {
 
         boolean[] generatePlatform = new boolean[3];
-        if(!onlyLowerPlatformLastTime) {
+        if (!onlyLowerPlatformLastTime) {
             //40% chance to generate each platform
             generatePlatform[0] = rand.nextInt() % 100 <= Constants.PLATFORM_GENERATION_CHANCE;
             generatePlatform[1] = rand.nextInt() % 100 <= Constants.PLATFORM_GENERATION_CHANCE;
@@ -169,16 +173,16 @@ public class GameStage extends Stage {
 
         onlyLowerPlatformLastTime = generatePlatform[0] && !generatePlatform[1] && !generatePlatform[2];
 
-        for(int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i) {
 
             //generate platform
-            if(generatePlatform[i]) {
+            if (generatePlatform[i]) {
                 Platform platform = factory.createPlatform(new Vector2(Constants.PLATFORM_DEFAULT_X,
                         Constants.PLATFORM_DEFAULT_Y[i]));
                 addActor(platform);
 
                 //generate obstacles
-                if(rand.nextInt() % 100 <= Constants.OBSTACLE_GENERATION_CHANCE) {
+                if (rand.nextInt() % 100 <= Constants.OBSTACLE_GENERATION_CHANCE) {
                     Obstacle obstacle = factory.createObstacle(new Vector2(Constants.OBSTACLE_DEFAULT_X,
                             Constants.OBSTACLE_DEFAULT_Y[i]));
                     addActor(obstacle);
@@ -187,9 +191,10 @@ public class GameStage extends Stage {
 
 
         }
-        Coin coin = factory.createCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), 0);
-        addActor(coin);
-        coins.add(coin);
+        //Coin coin = factory.createCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), 0);
+        //addActor(coin);
+        //coins.add(coin);
+        spawnPowerUp(1);
     }
 
     private void removeUnusedCoins() {
@@ -203,44 +208,64 @@ public class GameStage extends Stage {
         }
     }
 
-    private void spawnArrowHunter(){
+    private void spawnArrowHunter() {
         arrowHunter.setSpawned();
         arrowHunter
                 .getBody()
-                .setTransform(Constants.HUNTER_DEFAULT_POS_X,Constants.HUNTER_DEFAULT_POS_Y[arrowHunter.getLevel()],0);
+                .setTransform(Constants.HUNTER_DEFAULT_POS_X, Constants.HUNTER_DEFAULT_POS_Y[arrowHunter.getLevel()], 0);
     }
 
-    private void spawnBombHunter(){
+    private void spawnBombHunter() {
         bombHunter.setSpawned();
         bombHunter
                 .getBody()
-                .setTransform(Constants.HUNTER_DEFAULT_POS_X,Constants.HUNTER_DEFAULT_POS_Y[bombHunter.getLevel()],0);
+                .setTransform(Constants.HUNTER_DEFAULT_POS_X, Constants.HUNTER_DEFAULT_POS_Y[bombHunter.getLevel()], 0);
     }
 
-    private void removeArrowHunter(){
+    private void removeArrowHunter() {
         arrowHunter.deleteSpawn();
         arrowHunter
                 .getBody()
-                .setTransform(Constants.DUMPSTER_POS,0);
+                .setTransform(Constants.DUMPSTER_POS, 0);
     }
-    private void removeBombHunter(){
+
+    private void removeBombHunter() {
         bombHunter.deleteSpawn();
         bombHunter
                 .getBody()
-                .setTransform(Constants.DUMPSTER_POS,0);
+                .setTransform(Constants.DUMPSTER_POS, 0);
     }
 
-    private void removeUnusedBullets(){
+    private void removeUnusedBullets() {
         arrowHunter.verifyPowers();
         bombHunter.verifyPowers();
     }
-    private void isPlayerInBounds(){
-        if(player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0) // TODO: Fix this someday
+
+    private void spawnPowerUp(int level) {
+        PowerUp powerUp = factory.createPowerUp(new Vector2(Constants.POWER_UP_DEFAULT_X,Constants.POWER_UP_DEFAULT_Y[level]));
+        addActor(powerUp);
+        powerUps.add(powerUp);
+    }
+
+    private void removeUnusedPowerUps() {
+        powerUps.forEach(this::removePowerUp);
+    }
+
+    private void removePowerUp(PowerUp powerUp) {
+        if (((GameObjectData) powerUp.getBody().getFixtureList().get(0).getUserData()).isFlaggedForDelete() ||
+                powerUp.getBody().getPosition().x < 0) {
+            powerUp.getBody().setTransform(Constants.DUMPSTER_POS, 0f);
+            ((GameObjectData) powerUp.getBody().getFixtureList().get(0).getUserData()).setFlaggedForDelete(false);
+        }
+    }
+
+    private void isPlayerInBounds() {
+        if (player.getBody().getPosition().x + Constants.RUNNER_WIDTH < 0 || player.getBody().getPosition().y + Constants.RUNNER_HEIGHT < 0) // TODO: Fix this someday
             gameOver();
     }
 
 
-    private void gameOver(){
+    private void gameOver() {
         game.pause();
         game.setScreen(new GameOverScreen(game));
     }
@@ -252,30 +277,30 @@ public class GameStage extends Stage {
     }
 
     @Override
-    public void dispose(){
+    public void dispose() {
         super.dispose();
     }
 
     @Override
-    public boolean keyDown (int keycode) {
-        if(keycode == Input.Keys.UP){
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.UP) {
             player.jump();
-        } else if (keycode == Input.Keys.DOWN){
+        } else if (keycode == Input.Keys.DOWN) {
             player.dodge();
         }
 
-        if(keycode == Input.Keys.RIGHT)
+        if (keycode == Input.Keys.RIGHT)
             player.moveRight();
 
-        if(keycode == Input.Keys.LEFT)
+        if (keycode == Input.Keys.LEFT)
             player.moveLeft();
 
-        if(keycode == Input.Keys.P)
+        if (keycode == Input.Keys.P)
             game.pauseOrResume();
 
-        if(keycode == Input.Keys.R) {
-           game.dispose();
-           game.create();
+        if (keycode == Input.Keys.R) {
+            game.dispose();
+            game.create();
         }
 
         return super.keyDown(keycode);
@@ -283,10 +308,10 @@ public class GameStage extends Stage {
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.RIGHT)
+        if (keycode == Input.Keys.RIGHT)
             player.stopMovingRight();
 
-        if(keycode == Input.Keys.LEFT)
+        if (keycode == Input.Keys.LEFT)
             player.stopMovingLeft();
 
         if (player.isDodging()) {
@@ -296,43 +321,49 @@ public class GameStage extends Stage {
         return super.keyUp(keycode);
     }
 
-    public void beginContact(Fixture a, Fixture b){
+    public void beginContact(Fixture a, Fixture b) {
 
-        GameObjectType aType = ((GameObjectData)a.getUserData()).getType();
-        GameObjectType bType = ((GameObjectData)b.getUserData()).getType();
+        GameObjectType aType = ((GameObjectData) a.getUserData()).getType();
+        GameObjectType bType = ((GameObjectData) b.getUserData()).getType();
 
-        if(aType == GameObjectType.FEET_SENSOR || bType == GameObjectType.FEET_SENSOR) {
-            if(aType == GameObjectType.PLATFORM || bType == GameObjectType.PLATFORM ||
+        if (aType == GameObjectType.FEET_SENSOR || bType == GameObjectType.FEET_SENSOR) {
+            if (aType == GameObjectType.PLATFORM || bType == GameObjectType.PLATFORM ||
                     aType == GameObjectType.OBSTACLE || bType == GameObjectType.OBSTACLE) {
                 player.landed();
             }
         }
 
-        if(aType == GameObjectType.FEET_SENSOR || aType == GameObjectType.PLAYER) {
-            if(((GameObjectData)b.getUserData()).isCoin()) {
+        if (aType == GameObjectType.FEET_SENSOR || aType == GameObjectType.PLAYER) {
+            if (((GameObjectData) b.getUserData()).isCoin()) {
                 handlePlayerCoinContact(b);
             }
-        } else if(bType == GameObjectType.FEET_SENSOR || bType == GameObjectType.PLAYER) {
-            if (((GameObjectData)a.getUserData()).isCoin()) {
+        } else if (bType == GameObjectType.FEET_SENSOR || bType == GameObjectType.PLAYER) {
+            if (((GameObjectData) a.getUserData()).isCoin()) {
                 handlePlayerCoinContact(a);
             }
         }
 
-        if(aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
-            if(aType == GameObjectType.BULLET || bType == GameObjectType.BULLET ) {
+        if (aType == GameObjectType.POWER_UP && bType == GameObjectType.PLAYER) {
+            handlePlayerPowerUpContact(a);
+        } else if (bType == GameObjectType.POWER_UP && aType == GameObjectType.PLAYER) {
+            handlePlayerPowerUpContact(b);
+        }
+
+        if (aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
+            if (aType == GameObjectType.BULLET || bType == GameObjectType.BULLET) {
                 gameOver();
             }
         }
 
         if (aType == GameObjectType.BULLET || bType == GameObjectType.BULLET) {
-            if(aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
+            if (aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
                 gameOver();
             }
         }
 
-        if(aType == GameObjectType.BULLET && (bType == GameObjectType.PLATFORM ||bType == GameObjectType.OBSTACLE)){
+        if (aType == GameObjectType.BULLET && (bType == GameObjectType.PLATFORM || bType == GameObjectType.OBSTACLE)) {
             ((GameObjectData) a.getUserData()).setFlaggedForDelete(true);
-        }else if(bType == GameObjectType.BULLET && (aType == GameObjectType.PLATFORM ||aType == GameObjectType.OBSTACLE)){
+        } else if (bType == GameObjectType.BULLET && (aType == GameObjectType.PLATFORM || aType == GameObjectType.OBSTACLE)) {
             ((GameObjectData) b.getUserData()).setFlaggedForDelete(true);
         }
 
@@ -343,17 +374,23 @@ public class GameStage extends Stage {
             player.addPoints(Constants.COIN_VALUE[0]);
         } else if (coin.getUserData() == GameObjectType.COIN1) {
             player.addPoints(Constants.COIN_VALUE[1]);
-        }  else if (coin.getUserData() == GameObjectType.COIN2) {
+        } else if (coin.getUserData() == GameObjectType.COIN2) {
             player.addPoints(Constants.COIN_VALUE[2]);
         }
 
-        ((GameObjectData)coin.getUserData()).setFlaggedForDelete(true);
+        ((GameObjectData) coin.getUserData()).setFlaggedForDelete(true);
+    }
+
+    private void handlePlayerPowerUpContact(Fixture powerUp) {
+        //player.addEffect(powerUp);
+        System.out.println("Power upp collected");
+        ((GameObjectData) powerUp.getUserData()).setFlaggedForDelete(true);
     }
 
     public void endContact(Fixture a, Fixture b) {
-        if(((GameObjectData)a.getUserData()).getType() == GameObjectType.FEET_SENSOR || ((GameObjectData)b.getUserData()).getType() == GameObjectType.FEET_SENSOR) {
-            if((((GameObjectData)a.getUserData()).getType() == GameObjectType.PLATFORM) || (((GameObjectData)b.getUserData()).getType() == GameObjectType.PLATFORM) ||
-                    (((GameObjectData)a.getUserData()).getType() == GameObjectType.OBSTACLE) || (((GameObjectData)b.getUserData()).getType() == GameObjectType.OBSTACLE)) {
+        if (((GameObjectData) a.getUserData()).getType() == GameObjectType.FEET_SENSOR || ((GameObjectData) b.getUserData()).getType() == GameObjectType.FEET_SENSOR) {
+            if ((((GameObjectData) a.getUserData()).getType() == GameObjectType.PLATFORM) || (((GameObjectData) b.getUserData()).getType() == GameObjectType.PLATFORM) ||
+                    (((GameObjectData) a.getUserData()).getType() == GameObjectType.OBSTACLE) || (((GameObjectData) b.getUserData()).getType() == GameObjectType.OBSTACLE)) {
                 player.fall();
             }
         }

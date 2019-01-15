@@ -67,7 +67,7 @@ public class Player extends GameObject {
 
     public void update(float dt) {
         currentJumpTimeout -= dt;
-        powerUp.applyEffect();
+        powerUp.applyEffect(dt);
         setVelocity();
     }
 

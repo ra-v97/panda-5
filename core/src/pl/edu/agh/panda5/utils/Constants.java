@@ -98,4 +98,5 @@ public class Constants {
             PLATFORM_DEFAULT_Y[1] + PLATFORM_HEIGHT + POWER_UP_Y_OFFSET ,
             PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + POWER_UP_Y_OFFSET
     };
+    public static final float DEFAULT_POWER_UP_TIMEOUT = 30.0f;
 }

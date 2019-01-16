@@ -19,8 +19,8 @@ public class Player extends GameObject {
     private boolean jumping;
     private boolean canBeKilledByShot;
     private boolean canJumpTwice;
+    private boolean secondJumpDone;
     private float currentJumpTimeout;
-
     private boolean isMovingRight;
     private boolean isMovingLeft;
 
@@ -29,16 +29,25 @@ public class Player extends GameObject {
         currentJumpTimeout = 0f;
         isMovingLeft = false;
         isMovingRight = false;
+        canBeKilledByShot = true;
+        canJumpTwice = false;
+        secondJumpDone = false;
     }
 
     public void jump() {
-        if (!(jumping || dodging) && currentJumpTimeout < 0) {
-            body.applyLinearImpulse(Constants.RUNNER_JUMPING_LINEAR_IMPULSE, body.getWorldCenter(), true);
+        if (((!jumping && currentJumpTimeout < 0)||(canJumpTwice && !secondJumpDone)) && !dodging) {
+            body.applyLinearImpulse(
+                    0f,
+                    Constants.RUNNER_JUMPING_LINEAR_IMPULSE_Y-body.getLinearVelocity().y,
+                    body.getWorldCenter().x,
+                    body.getWorldCenter().y,
+                    true);
+
+            if(jumping && canJumpTwice && !secondJumpDone) secondJumpDone = true;
             jumping = true;
             currentJumpTimeout = Constants.RUNNER_JUMP_TIMEOUT;
         }
     }
-
 
     public boolean isJumping() {
         return jumping;
@@ -46,6 +55,7 @@ public class Player extends GameObject {
 
     public void landed() {
         jumping = false;
+        secondJumpDone = false;
     }
 
     public void fall() {

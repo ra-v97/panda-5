@@ -233,7 +233,7 @@ public class GameObjectFactory implements AbstractFactory {
 
     public PowerUp createPowerUp(Vector2 position) {
         PowerUpEffect effect;
-        switch((new Random().nextInt() & Integer.MAX_VALUE) % 2 +1){
+        switch((new Random().nextInt() & Integer.MAX_VALUE) % 3 +1){
             case 1:
                 effect = new PowerUpShield();
                 break;

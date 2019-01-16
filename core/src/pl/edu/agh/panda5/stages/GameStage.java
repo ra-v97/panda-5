@@ -69,9 +69,6 @@ public class GameStage extends Stage {
         setUpPlayer();
         setUpHunters();
         setUpMutableObjects();
-
-        arrowHunter.setLevel(2);
-        spawnArrowHunter();
     }
 
     private void setUpKeyboard() {

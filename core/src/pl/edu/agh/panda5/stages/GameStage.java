@@ -19,9 +19,7 @@ import pl.edu.agh.panda5.player.powerups.*;
 import pl.edu.agh.panda5.screens.GameOverScreen;
 import pl.edu.agh.panda5.utils.*;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class GameStage extends Stage {
 
@@ -51,6 +49,8 @@ public class GameStage extends Stage {
     private Set<Coin> coins = new HashSet<>();
     private Set<PowerUp> powerUps = new HashSet<>();
 
+    private Map<GameObjectType, Object> mutableObjects = new HashMap<>();
+
     public GameStage(Panda5 game) {
         this.game = game;
 
@@ -68,8 +68,10 @@ public class GameStage extends Stage {
         setUpGround();
         setUpPlayer();
         setUpHunters();
-        //spawnArrowHunter();
-        //spawnBombHunter();
+        setUpMutableObjects();
+
+        arrowHunter.setLevel(2);
+        spawnArrowHunter();
     }
 
     private void setUpKeyboard() {
@@ -89,6 +91,7 @@ public class GameStage extends Stage {
 
     private void setUpPlayer() {
         player = factory.createPlayer();
+        player.setUpBasicEffect(mutableObjects);
         addActor(player);
     }
 
@@ -99,6 +102,11 @@ public class GameStage extends Stage {
         addActor(bombHunter);
         removeArrowHunter();
         removeBombHunter();
+    }
+
+    private void setUpMutableObjects() {
+        mutableObjects.put(GameObjectType.PLAYER,player);
+        mutableObjects.put(GameObjectType.COINS,coins);
     }
 
     @Override
@@ -123,9 +131,9 @@ public class GameStage extends Stage {
             accumulator2 -= Constants.PLATFORM_TIME_STEP;
         }
 
-        if (accumulator3 >= 5) {
-            //arrowHunter.usePower();
-            bombHunter.usePower();
+        if (accumulator3 >= 4) {
+            arrowHunter.usePower();
+            //bombHunter.usePower();
             accumulator3 = 0;
         }
 
@@ -349,15 +357,19 @@ public class GameStage extends Stage {
             handlePlayerPowerUpContact(b);
         }
 
-        if (aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
-            if (aType == GameObjectType.BULLET || bType == GameObjectType.BULLET) {
-                gameOver();
-            }
+        if (aType == GameObjectType.PLAYER && bType == GameObjectType.BULLET) {
+                if(player.canBeKilled()) gameOver();
+                ((GameObjectData) b.getUserData()).setFlaggedForDelete(true);
+        }
+
+        if (aType == GameObjectType.BULLET && bType == GameObjectType.PLAYER) {
+            if(player.canBeKilled()) gameOver();
+            ((GameObjectData) a.getUserData()).setFlaggedForDelete(true);
         }
 
         if (aType == GameObjectType.BULLET || bType == GameObjectType.BULLET) {
             if (aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
-                gameOver();
+                if(player.canBeKilled()) gameOver();
             }
         }
 

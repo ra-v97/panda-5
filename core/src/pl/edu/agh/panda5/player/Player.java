@@ -7,15 +7,18 @@ import pl.edu.agh.panda5.player.powerups.BasicPowerUpEffect;
 import pl.edu.agh.panda5.player.powerups.PowerUpDecorator;
 import pl.edu.agh.panda5.player.powerups.PowerUpEffect;
 import pl.edu.agh.panda5.utils.Constants;
+import pl.edu.agh.panda5.utils.GameObjectType;
 
-import java.util.List;
+import java.util.Map;
 
 
 public class Player extends GameObject {
     private int points = 0;
-    private PowerUpEffect powerUp = new BasicPowerUpEffect();
+    private PowerUpEffect powerUp;
     private boolean dodging;
     private boolean jumping;
+    private boolean canBeKilledByShot;
+    private boolean canJumpTwice;
     private float currentJumpTimeout;
 
     private boolean isMovingRight;
@@ -65,6 +68,18 @@ public class Player extends GameObject {
         isMovingLeft = false;
     }
 
+    public void setImmortality() { canBeKilledByShot = false; }
+
+    public void setPossibleToKill() {
+        canBeKilledByShot = true;
+    }
+
+    public void doubleJumpOn() { canJumpTwice = true; }
+
+    public void doubleJumpOff() { canJumpTwice = false; }
+
+    public boolean canBeKilled() { return this.canBeKilledByShot; }
+
     public void update(float dt) {
         currentJumpTimeout -= dt;
         powerUp.applyEffect(dt);
@@ -97,6 +112,10 @@ public class Player extends GameObject {
 
     public void addEffect(PowerUpEffect effect) {
         powerUp.decorate((PowerUpDecorator) effect);
+    }
+
+    public void setUpBasicEffect(Map<GameObjectType, Object> mutableObjects) {
+        this.powerUp = new BasicPowerUpEffect(mutableObjects);
     }
 
     private void setVelocity() {

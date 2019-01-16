@@ -9,6 +9,7 @@ public enum GameObjectType {
     BULLET,
     ARROW_POWER,
     BOMB_POWER,
+    COINS,
     COIN0,
     COIN1,
     COIN2,

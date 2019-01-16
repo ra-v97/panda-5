@@ -2,6 +2,8 @@ package pl.edu.agh.panda5.player.powerups;
 
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.player.Player;
+import pl.edu.agh.panda5.utils.Constants;
+import pl.edu.agh.panda5.utils.GameObjectData;
 import pl.edu.agh.panda5.utils.GameObjectType;
 
 import java.util.Map;
@@ -14,6 +16,13 @@ public class PowerUpCoinMagnet extends PowerUpDecorator {
 
     @Override
     public void applyEffect(float dt){
+        for(Coin activeCoin : activeCoins){
+            if(activeCoin.getBody().getPosition().dst(player.getBody().getPosition()) < Constants.MAGNET_EFFECT_RANGE){
+                System.out.println("Collected");
+                player.addPoints(activeCoin.getValue());
+                ((GameObjectData) activeCoin.getBody().getFixtureList().get(0).getUserData()).setFlaggedForDelete(true);
+            }
+        }
         updateEffectTime(dt);
     }
 

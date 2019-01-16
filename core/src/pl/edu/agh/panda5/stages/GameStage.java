@@ -199,7 +199,7 @@ public class GameStage extends Stage {
         //Coin coin = factory.createCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), 0);
         //addActor(coin);
         //coins.add(coin);
-        spawnPowerUp(1);
+        //spawnPowerUp(1);
     }
 
     private void removeUnusedCoins() {

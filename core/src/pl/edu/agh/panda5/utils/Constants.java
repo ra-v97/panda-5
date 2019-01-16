@@ -12,6 +12,11 @@ public class Constants {
     //For removed objects
     public static final Vector2 DUMPSTER_POS = new Vector2(500f, 500f);
 
+    public static final int SCORE_LABEL_POSITION_X = 5;
+    public static final int SCORE_LABEL_POSITION_Y = 460;
+    public static final int SCORE_LABEL_WIDTH = 20;
+    public static final int SCORE_LABEL_HEIGHT = 5;
+
     public static final float GROUND_X = 0;
     public static final float GROUND_Y = 0;
     public static final float GROUND_WIDTH = 35f;

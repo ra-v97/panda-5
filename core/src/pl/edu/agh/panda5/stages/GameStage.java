@@ -3,11 +3,13 @@ package pl.edu.agh.panda5.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import pl.edu.agh.panda5.Panda5;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Coin;
@@ -50,6 +52,7 @@ public class GameStage extends Stage {
     private Set<PowerUp> powerUps = new HashSet<>();
 
     private Map<GameObjectType, Object> mutableObjects = new HashMap<>();
+    private Label scores;
 
     public GameStage(Panda5 game) {
         this.game = game;
@@ -69,6 +72,7 @@ public class GameStage extends Stage {
         setUpPlayer();
         setUpHunters();
         setUpMutableObjects();
+        setUpPointsCounter();
     }
 
     private void setUpKeyboard() {
@@ -106,6 +110,22 @@ public class GameStage extends Stage {
         mutableObjects.put(GameObjectType.COINS,coins);
     }
 
+    private void setUpPointsCounter(){
+        Label.LabelStyle textStyle;
+        BitmapFont font = new BitmapFont();
+
+        textStyle = new Label.LabelStyle();
+        textStyle.font = font;
+
+        scores = new Label("Scores: 0",textStyle);
+        scores.setBounds(Constants.SCORE_LABEL_POSITION_X,
+                Constants.SCORE_LABEL_POSITION_Y,
+                Constants.SCORE_LABEL_WIDTH,
+                Constants.SCORE_LABEL_HEIGHT);
+        scores.setFontScale(1.2f);
+        addActor(scores);
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -120,6 +140,7 @@ public class GameStage extends Stage {
             player.update(delta);
             isPlayerInBounds();
             removeUnusedBullets();
+            updateScore(player.getPoints());
             accumulator -= TIME_STEP;
         }
 
@@ -138,6 +159,10 @@ public class GameStage extends Stage {
         removeUnusedPowerUps();
 
         // TODO: Implement interpolation
+    }
+
+    private void updateScore(int score){
+        scores.setText("Score: "+score);
     }
 
     private void spawnPlatforms() {
@@ -196,9 +221,9 @@ public class GameStage extends Stage {
 
 
         }
-        //Coin coin = factory.createCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), 0);
-        //addActor(coin);
-        //coins.add(coin);
+        Coin coin = factory.createCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), 0);
+        addActor(coin);
+        coins.add(coin);
         //spawnPowerUp(1);
     }
 
@@ -338,11 +363,11 @@ public class GameStage extends Stage {
             }
         }
 
-        if (aType == GameObjectType.FEET_SENSOR || aType == GameObjectType.PLAYER) {
+        if (aType == GameObjectType.PLAYER) {
             if (((GameObjectData) b.getUserData()).isCoin()) {
                 handlePlayerCoinContact(b);
             }
-        } else if (bType == GameObjectType.FEET_SENSOR || bType == GameObjectType.PLAYER) {
+        } else if (bType == GameObjectType.PLAYER) {
             if (((GameObjectData) a.getUserData()).isCoin()) {
                 handlePlayerCoinContact(a);
             }
@@ -379,11 +404,12 @@ public class GameStage extends Stage {
     }
 
     private void handlePlayerCoinContact(Fixture coin) {
-        if (coin.getUserData() == GameObjectType.COIN0) {
+        GameObjectType coinType = ((GameObjectData) coin.getUserData()).getType();
+        if (coinType == GameObjectType.COIN0) {
             player.addPoints(Constants.COIN_VALUE[0]);
-        } else if (coin.getUserData() == GameObjectType.COIN1) {
+        } else if (coinType == GameObjectType.COIN1) {
             player.addPoints(Constants.COIN_VALUE[1]);
-        } else if (coin.getUserData() == GameObjectType.COIN2) {
+        } else if (coinType == GameObjectType.COIN2) {
             player.addPoints(Constants.COIN_VALUE[2]);
         }
 

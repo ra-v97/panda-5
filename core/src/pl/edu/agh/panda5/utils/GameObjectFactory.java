@@ -189,22 +189,26 @@ public class GameObjectFactory implements AbstractFactory {
         return new Obstacle(body);
     }
 
-    public Coin createCoin(Vector2 position, int type) {
+    public Coin createCoin(Vector2 position, GameObjectType type) {
         Coin coin;
+        int index;
         switch (type) {
-            case 0:
-                coin = (Coin) poll.get(GameObjectType.COIN0).get(currentCoin[type]);
+            case COIN0:
+                index = 0;
+                coin = (Coin) poll.get(GameObjectType.COIN0).get(currentCoin[index]);
                 break;
-            case 1:
-                coin = (Coin) poll.get(GameObjectType.COIN1).get(currentCoin[type]);
+            case COIN1:
+                index = 1;
+                coin = (Coin) poll.get(GameObjectType.COIN1).get(currentCoin[index]);
                 break;
-            case 2:
-                coin = (Coin) poll.get(GameObjectType.COIN2).get(currentCoin[type]);
+            case COIN2:
+                index = 2;
+                coin = (Coin) poll.get(GameObjectType.COIN2).get(currentCoin[index]);
                 break;
             default:
                 throw new RuntimeException("coin type can only be one of {0, 1, 2}");
         }
-        currentCoin[type] = (currentCoin[type] + 1) % coinCacheSize[type];
+        currentCoin[index] = (currentCoin[index] + 1) % coinCacheSize[index];
         coin.getBody().setTransform(position.x, position.y, 0);
         return coin;
     }

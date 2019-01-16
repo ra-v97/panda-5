@@ -14,6 +14,6 @@ public interface AbstractFactory {
     Platform createPlatform(Vector2 position);
     Hunter createHunter(int level, GameObjectType power);
     Obstacle createObstacle(Vector2 position);
-    Coin createCoin(Vector2 position, int type);
+    Coin createCoin(Vector2 position, GameObjectType type);
     PowerUp createPowerUp(Vector2 position);
 }

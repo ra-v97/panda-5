@@ -124,6 +124,8 @@ public class GameStage extends Stage {
                 Constants.SCORE_LABEL_HEIGHT);
         scores.setFontScale(1.2f);
         addActor(scores);
+
+        spawnArrowHunter(2);
     }
 
     @Override
@@ -221,10 +223,14 @@ public class GameStage extends Stage {
 
 
         }
-        Coin coin = factory.createCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), 0);
+        spawnCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), GameObjectType.COIN0);
+        spawnPowerUp(1);
+    }
+
+    private void spawnCoin(Vector2 position, GameObjectType type){
+        Coin coin = factory.createCoin(position, type);
         addActor(coin);
         coins.add(coin);
-        //spawnPowerUp(1);
     }
 
     private void removeUnusedCoins() {
@@ -238,14 +244,16 @@ public class GameStage extends Stage {
         }
     }
 
-    private void spawnArrowHunter() {
+    private void spawnArrowHunter(int level) {
+        arrowHunter.setLevel(level);
         arrowHunter.setSpawned();
         arrowHunter
                 .getBody()
                 .setTransform(Constants.HUNTER_DEFAULT_POS_X, Constants.HUNTER_DEFAULT_POS_Y[arrowHunter.getLevel()], 0);
     }
 
-    private void spawnBombHunter() {
+    private void spawnBombHunter(int level) {
+        bombHunter.setLevel(level);
         bombHunter.setSpawned();
         bombHunter
                 .getBody()

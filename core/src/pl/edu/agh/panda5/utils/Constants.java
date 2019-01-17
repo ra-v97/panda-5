@@ -16,6 +16,7 @@ public class Constants {
     public static final int SCORE_LABEL_POSITION_Y = 460;
     public static final int SCORE_LABEL_WIDTH = 20;
     public static final int SCORE_LABEL_HEIGHT = 5;
+    public static final String SCORE_DATABASE_PATH = "../../database.csv";
 
     public static final float GROUND_X = 0;
     public static final float GROUND_Y = 0;

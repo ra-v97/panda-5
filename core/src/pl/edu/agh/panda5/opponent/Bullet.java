@@ -27,6 +27,7 @@ public class Bullet extends GameObject implements Pool.Poolable {
 
     @Override
     public void reset() {
+        ((GameObjectData) body.getFixtureList().get(0).getUserData()).setFlaggedForDelete(false);
         body.setTransform(Constants.DUMPSTER_POS,0f);
     }
 

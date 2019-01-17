@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import pl.edu.agh.panda5.Panda5;
+import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
@@ -21,6 +22,7 @@ import pl.edu.agh.panda5.player.powerups.*;
 import pl.edu.agh.panda5.screens.GameOverScreen;
 import pl.edu.agh.panda5.utils.*;
 
+import java.io.IOException;
 import java.util.*;
 
 public class GameStage extends Stage {
@@ -32,6 +34,7 @@ public class GameStage extends Stage {
     private Panda5 game;
 
     private AbstractFactory factory;
+    private ScoreSerializer serializer;
     private World world;
     private Platform ground;
     private Player player;
@@ -61,7 +64,7 @@ public class GameStage extends Stage {
         world.setContactListener(new CollisionDetector(this));
 
         factory = new GameObjectFactory(world);
-
+        serializer = game.getSerializer();
         renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
 
@@ -316,6 +319,7 @@ public class GameStage extends Stage {
 
     @Override
     public void dispose() {
+        serializer.addNewScore(player.getPoints());
         super.dispose();
     }
 

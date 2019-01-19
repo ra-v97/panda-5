@@ -119,7 +119,7 @@ public class GameStage extends Stage {
         textStyle = new Label.LabelStyle();
         textStyle.font = font;
 
-        scores = new Label("Scores: 0",textStyle);
+        scores = new Label("Score: 0",textStyle);
         scores.setBounds(Constants.SCORE_LABEL_POSITION_X,
                 Constants.SCORE_LABEL_POSITION_Y,
                 Constants.SCORE_LABEL_WIDTH,
@@ -307,7 +307,7 @@ public class GameStage extends Stage {
     }
 
 
-    private void gameOver() {
+    public void gameOver() {
         game.pause();
         serializer.addNewScore(player.getPoints());
         game.setScreen(new GameOverScreen(game));
@@ -377,87 +377,12 @@ public class GameStage extends Stage {
         return super.keyUp(keycode);
     }
 
-    public void beginContact(Fixture a, Fixture b) {
-
-        GameObjectType aType = ((GameObjectData) a.getUserData()).getType();
-        GameObjectType bType = ((GameObjectData) b.getUserData()).getType();
-
-        if (aType == GameObjectType.FEET_SENSOR || bType == GameObjectType.FEET_SENSOR) {
-            if (aType == GameObjectType.PLATFORM || bType == GameObjectType.PLATFORM ||
-                    aType == GameObjectType.OBSTACLE || bType == GameObjectType.OBSTACLE) {
-                player.landed();
-            }
-        }
-
-        if (aType == GameObjectType.PLAYER) {
-            if (((GameObjectData) b.getUserData()).isCoin()) {
-                handlePlayerCoinContact(b);
-            }
-        } else if (bType == GameObjectType.PLAYER) {
-            if (((GameObjectData) a.getUserData()).isCoin()) {
-                handlePlayerCoinContact(a);
-            }
-        }
-
-        if (aType == GameObjectType.POWER_UP && bType == GameObjectType.PLAYER) {
-            handlePlayerPowerUpContact(a);
-        } else if (bType == GameObjectType.POWER_UP && aType == GameObjectType.PLAYER) {
-            handlePlayerPowerUpContact(b);
-        }
-
-        if (aType == GameObjectType.PLAYER && bType == GameObjectType.BULLET) {
-                if(player.canBeKilled()) gameOver();
-                ((GameObjectData) b.getUserData()).setFlaggedForDelete(true);
-        }
-
-        if (aType == GameObjectType.BULLET && bType == GameObjectType.PLAYER) {
-            if(player.canBeKilled()) gameOver();
-            ((GameObjectData) a.getUserData()).setFlaggedForDelete(true);
-        }
-
-        if (aType == GameObjectType.BULLET || bType == GameObjectType.BULLET) {
-            if (aType == GameObjectType.PLAYER || bType == GameObjectType.PLAYER) {
-                if(player.canBeKilled()) gameOver();
-            }
-        }
-
-        if (aType == GameObjectType.BULLET && (bType == GameObjectType.PLATFORM || bType == GameObjectType.OBSTACLE)) {
-            ((GameObjectData) a.getUserData()).setFlaggedForDelete(true);
-        } else if (bType == GameObjectType.BULLET && (aType == GameObjectType.PLATFORM || aType == GameObjectType.OBSTACLE)) {
-            ((GameObjectData) b.getUserData()).setFlaggedForDelete(true);
-        }
-
+    public Player getPlayer(){
+        return player;
     }
 
-    private void handlePlayerCoinContact(Fixture coin) {
-        GameObjectType coinType = ((GameObjectData) coin.getUserData()).getType();
-        if (coinType == GameObjectType.COIN0) {
-            player.addPoints(Constants.COIN_VALUE[0]);
-        } else if (coinType == GameObjectType.COIN1) {
-            player.addPoints(Constants.COIN_VALUE[1]);
-        } else if (coinType == GameObjectType.COIN2) {
-            player.addPoints(Constants.COIN_VALUE[2]);
-        }
-
-        ((GameObjectData) coin.getUserData()).setFlaggedForDelete(true);
-    }
-
-    private void handlePlayerPowerUpContact(Fixture powerUp) {
-        PowerUp pu = powerUps
-                .stream()
-                .filter((p) -> p.getBody().getFixtureList().contains(powerUp, true))
-                .findFirst().orElseThrow(() -> new RuntimeException("Power upp error"));
-        player.addEffect(pu.getEffect());
-        ((GameObjectData) powerUp.getUserData()).setFlaggedForDelete(true);
-    }
-
-    public void endContact(Fixture a, Fixture b) {
-        if (((GameObjectData) a.getUserData()).getType() == GameObjectType.FEET_SENSOR || ((GameObjectData) b.getUserData()).getType() == GameObjectType.FEET_SENSOR) {
-            if ((((GameObjectData) a.getUserData()).getType() == GameObjectType.PLATFORM) || (((GameObjectData) b.getUserData()).getType() == GameObjectType.PLATFORM) ||
-                    (((GameObjectData) a.getUserData()).getType() == GameObjectType.OBSTACLE) || (((GameObjectData) b.getUserData()).getType() == GameObjectType.OBSTACLE)) {
-                player.fall();
-            }
-        }
+    public Set<PowerUp> getPowerUps(){
+        return powerUps;
     }
 }
 

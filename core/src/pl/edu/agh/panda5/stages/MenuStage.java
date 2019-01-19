@@ -25,7 +25,7 @@ public class MenuStage extends Stage {
         return serializer
                 .getTopScores(8)
                 .stream()
-                .map(s-> s.replace(";","   Scores-> "))
+                .map(s-> s.replace(";","   Score-> "))
                 .collect(Collectors.toList());
     }
 

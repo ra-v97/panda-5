@@ -104,8 +104,8 @@ public class CollisionDetector implements ContactListener {
             if (gameStage.getPlayer().isDropping()){
                 contact.setEnabled(false);
             }
-        } else if ((aType == GameObjectType.PLAYER && bType == GameObjectType.OBSTACLE) ||
-                (aType == GameObjectType.OBSTACLE && bType == GameObjectType.PLAYER) ) {
+        } else if ((aType == GameObjectType.FEET_SENSOR && bType == GameObjectType.OBSTACLE) ||
+                (aType == GameObjectType.OBSTACLE && bType == GameObjectType.FEET_SENSOR) ) {
             if (gameStage.getPlayer().isDropping()){
                 gameStage.getPlayer().stopDrop();
             }

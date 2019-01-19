@@ -72,7 +72,7 @@ public class Constants {
     public static final float HUNTER_HEIGHT = 1f;
     public static final float HUNTER_DEFAULT_POS_X = 19f;
     public static final float HUNTER_POS_Y_OFFSET = 1f;
-    public static final float HUNTER_DEFAULT_POS_Y[] = {
+    public static final float[] HUNTER_DEFAULT_POS_Y = {
             PLATFORM_DEFAULT_Y[0] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET,
             PLATFORM_DEFAULT_Y[1] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET,
             PLATFORM_DEFAULT_Y[2] + PLATFORM_HEIGHT + HUNTER_POS_Y_OFFSET
@@ -84,7 +84,7 @@ public class Constants {
     public static final float BULLET_LENGTH = 0.2f;
     public static final float BULLET_DEFAULT_POS_X = HUNTER_DEFAULT_POS_X+0.05f;
     public static final float BULLET_POS_Y_OFFSET = (float)0.5* HUNTER_HEIGHT;
-    public static final float BULLET_DEFAULT_POS_Y[] = {
+    public static final float[] BULLET_DEFAULT_POS_Y = {
             HUNTER_DEFAULT_POS_Y[0] + BULLET_POS_Y_OFFSET,
             HUNTER_DEFAULT_POS_Y[1] + BULLET_POS_Y_OFFSET,
             HUNTER_DEFAULT_POS_Y[2] + BULLET_POS_Y_OFFSET

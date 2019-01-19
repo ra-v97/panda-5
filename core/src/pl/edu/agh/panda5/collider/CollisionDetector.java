@@ -86,7 +86,7 @@ public class CollisionDetector implements ContactListener {
         PowerUp pu = gameStage.getPowerUps()
                 .stream()
                 .filter((p) -> p.getBody().getFixtureList().contains(powerUp, true))
-                .findFirst().orElseThrow(() -> new RuntimeException("Power upp error"));
+                .findFirst().orElseThrow(() -> new RuntimeException("Power up error"));
         gameStage.getPlayer().addEffect(pu.getEffect());
         ((GameObjectData) powerUp.getUserData()).setFlaggedForDelete(true);
     }

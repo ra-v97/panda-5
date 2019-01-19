@@ -50,7 +50,7 @@ public class Constants {
 
     public static final Vector2 GAME_LINEAR_VELOCITY = new Vector2(-10f, 0);
 
-    public static final float PLATFORM_WIDTH = 3f;
+    public static final float PLATFORM_WIDTH = 6f;
     public static final float PLATFORM_HEIGHT = 0.2f;
     public static final float PLATFORM_DEFAULT_X = 25f;
     public static final float PLATFORM_TIME_STEP = 1.5f;

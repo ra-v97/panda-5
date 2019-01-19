@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.ContactFilter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -89,6 +91,25 @@ public class GameStage extends Stage {
     private void setUpGround() {
         ground = factory.createGround();
         addActor(ground);
+
+        world.setContactFilter(new ContactFilter() {
+
+            @Override
+            public boolean shouldCollide (Fixture a, Fixture b) {
+                if (((GameObjectData) a.getUserData()).getType() == GameObjectType.PLATFORM &&
+                        ((GameObjectData) b.getUserData()).getType() == GameObjectType.PLAYER) {
+                    Vector2 position = b.getBody().getPosition();
+                    return (position.y - Constants.RUNNER_HEIGHT/2 > a.getBody().getPosition().y);
+                } else if (((GameObjectData) a.getUserData()).getType() == GameObjectType.PLAYER &&
+                        ((GameObjectData) b.getUserData()).getType() == GameObjectType.PLATFORM) {
+                    Vector2 position = a.getBody().getPosition();
+                    return (position.y - Constants.RUNNER_HEIGHT/2 > b.getBody().getPosition().y);
+                } else{
+                    return true;
+                }
+            }
+        });
+
     }
 
     private void setUpPlayer() {
@@ -335,9 +356,12 @@ public class GameStage extends Stage {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.UP) {
             player.jump();
-        } else if (keycode == Input.Keys.DOWN) {
+        } else if (keycode == Input.Keys.CONTROL_RIGHT) {
             player.dodge();
         }
+
+        if(keycode == Input.Keys.DOWN)
+            player.drop();
 
         if (keycode == Input.Keys.RIGHT)
             player.moveRight();

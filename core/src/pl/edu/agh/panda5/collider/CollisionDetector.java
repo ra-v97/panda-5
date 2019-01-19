@@ -29,6 +29,7 @@ public class CollisionDetector implements ContactListener {
             }
         }
 
+
         if (aType == GameObjectType.PLAYER) {
             if (((GameObjectData) b.getUserData()).isCoin()) {
                 handlePlayerCoinContact(b);
@@ -92,7 +93,24 @@ public class CollisionDetector implements ContactListener {
     }
 
 
-    public void preSolve(Contact _contact, Manifold _oldManifold){ }
+    public void preSolve(Contact contact, Manifold _oldManifold){
+        Fixture a = contact.getFixtureA();
+        Fixture b = contact.getFixtureB();
+
+        GameObjectType aType = ((GameObjectData) a.getUserData()).getType();
+        GameObjectType bType = ((GameObjectData) b.getUserData()).getType();
+        if ((aType == GameObjectType.PLAYER && bType == GameObjectType.PLATFORM) ||
+                (aType == GameObjectType.PLATFORM && bType == GameObjectType.PLAYER) ) {
+            if (gameStage.getPlayer().isDropping()){
+                contact.setEnabled(false);
+            }
+        } else if ((aType == GameObjectType.PLAYER && bType == GameObjectType.OBSTACLE) ||
+                (aType == GameObjectType.OBSTACLE && bType == GameObjectType.PLAYER) ) {
+            if (gameStage.getPlayer().isDropping()){
+                gameStage.getPlayer().stopDrop();
+            }
+        }
+    }
 
 
     public void postSolve(Contact _contact, ContactImpulse _impulse){ }
@@ -105,6 +123,10 @@ public class CollisionDetector implements ContactListener {
                     (((GameObjectData) a.getUserData()).getType() == GameObjectType.OBSTACLE) || (((GameObjectData) b.getUserData()).getType() == GameObjectType.OBSTACLE)) {
                 gameStage.getPlayer().fall();
             }
+        }
+        if ((((GameObjectData) a.getUserData()).getType() == GameObjectType.PLAYER && ((GameObjectData) b.getUserData()).getType() == GameObjectType.PLATFORM) ||
+                (((GameObjectData) a.getUserData()).getType() == GameObjectType.PLATFORM && ((GameObjectData) b.getUserData()).getType() == GameObjectType.PLAYER)) {
+            gameStage.getPlayer().stopDrop();
         }
     }
 }

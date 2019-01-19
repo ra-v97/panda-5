@@ -21,23 +21,18 @@ import java.util.Map;
 public class Player extends GameObject {
     private int points = 0;
     private PowerUpEffect powerUp;
-    private boolean dodging;
-    private boolean jumping;
-    private boolean canBeKilledByShot;
-    private boolean canJumpTwice;
-    private boolean secondJumpDone;
-    private float currentJumpTimeout;
-    private boolean isMovingRight;
-    private boolean isMovingLeft;
+    private boolean dodging = false;
+    private boolean jumping = false;
+    private boolean dropping = false;
+    private boolean canBeKilledByShot = false;
+    private boolean canJumpTwice = false;
+    private boolean secondJumpDone = false;
+    private float currentJumpTimeout = 0f;
+    private boolean isMovingRight = false;
+    private boolean isMovingLeft = false;
 
     public Player(Body body) {
         super(body);
-        currentJumpTimeout = 0f;
-        isMovingLeft = false;
-        isMovingRight = false;
-        canBeKilledByShot = true;
-        canJumpTwice = false;
-        secondJumpDone = false;
         sprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("core/assets/panda/panda.png"))));
         resetAnimation(AnimationPart.PANDA_WALK_1);
     }
@@ -67,6 +62,10 @@ public class Player extends GameObject {
         secondJumpDone = false;
         resetAnimation(AnimationPart.PANDA_WALK_1);
     }
+
+    public void drop() { dropping = true; }
+    public void stopDrop() { dropping = false; }
+    public boolean isDropping() { return dropping; }
 
     public void fall() {
         jumping = true;

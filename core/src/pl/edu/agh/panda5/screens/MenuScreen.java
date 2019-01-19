@@ -16,6 +16,23 @@ import pl.edu.agh.panda5.stages.MenuStage;
 
 public class MenuScreen implements Screen {
 
+    private class MenuListener extends ClickListener{
+        private final Button button;
+        private MenuListener(Button button){
+            this.button=button;
+        }
+
+        @Override
+        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+            button.setWidth(button.getWidth() + 75);
+        }
+
+        @Override
+        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+            button.setWidth(button.getWidth() - 75);
+        }
+    }
+
     private Panda5 game;
     private MenuStage stage;
 
@@ -33,7 +50,6 @@ public class MenuScreen implements Screen {
         stage = new MenuStage(game);
     }
 
-    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -46,19 +62,15 @@ public class MenuScreen implements Screen {
         stage.draw();
     }
 
-    @Override
     public void hide() {
     }
 
-    @Override
     public void pause() {
     }
 
-    @Override
     public void resume() {
     }
 
-    @Override
     public void show() {
         Table table = new Table();
         table.setFillParent(true);
@@ -100,29 +112,11 @@ public class MenuScreen implements Screen {
         });
     }
 
-    @Override
     public void resize(int width, int height) {
     }
 
-    @Override
     public void dispose() {
         stage.dispose();
     }
 
-    private class MenuListener extends ClickListener{
-        private final Button button;
-        private MenuListener(Button button){
-            this.button=button;
-        }
-
-        @Override
-        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-            button.setWidth(button.getWidth() + 75);
-        }
-
-        @Override
-        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-            button.setWidth(button.getWidth() - 75);
-        }
-    }
 }

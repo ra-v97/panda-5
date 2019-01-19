@@ -20,12 +20,14 @@ public class GameScreen implements Screen {
         if (isPaused)
             delta = 0;
 
-        //Clear the screen
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //Update the stage
-        stage.draw();
+        // tell our stage to do actions and draw itself
+        stage.getBatch().begin();
+        stage.getBatch().end();
         stage.act(delta);
+        stage.draw();
     }
 
     public void resize(int width, int height) {

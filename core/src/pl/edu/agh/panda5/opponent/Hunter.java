@@ -1,5 +1,6 @@
 package pl.edu.agh.panda5.opponent;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Body;
 import pl.edu.agh.panda5.application.GameObject;
 
@@ -52,6 +53,10 @@ public class Hunter extends GameObject {
         super.act(delta);
         Random random = new Random();
         random.nextFloat();
+    }
+
+    public void draw(Batch batch) {
+
     }
 
 }

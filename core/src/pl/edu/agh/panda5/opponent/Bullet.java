@@ -1,5 +1,6 @@
 package pl.edu.agh.panda5.opponent;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -47,6 +48,10 @@ public class Bullet extends GameObject implements Pool.Poolable {
                 bulletPool.free(item);
             }
         }
+    }
+
+    public void draw(Batch batch) {
+
     }
 
 }

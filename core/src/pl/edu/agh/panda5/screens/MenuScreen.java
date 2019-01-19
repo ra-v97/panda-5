@@ -26,10 +26,10 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(Panda5 game) {
         this.game = game;
-        background = new Texture("background/menu_background_v2.png");
-        start_button = new Texture("buttons/play_menu_button.png");
-        score_button = new Texture("buttons/score_menu_button.png");
-        exit_button = new Texture("buttons/quit_menu_button.png");
+        background = new Texture("core/assets/background/menu_background_v2.png");
+        start_button = new Texture("core/assets/buttons/play_menu_button.png");
+        score_button = new Texture("core/assets/buttons/score_menu_button.png");
+        exit_button = new Texture("core/assets/buttons/quit_menu_button.png");
         stage = new MenuStage(game);
     }
 

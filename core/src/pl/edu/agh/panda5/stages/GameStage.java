@@ -3,6 +3,7 @@ package pl.edu.agh.panda5.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -27,10 +28,6 @@ import java.util.*;
 
 public class GameStage extends Stage {
 
-    // This will be our viewport measurements while working with the debug renderer
-    private static final int VIEWPORT_WIDTH = 20;
-    private static final int VIEWPORT_HEIGHT = 13;
-
     private Panda5 game;
 
     private AbstractFactory factory;
@@ -40,6 +37,8 @@ public class GameStage extends Stage {
     private Player player;
     private Hunter arrowHunter;
     private Hunter bombHunter;
+    private IdentityHashMap<Platform, Platform> platforms = new IdentityHashMap<>();
+    private IdentityHashMap<Obstacle, Obstacle> obstacles = new IdentityHashMap<>();
 
     private final float TIME_STEP = 1 / 300f;
     private float accumulator = 0f;
@@ -83,7 +82,7 @@ public class GameStage extends Stage {
     }
 
     private void setUpCamera() {
-        camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
         camera.update();
     }
@@ -215,12 +214,14 @@ public class GameStage extends Stage {
                 Platform platform = factory.createPlatform(new Vector2(Constants.PLATFORM_DEFAULT_X,
                         Constants.PLATFORM_DEFAULT_Y[i]));
                 addActor(platform);
+                platforms.put(platform, platform);
 
                 //generate obstacles
                 if (rand.nextInt() % 100 <= Constants.OBSTACLE_GENERATION_CHANCE) {
                     Obstacle obstacle = factory.createObstacle(new Vector2(Constants.OBSTACLE_DEFAULT_X,
                             Constants.OBSTACLE_DEFAULT_Y[i]));
                     addActor(obstacle);
+                    obstacles.put(obstacle, obstacle);
                 }
             }
 
@@ -314,6 +315,14 @@ public class GameStage extends Stage {
     @Override
     public void draw() {
         super.draw();
+        Batch batch = getBatch();
+        batch.begin();
+        ground.draw(batch);
+        player.draw(batch);
+        platforms.forEach((platform, t) -> platform.draw(batch));
+        obstacles.forEach((obstacle, t) -> obstacle.draw(batch));
+        coins.forEach(coin -> coin.draw(batch));
+        batch.end();
         renderer.render(world, camera.combined);
     }
 

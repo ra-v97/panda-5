@@ -32,9 +32,9 @@ public class ScoreScreen implements Screen {
 
     public ScoreScreen(Panda5 game) {
         this.game = game;
-        background = new Texture("background/menu_background_v2.png");
-        backTexture = new Texture("buttons/basic_button.png");
-        listTexture = new Texture("buttons/score_menu_list_v2.png");
+        background = new Texture("core/assets/background/menu_background_v2.png");
+        backTexture = new Texture("core/assets/buttons/basic_button.png");
+        listTexture = new Texture("core/assets/buttons/score_menu_list_v2.png");
 
         stage = new MenuStage(game);
     }

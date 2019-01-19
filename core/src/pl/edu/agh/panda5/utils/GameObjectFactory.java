@@ -93,8 +93,9 @@ public class GameObjectFactory implements AbstractFactory {
     }
 
     public Platform createGround() {
-        return createPlatformPrototype(new Vector2(Constants.GROUND_X, Constants.GROUND_Y), Constants.GROUND_WIDTH,
-                Constants.GROUND_HEIGHT);
+        Body body = createKinematicBodyPrototype(Constants.GROUND_X, Constants.GROUND_Y,Constants.GROUND_WIDTH,
+                Constants.GROUND_HEIGHT, Constants.GROUND_DENSITY, false, new GameObjectData(PLATFORM));
+        return new Platform(body, true);
     }
 
     public Platform createPlatform(Vector2 position) {
@@ -105,10 +106,9 @@ public class GameObjectFactory implements AbstractFactory {
     }
 
     private Platform createPlatformPrototype(Vector2 position, float width, float height) {
-
         Body body = createKinematicBodyPrototype(position.x, position.y, width, height,
                 Constants.GROUND_DENSITY, false, new GameObjectData(PLATFORM));
-        return new Platform(body);
+        return new Platform(body, false);
     }
 
     public Hunter createHunter(int level, GameObjectType power) {

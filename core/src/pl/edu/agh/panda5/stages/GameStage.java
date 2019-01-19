@@ -309,6 +309,7 @@ public class GameStage extends Stage {
 
     private void gameOver() {
         game.pause();
+        serializer.addNewScore(player.getPoints());
         game.setScreen(new GameOverScreen(game));
     }
 
@@ -328,7 +329,6 @@ public class GameStage extends Stage {
 
     @Override
     public void dispose() {
-        serializer.addNewScore(player.getPoints());
         super.dispose();
     }
 

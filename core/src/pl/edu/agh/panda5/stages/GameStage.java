@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import pl.edu.agh.panda5.Panda5;
-import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Obstacle;
@@ -20,9 +19,10 @@ import pl.edu.agh.panda5.opponent.Hunter;
 import pl.edu.agh.panda5.player.Player;
 import pl.edu.agh.panda5.player.powerups.*;
 import pl.edu.agh.panda5.screens.GameOverScreen;
+import pl.edu.agh.panda5.screens.GameScreen;
+import pl.edu.agh.panda5.screens.MenuScreen;
 import pl.edu.agh.panda5.utils.*;
 
-import java.io.IOException;
 import java.util.*;
 
 public class GameStage extends Stage {
@@ -127,9 +127,9 @@ public class GameStage extends Stage {
                 Constants.SCORE_LABEL_HEIGHT);
         scores.setFontScale(1.2f);
         addActor(scores);
-
-        spawnArrowHunter(2);
     }
+
+
 
     @Override
     public void act(float delta) {
@@ -342,7 +342,12 @@ public class GameStage extends Stage {
 
         if (keycode == Input.Keys.R) {
             game.dispose();
-            game.create();
+            game.setScreen(new GameScreen(game));
+        }
+
+        if (keycode == Input.Keys.ENTER || keycode == Input.Keys.ESCAPE) {
+            game.dispose();
+            game.setScreen(new MenuScreen(game));
         }
 
         return super.keyDown(keycode);

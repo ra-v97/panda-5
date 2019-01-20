@@ -36,7 +36,11 @@ public enum AnimationPart {
     COIN_BRONZE_5(412, 388, 64, 80, 0.1f),
     COIN_BRONZE_6(468, 388, 80, 80, 0.1f),
     COIN_BRONZE_7(550, 388, 80, 80, 0.1f),
-    COIN_BRONZE_8(630, 388, 80, 80, 0.1f);
+    COIN_BRONZE_8(630, 388, 80, 80, 0.1f),
+
+    POWER_UP_MAGNET(305, 156, 86, 113, 999.0f),
+    POWER_UP_SHIELD(40, 120, 30, 30, 999.0f),
+    POWER_UP_BONUS_JUMP(0, 160, 30, 30, 999.0f);
 
     static {
         PANDA_WALK_1.nextPart = PANDA_WALK_2;
@@ -74,6 +78,10 @@ public enum AnimationPart {
         COIN_BRONZE_6.nextPart = COIN_BRONZE_7;
         COIN_BRONZE_7.nextPart = COIN_BRONZE_8;
         COIN_BRONZE_8.nextPart = COIN_BRONZE_1;
+
+        POWER_UP_MAGNET.nextPart = POWER_UP_MAGNET;
+        POWER_UP_BONUS_JUMP.nextPart = POWER_UP_BONUS_JUMP;
+        POWER_UP_SHIELD.nextPart = POWER_UP_SHIELD;
     }
 
     AnimationPart(int x, int y, int width, int height, float timeout) {

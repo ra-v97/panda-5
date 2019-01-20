@@ -102,8 +102,8 @@ public class Constants {
 
     public static final int[] COIN_VALUE = {1, 3, 5};
 
-    public static final float POWER_UP_WIDTH = 0.15f;
-    public static final float POWER_UP_HEIGHT = 0.15f;
+    public static final float POWER_UP_WIDTH = 0.3f;
+    public static final float POWER_UP_HEIGHT = 0.3f;
     public static final float POWER_UP_DENSITY = GROUND_DENSITY;
     public static final float POWER_UP_Y_OFFSET = 1f;
     public static final float POWER_UP_DEFAULT_X = 22f;

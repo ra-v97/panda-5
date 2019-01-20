@@ -14,6 +14,7 @@ import pl.edu.agh.panda5.player.powerups.PowerUpEffect;
 import pl.edu.agh.panda5.utils.AnimationPart;
 import pl.edu.agh.panda5.utils.Constants;
 import pl.edu.agh.panda5.utils.GameObjectType;
+import pl.edu.agh.panda5.utils.GameTextures;
 
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class Player extends GameObject {
 
     public Player(Body body) {
         super(body);
-        sprite = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("core/assets/panda/panda.png"))));
+        sprite = new Sprite(new TextureRegion(GameTextures.PLAYER));
         resetAnimation(AnimationPart.PANDA_WALK_1);
     }
 

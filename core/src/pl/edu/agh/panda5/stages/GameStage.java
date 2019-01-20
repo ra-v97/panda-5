@@ -343,6 +343,9 @@ public class GameStage extends Stage {
         platforms.forEach((platform, t) -> platform.draw(batch));
         obstacles.forEach((obstacle, t) -> obstacle.draw(batch));
         coins.forEach(coin -> coin.draw(batch));
+        powerUps.forEach(powerUp -> powerUp.draw(batch));
+        arrowHunter.draw(batch);
+        bombHunter.draw(batch);
         batch.end();
         renderer.render(world, camera.combined);
     }

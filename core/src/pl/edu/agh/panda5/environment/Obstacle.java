@@ -8,13 +8,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.utils.Constants;
+import pl.edu.agh.panda5.utils.GameTextures;
 
 public class Obstacle extends GameObject {
     private int width;
 
     public Obstacle(Body body){
         super(body);
-        sprite = new Sprite(new Texture(Gdx.files.internal("core/assets/terrain/boulder.png")));
+        sprite = new Sprite(GameTextures.OBSTACLE);
     }
 
     @Override

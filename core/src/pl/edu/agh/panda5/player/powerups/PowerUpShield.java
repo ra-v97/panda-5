@@ -9,7 +9,7 @@ import java.util.Map;
 public class PowerUpShield extends PowerUpDecorator {
 
     private Player player;
-    private boolean isRunning =false;
+    private boolean isRunning = false;
 
     @Override
     public void applyEffect(float dt){

@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import pl.edu.agh.panda5.application.GameObject;
 import pl.edu.agh.panda5.utils.Constants;
+import pl.edu.agh.panda5.utils.GameTextures;
 
 public class Platform extends GameObject {
     private int width;
@@ -16,7 +17,7 @@ public class Platform extends GameObject {
     public Platform(Body body, boolean isGround){
         super(body);
         this.isGround = isGround;
-        sprite = new Sprite(new Texture(Gdx.files.internal("core/assets/terrain/terrain.png")));
+        sprite = new Sprite(GameTextures.PLATFORM);
     }
 
     @Override

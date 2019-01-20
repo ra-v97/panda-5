@@ -114,4 +114,11 @@ public class Constants {
     };
     public static final float DEFAULT_POWER_UP_TIMEOUT = 30.0f;
     public static final float MAGNET_EFFECT_RANGE = 5.0f;
+
+    public static final float BACKGROUND_X = 0.0f;
+    public static final float BACKGROUND_Y = 0.0f;
+    public static final float BACKGROUND_HEIGHT = APP_HEIGHT;
+    public static final float BACKGROUND_WIDTH = APP_WIDTH;
+    public static final float BACKGROUND_VELOCITY = (GAME_LINEAR_VELOCITY.x * PPM_X) / 10f;
+    public static final float BACKGROUND_SWITCH_TIME = BACKGROUND_WIDTH / -BACKGROUND_VELOCITY;
 }

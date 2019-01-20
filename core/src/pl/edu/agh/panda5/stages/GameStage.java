@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import pl.edu.agh.panda5.Panda5;
 import pl.edu.agh.panda5.collider.CollisionDetector;
 import pl.edu.agh.panda5.environment.Coin;
+import pl.edu.agh.panda5.environment.GameBackground;
 import pl.edu.agh.panda5.environment.Obstacle;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Hunter;
@@ -34,6 +35,7 @@ public class GameStage extends Stage {
     private AbstractFactory factory;
     private ScoreSerializer serializer;
     private World world;
+    private GameBackground background;
     private Platform ground;
     private Player player;
     private Hunter arrowHunter;
@@ -70,6 +72,7 @@ public class GameStage extends Stage {
         setUpCamera();
 
         rand = new Random();
+        background = new GameBackground();
 
         setUpKeyboard();
         setUpGround();
@@ -163,6 +166,7 @@ public class GameStage extends Stage {
         while (accumulator >= TIME_STEP) {
             world.step(TIME_STEP, 6, 2);
             player.update(delta);
+            background.update(delta);
             isPlayerInBounds();
             removeUnusedBullets();
             updateScore(player.getPoints());
@@ -345,6 +349,7 @@ public class GameStage extends Stage {
         super.draw();
         Batch batch = getBatch();
         batch.begin();
+        background.draw(batch);
         ground.draw(batch);
         player.draw(batch);
         platforms.forEach((platform, t) -> platform.draw(batch));

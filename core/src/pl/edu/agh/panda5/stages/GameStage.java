@@ -56,6 +56,7 @@ public class GameStage extends Stage {
 
     private Map<GameObjectType, Object> mutableObjects = new HashMap<>();
     private Label scores;
+    private boolean pointsSaved;
 
     public GameStage(Panda5 game) {
         this.game = game;
@@ -326,10 +327,16 @@ public class GameStage extends Stage {
             gameOver();
     }
 
+    public void resetPoints(){
+        pointsSaved =false;
+    }
 
     public void gameOver() {
         game.pause();
-        serializer.addNewScore(player.getPoints());
+        if(!pointsSaved){
+            serializer.addNewScore(player.getPoints());
+            pointsSaved = true;
+        }
         game.setScreen(new GameOverScreen(game));
     }
 

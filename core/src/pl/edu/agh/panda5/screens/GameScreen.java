@@ -35,7 +35,7 @@ public class GameScreen implements Screen {
     }
 
     public void show() {
-
+        stage.resetPoints();
     }
 
     public void hide() {
@@ -49,7 +49,6 @@ public class GameScreen implements Screen {
     public void resume() {
         isPaused = false;
     }
-
 
     public void dispose() {
         stage.dispose();

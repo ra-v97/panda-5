@@ -82,6 +82,7 @@ project(":core") {
     test {
         useJUnitPlatform()
         dependsOn 'cleanTest'
+        workingDir = new File("../")
 
         // Show test results
         testLogging {

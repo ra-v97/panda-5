@@ -49,7 +49,6 @@ public class GameStage extends Stage {
     private float accumulator3 = 0f;
 
     private OrthographicCamera camera;
-    private Box2DDebugRenderer renderer;
 
     private Random rand;
     private boolean onlyLowerPlatformLastTime = true;
@@ -68,7 +67,6 @@ public class GameStage extends Stage {
 
         factory = new GameObjectFactory(world);
         serializer = game.getSerializer();
-        renderer = new Box2DDebugRenderer(); // TODO: Replace in final version
         setUpCamera();
 
         rand = new Random();

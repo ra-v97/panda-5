@@ -75,7 +75,7 @@ public class ScoreSerializer {
                 System.out.println("Cannot parse date;");
             }
         }
-}
+    }
 
     private class Record{
         private final Date gameDate;

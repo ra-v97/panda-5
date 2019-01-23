@@ -5,11 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-import com.sun.deploy.config.VerboseDefaultConfig;
 import pl.edu.agh.panda5.application.GameObject;
-
 import pl.edu.agh.panda5.utils.AnimationPart;
 import pl.edu.agh.panda5.utils.Constants;
 import pl.edu.agh.panda5.utils.GameObjectData;

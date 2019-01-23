@@ -76,6 +76,13 @@ public class GameObjectFactory implements AbstractFactory {
         }
     }
 
+    public GameObjectFactory(World world, Boolean ignorePool){
+        if(!ignorePool) {
+            new GameObjectFactory(world);
+            return;
+        }
+        GameObjectFactory.world = world;
+    }
     public Player createPlayer() {
 
         BodyDef bodyDef = new BodyDef();

@@ -167,8 +167,8 @@ public class GameStage extends Stage {
             world.step(TIME_STEP, 6, 2);
             player.update(delta);
             background.update(delta);
+            arrowHunter.update(delta);
             isPlayerInBounds();
-            removeUnusedBullets();
             updateScore(player.getPoints());
             accumulator -= TIME_STEP;
         }
@@ -305,10 +305,6 @@ public class GameStage extends Stage {
                 .setTransform(Constants.DUMPSTER_POS, 0);
     }
 
-    private void removeUnusedBullets() {
-        arrowHunter.verifyPowers();
-        bombHunter.verifyPowers();
-    }
 
     private void spawnPowerUp(int level) {
         PowerUp powerUp = factory.createPowerUp(new Vector2(Constants.POWER_UP_DEFAULT_X, Constants.POWER_UP_DEFAULT_Y[level]));

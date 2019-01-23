@@ -22,10 +22,14 @@ public class GameObjectFactory implements AbstractFactory {
     private final int platformCacheSize = 6;
     private final int[] coinCacheSize = {5, 2, 2};
     private final int powerUpsCacheSize = 6;
+    private final int bombCacheSize = 6;
+    private final int arrowCacheSize = 6;
     private int currentObstacle = 0;
     private int currentPlatform = 0;
     private int[] currentCoin = {0, 0, 0};
     private int currentPowerUp = 0;
+    private int currentBomb = 0;
+    private int currentArrow = 0;
 
     public GameObjectFactory(World worldRef) {
         world = worldRef;
@@ -35,6 +39,8 @@ public class GameObjectFactory implements AbstractFactory {
         poll.put(GameObjectType.COIN1, new ArrayList<>());
         poll.put(GameObjectType.COIN2, new ArrayList<>());
         poll.put(GameObjectType.POWER_UP,new ArrayList<>());
+        poll.put(ARROW_POWER, new ArrayList<>());
+        poll.put(BOMB_POWER, new ArrayList<>());
 
         while (poll.get(GameObjectType.OBSTACLE).size() < obstacleCacheSize) {
             poll.get(GameObjectType.OBSTACLE).add(createObstaclePrototype());
@@ -59,6 +65,14 @@ public class GameObjectFactory implements AbstractFactory {
 
         while (poll.get(GameObjectType.POWER_UP).size() < powerUpsCacheSize) {
             poll.get(GameObjectType.POWER_UP).add(createPowerUpPrototype());
+        }
+
+        while(poll.get(ARROW_POWER).size() < arrowCacheSize) {
+            poll.get(ARROW_POWER).add(new Bullet(createArrowBody()));
+        }
+
+        while(poll.get(BOMB_POWER).size() < bombCacheSize) {
+            poll.get(BOMB_POWER).add(new Bullet(createBombBody()));
         }
     }
 
@@ -134,10 +148,23 @@ public class GameObjectFactory implements AbstractFactory {
             default:
                 throw new RuntimeException("Invalid power type");
         }
+        hunterPower.setFactory(this);
         return new Hunter(body, level, hunterPower);
     }
 
-    public static Body createArrowBody() {
+    public Bullet getArrow() {
+        Bullet bullet = (Bullet) poll.get(ARROW_POWER).get(currentArrow);
+        currentArrow = (currentArrow + 1) % arrowCacheSize;
+        return bullet;
+    }
+
+    public Bullet getBomb() {
+        Bullet bullet = (Bullet) poll.get(BOMB_POWER).get(currentBomb);
+        currentBomb = (currentBomb + 1) % bombCacheSize;
+        return bullet;
+    }
+
+    private Body createArrowBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(Constants.DUMPSTER_POS);
@@ -158,7 +185,7 @@ public class GameObjectFactory implements AbstractFactory {
         return body;
     }
 
-    public static Body createBombBody() {
+    private Body createBombBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(Constants.DUMPSTER_POS);

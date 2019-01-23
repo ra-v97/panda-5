@@ -45,8 +45,6 @@ public abstract class GameObject extends Actor {
         size.y *= Constants.PPM_Y;
         sprite.setSize(size.x, size.y);
         sprite.setCenter(pos.x, pos.y);
-        sprite.setRotation(0);
-
         sprite.draw(batch);
     }
 

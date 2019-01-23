@@ -148,6 +148,7 @@ public class GameObjectFactory implements AbstractFactory {
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;
         fDef.density = Constants.BULLET_DENSITY;
+        fDef.isSensor = true;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
         fixture.setUserData(GameObjectType.BULLET);
@@ -167,6 +168,7 @@ public class GameObjectFactory implements AbstractFactory {
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;
         fDef.density = Constants.BOMB_DENSITY;
+        fDef.isSensor = true;
         Body body = world.createBody(bodyDef);
         Fixture fixture = body.createFixture(fDef);
         fixture.setUserData(new GameObjectData(BULLET));

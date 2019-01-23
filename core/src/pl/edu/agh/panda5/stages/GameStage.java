@@ -180,7 +180,7 @@ public class GameStage extends Stage {
 
         if (accumulator3 >= 4) {
             arrowHunter.usePower();
-            //bombHunter.usePower();
+            bombHunter.usePower();
             accumulator3 = 0;
         }
 
@@ -254,6 +254,8 @@ public class GameStage extends Stage {
         }
         spawnCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), GameObjectType.COIN0);
         spawnPowerUp(1);
+        spawnBombHunter(1);
+        spawnArrowHunter(2);
     }
 
     private void spawnCoin(Vector2 position, GameObjectType type){
@@ -359,7 +361,7 @@ public class GameStage extends Stage {
         arrowHunter.draw(batch);
         bombHunter.draw(batch);
         batch.end();
-        renderer.render(world, camera.combined);
+        //renderer.render(world, camera.combined);
     }
 
     @Override

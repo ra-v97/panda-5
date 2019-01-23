@@ -68,8 +68,8 @@ public class Constants {
     public static final int OBSTACLE_GENERATION_CHANCE = 20;
 
     public static final float HUNTER_DENSITY = RUNNER_DENSITY;
-    public static final float HUNTER_WIDTH = 1f;
-    public static final float HUNTER_HEIGHT = 1f;
+    public static final float HUNTER_WIDTH = 1.5f;
+    public static final float HUNTER_HEIGHT = 1.8f;
     public static final float HUNTER_DEFAULT_POS_X = 19f;
     public static final float HUNTER_POS_Y_OFFSET = 1f;
     public static final float[] HUNTER_DEFAULT_POS_Y = {

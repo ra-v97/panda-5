@@ -1,5 +1,6 @@
 package pl.edu.agh.panda5.opponent;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import pl.edu.agh.panda5.utils.GameObjectFactory;
@@ -41,5 +42,10 @@ public class ArrowPower implements HunterPower {
     @Override
     public void tideUp(){
         Bullet.freeDeadBullets(this.activeArrows,this.bulletPool);
+    }
+
+    @Override
+    public void draw(Batch batch) {
+        activeArrows.forEach(arrow -> arrow.draw(batch));
     }
 }

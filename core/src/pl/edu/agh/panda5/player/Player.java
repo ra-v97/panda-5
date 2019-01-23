@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class Player extends GameObject {
     private int points = 0;
-    private PowerUpEffect powerUp;
+    private PowerUpEffect powerUp = null;
     private boolean dodging = false;
     private boolean jumping = false;
     private boolean dropping = false;
@@ -62,8 +62,12 @@ public class Player extends GameObject {
         resetAnimation(AnimationPart.PANDA_WALK_1);
     }
 
-    public void drop() { dropping = true; }
+    public void drop() {
+        if(!jumping)
+            dropping = true;
+    }
     public void stopDrop() { dropping = false; }
+p
     public boolean isDropping() { return dropping; }
 
     public void fall() {
@@ -100,7 +104,8 @@ public class Player extends GameObject {
 
     public void update(float dt) {
         currentJumpTimeout -= dt;
-        powerUp.applyEffect(dt);
+        if(powerUp != null)
+            powerUp.applyEffect(dt);
         setVelocity();
     }
 

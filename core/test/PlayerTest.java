@@ -1,6 +1,9 @@
 import com.badlogic.gdx.physics.box2d.World;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.runner.RunWith;
 import pl.edu.agh.panda5.player.Player;
 import pl.edu.agh.panda5.utils.Constants;
 import pl.edu.agh.panda5.utils.GameObjectFactory;
@@ -10,14 +13,14 @@ import java.io.IOException;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(GdxTestRunner.class)
+public class PlayerTest {
+    private Player player;
+    private World world;
+    private GameObjectFactory factory;
 
-public class PlayerTest extends GameTest {
-    private static Player player;
-    private static World world;
-    private static GameObjectFactory factory;
-
-    @BeforeAll
-    public static void setUp() {
+    @Before
+    public void setUp() {
         try {
             System.out.println(new java.io.File( "." ).getCanonicalPath());
         } catch (IOException e) {
@@ -31,6 +34,7 @@ public class PlayerTest extends GameTest {
         assertNotNull(factory);
         assertNotNull(player);
     }
+
 
     @Test
     public void addPointsTest() {
@@ -81,14 +85,30 @@ public class PlayerTest extends GameTest {
         assertFalse(player.isJumping());
         player.update(1);
         player.dodge();
+        player.update(1);
         assertTrue(player.isDodging());
         player.jump();
+        player.update(1);
         assertFalse(player.isJumping());
         player.stopDodge();
+        player.update(1);
         assertFalse(player.isDodging());
         player.jump();
+        player.update(1);
         assertTrue(player.isJumping());
         player.landed();
+        player.update(1);
         assertFalse(player.isJumping());
+    }
+
+    @Test
+    public void cannotDropWhileJumpingTest() {
+        assertFalse(player.isJumping());
+        player.update(1);
+        player.jump();
+        assertTrue(player.isJumping());
+        player.drop();
+        player.update(1);
+        assertFalse(player.isDropping());
     }
 }

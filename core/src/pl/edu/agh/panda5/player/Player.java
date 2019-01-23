@@ -25,7 +25,7 @@ public class Player extends GameObject {
     private boolean dodging = false;
     private boolean jumping = false;
     private boolean dropping = false;
-    private boolean canBeKilledByShot = false;
+    private boolean canBeKilledByShot = true;
     private boolean canJumpTwice = false;
     private boolean secondJumpDone = false;
     private float currentJumpTimeout = 0f;

@@ -322,7 +322,7 @@ public class GameStage extends Stage {
             serializer.addNewScore(player.getPoints());
             pointsSaved = true;
         }
-        game.setScreen(new GameOverScreen(game));
+        game.setScreen(new GameOverScreen(game, player.getPoints()));
     }
 
     @Override
@@ -352,7 +352,7 @@ public class GameStage extends Stage {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.UP) {
             player.jump();
-        } else if (keycode == Input.Keys.CONTROL_RIGHT) {
+        } else if (keycode == Input.Keys.CONTROL_RIGHT || keycode == Input.Keys.CONTROL_LEFT ) {
             player.dodge();
         }
 

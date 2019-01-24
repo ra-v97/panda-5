@@ -11,13 +11,13 @@ import pl.edu.agh.panda5.utils.Constants;
 
 
 public class GameOverScreen implements Screen{
-
-
     private Panda5 game;
+    private int points;
 
 
-    public GameOverScreen(Panda5 game) {
+    public GameOverScreen(Panda5 game, int points) {
         this.game = game;
+        this.points = points;
     }
 
     public void render(float delta) {
@@ -26,7 +26,13 @@ public class GameOverScreen implements Screen{
 
         SpriteBatch batch = new SpriteBatch();
         BitmapFont font = new BitmapFont();
-        final String fontText = "Game Over";
+        String fontText = "Game Over. You scored " + points;
+
+        if(points == 1)
+            fontText += " point";
+        else
+            fontText += " points";
+
         GlyphLayout layout = new GlyphLayout();
         layout.setText(font, fontText);
 

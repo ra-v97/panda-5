@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import pl.edu.agh.panda5.collider.CollisionDetector;
+import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.Platform;
 import pl.edu.agh.panda5.opponent.Bullet;
 import pl.edu.agh.panda5.player.Player;
@@ -101,5 +102,28 @@ public class CollisionTest {
         arrow.getBody().setTransform(player.getBody().getPosition(), 0);
         world.step(1f/60f,5,5);
         assertTrue(gameOver);
+    }
+
+
+    @Test
+    public void coinTest() {
+        int points = player.getPoints();
+
+        Method method = null;
+        try {
+            method = factory.getClass().getDeclaredMethod("createCoinPrototype", int.class);
+            method.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        Coin coin = null;
+        try {
+            coin = (Coin) method.invoke(factory, 0);
+            coin.getBody().setTransform(player.getBody().getPosition(), 0);
+            world.step(1f/60f,5,5);
+            assertTrue(player.getPoints() > points);
+        } catch (IllegalAccessException | InvocationTargetException | NullPointerException e ) {
+            e.printStackTrace();
+        }
     }
 }

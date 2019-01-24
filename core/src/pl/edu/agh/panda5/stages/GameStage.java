@@ -235,7 +235,14 @@ public class GameStage extends Stage {
 
 
         }
-        spawnCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), GameObjectType.COIN0);
+        int type = rand.nextInt() % 3;
+        GameObjectType coinType;
+        switch (type) {
+            case 0: coinType = GameObjectType.COIN0; break;
+            case 1: coinType = GameObjectType.COIN1; break;
+            default: coinType = GameObjectType.COIN2; break;
+        }
+        spawnCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), coinType);
         spawnPowerUp(1);
         spawnBombHunter(1);
         spawnArrowHunter(2);

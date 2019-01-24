@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import pl.edu.agh.panda5.Panda5;
 import pl.edu.agh.panda5.collider.CollisionDetector;
+import pl.edu.agh.panda5.collider.CollisionFilter;
 import pl.edu.agh.panda5.environment.Coin;
 import pl.edu.agh.panda5.environment.GameBackground;
 import pl.edu.agh.panda5.environment.Obstacle;
@@ -94,23 +95,7 @@ public class GameStage extends Stage {
         ground = factory.createGround();
         addActor(ground);
 
-        world.setContactFilter(new ContactFilter() {
-
-            @Override
-            public boolean shouldCollide (Fixture a, Fixture b) {
-                if (((GameObjectData) a.getUserData()).getType() == GameObjectType.PLATFORM &&
-                        ((GameObjectData) b.getUserData()).getType() == GameObjectType.PLAYER) {
-                    Vector2 position = b.getBody().getPosition();
-                    return (position.y - Constants.RUNNER_HEIGHT/2 > a.getBody().getPosition().y);
-                } else if (((GameObjectData) a.getUserData()).getType() == GameObjectType.PLAYER &&
-                        ((GameObjectData) b.getUserData()).getType() == GameObjectType.PLATFORM) {
-                    Vector2 position = a.getBody().getPosition();
-                    return (position.y - Constants.RUNNER_HEIGHT/2 > b.getBody().getPosition().y);
-                } else{
-                    return true;
-                }
-            }
-        });
+        world.setContactFilter(new CollisionFilter());
 
     }
 

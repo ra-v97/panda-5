@@ -48,7 +48,8 @@ public class GameStage extends Stage {
     private float accumulator = 0f;
     private float accumulator2 = 0f;
     private float accumulator3 = 0f;
-
+    private boolean isOpponentOn = false;
+    private int stepper =0;
     private OrthographicCamera camera;
 
     private Random rand;
@@ -244,8 +245,25 @@ public class GameStage extends Stage {
         }
         spawnCoin(new Vector2(Constants.COIN_DEFAULT_X, Constants.COIN_DEFAULT_Y), coinType);
         spawnPowerUp(1);
-        spawnBombHunter(1);
-        spawnArrowHunter(2);
+
+        if(stepper >2){
+            stepper = 0;
+            if(isOpponentOn){
+                removeArrowHunter();
+                removeBombHunter();
+                isOpponentOn =false;
+            }else{
+                if(rand.nextBoolean()){
+                    spawnBombHunter(1);
+                }else{
+                    spawnArrowHunter(2);
+                }
+                isOpponentOn = true;
+            }
+
+        }else {
+            stepper++;
+        }
     }
 
     private void spawnCoin(Vector2 position, GameObjectType type){

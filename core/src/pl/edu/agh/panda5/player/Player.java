@@ -67,7 +67,7 @@ public class Player extends GameObject {
             dropping = true;
     }
     public void stopDrop() { dropping = false; }
-p
+
     public boolean isDropping() { return dropping; }
 
     public void fall() {

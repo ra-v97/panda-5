@@ -14,7 +14,7 @@ public class PowerUpShield extends PowerUpDecorator {
     @Override
     public void applyEffect(float dt){
         if(!isRunning){
-            isRunning =true;
+            isRunning = true;
             player.setImmortality();
         }
         updateEffectTime(dt);

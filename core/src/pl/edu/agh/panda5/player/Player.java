@@ -137,6 +137,10 @@ public class Player extends GameObject {
         powerUp.decorate((PowerUpDecorator) effect);
     }
 
+    public PowerUpEffect getEffect(){
+        return powerUp;
+    }
+
     public void setUpBasicEffect(Map<GameObjectType, Object> mutableObjects) {
         this.powerUp = new BasicPowerUpEffect(mutableObjects);
     }

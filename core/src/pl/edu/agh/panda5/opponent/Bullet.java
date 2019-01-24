@@ -29,6 +29,7 @@ public class Bullet extends GameObject {
     void initHorizontal(float posX) {
         sprite.setRotation(270.0f);
         ((GameObjectData)this.body.getFixtureList().get(0).getUserData()).setFlaggedForDelete(false);
+        body.setLinearVelocity(new Vector2(0,0));
         body.setTransform(posX,Constants.BOMB_POS_Y,0f);
     }
 

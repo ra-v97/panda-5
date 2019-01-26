@@ -1,23 +1,97 @@
-plugins {
-    id 'java'
-    id 'application'
-    id 'com.adarshr.test-logger' version '1.6.0'
+buildscript {
+    
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+        google()
+    }
+    dependencies {
+        
+
+    }
 }
 
-group 'pl.edu.agh.to2.czw-1440-panda5'
-version '1.0'
+allprojects {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
 
-sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
+    version = '1.0'
+    ext {
+        appName = "czw-1440-panda5"
+        gdxVersion = '1.9.9'
+        roboVMVersion = '2.3.5'
+        box2DLightsVersion = '1.4'
+        ashleyVersion = '1.7.0'
+        aiVersion = '1.8.0'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
 }
 
-dependencies {
+project(":desktop") {
+    apply plugin: "java"
 
-    compile 'io.reactivex.rxjava2:rxjava:2.2.0'
 
-    testImplementation 'junit:junit:4.12'
+    dependencies {
+        compile project(":core")
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+    }
 }
 
-mainClassName = 'application.Main'
+project(":core") {
+    apply plugin: "java"
+
+    idea {
+        module {
+            testSourceDirs += project.sourceSets.test.java.srcDirs
+        }
+    }
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+        testCompileOnly 'junit:junit:4.12'
+        testCompileOnly 'org.mockito:mockito-core:2.2.7'
+        testCompile "org.mockito:mockito-all:1.9.+"
+        testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.1.0'
+    }
+
+    test {
+        useJUnitPlatform()
+        dependsOn 'cleanTest'
+        workingDir = new File("../")
+
+        // Show test results
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+}
+
+tasks.eclipse.doLast {
+    delete ".project"
+}
